@@ -6,7 +6,7 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<OutputPath>..\..\..\Assets\Plugins\QHPhysics</OutputPath>
+		<OutputPath>..\..\..\Assets\QHPlugins\QHPhysics</OutputPath>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Product>$(AssemblyName)</Product>
 		<Authors>$(AssemblyName)</Authors>

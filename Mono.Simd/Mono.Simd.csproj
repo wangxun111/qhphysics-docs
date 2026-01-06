@@ -6,7 +6,7 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<OutputPath>..\..\..\Assets\Plugins\Mono.Simd</OutputPath>
+		<OutputPath>..\..\..\Assets\QHPlugins\Mono.Simd</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
