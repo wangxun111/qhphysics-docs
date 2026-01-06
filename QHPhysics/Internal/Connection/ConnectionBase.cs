@@ -59,11 +59,6 @@ namespace QH.Physics {
                 IID = -NewIID;
             }
             SetMasses(mass1, mass2);
-#if ENABLE_EASTMALLI_DEBUG
-            if (!mass1.Sim.IsMain) {
-                QHFramework.MessengerManager.Instance.Broadcast<QH.Physics.ConnectionBase>("CreatePhyConnection", this);
-            }
-#endif
         }
 
         public abstract void Solve();

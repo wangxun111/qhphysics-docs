@@ -97,12 +97,6 @@ namespace QH.Physics {
 
         public Vector4f CollisionImpulseVelocity4f { get; protected set; }
 
-        public static Int32 GetCollisionHash(Collision collision) {
-            GameObject gameObject = collision.gameObject;
-            GameObject gameObject2 = collision.contacts[0].thisCollider.gameObject;
-            return gameObject.GetInstanceID() ^ gameObject2.GetInstanceID();
-        }
-
         public RigidBodyObject(Simulation simulation, Single massValue, Vector3 position, EMassObjectType massType, Single radius = DefaultRadius) : base(simulation, massValue, Vector3.zero, massType) {
             InertiaTensorFactor4f = new Vector4f(0.4f * massValue);
             Dimensions = new Vector3(2f * radius, 2f * radius, 2f * radius);

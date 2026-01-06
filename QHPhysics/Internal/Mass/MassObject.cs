@@ -49,7 +49,6 @@ namespace QH.Physics {
         protected Vector4f buoyancy4f;
         public Vector4f WaterDragConstant4f;
         public Vector4f AirDragConstant4f;
-        protected Vector4f buoyancySpeedMultiplier4f;
         protected Vector4f buoyancyAtMinimalSpeed4f;
         protected Vector4f extGroundPointPrev;
         protected Vector4f extGroundPointCurrent;
@@ -131,7 +130,7 @@ namespace QH.Physics {
                     Weight *= 0.1f;
                 }
 
-                CompoundWaterResistance = MassValue * (WaterDragConstant + BuoyancySpeedMultiplier * 9.81f);
+                CompoundWaterResistance = MassValue * WaterDragConstant;
                 Sim.IPhyActionsListener?.ChangeMassValue(UID, value);
             }
         }
@@ -213,7 +212,7 @@ namespace QH.Physics {
         public Single Buoyancy {
             get { return buoyancy4f.X; }
             set {
-                buoyancy4f = new Vector4f(value);
+                buoyancy4f =massType==EMassObjectType.Fish? new Vector4f(value+1) : new Vector4f(value);
                 Sim.IPhyActionsListener?.ChangeMassBuoyancy(UID, value);
             }
         }
@@ -222,7 +221,7 @@ namespace QH.Physics {
             get { return WaterDragConstant4f.X; }
             set {
                 WaterDragConstant4f = new Vector4f(value);
-                CompoundWaterResistance = MassValue * (WaterDragConstant + BuoyancySpeedMultiplier * 9.81f);
+                CompoundWaterResistance = MassValue * WaterDragConstant;
                 Sim.IPhyActionsListener?.ChangeMassWaterDragConstant(UID, value);
             }
         }
@@ -235,18 +234,7 @@ namespace QH.Physics {
             }
         }
 
-        public Single BuoyancySpeedMultiplier {
-            get { return buoyancySpeedMultiplier4f.X; }
-            set {
-                buoyancySpeedMultiplier4f = new Vector4f(value);
-                CompoundWaterResistance = MassValue * (WaterDragConstant + BuoyancySpeedMultiplier * 9.81f);
-                ScaledBuoyancySpeedMultiplier = BuoyancySpeedMultiplier * 1.3f;
-                Sim.IPhyActionsListener?.ChangeMassBuoyancySpeedFactor(UID, value);
-            }
-        }
-
         public Single CompoundWaterResistance { get; private set; }
-        public Single ScaledBuoyancySpeedMultiplier { get; private set; }
 
         public Single BuoyancyAtMinimalSpeed {
             get { return buoyancyAtMinimalSpeed4f.X; }
@@ -359,7 +347,7 @@ namespace QH.Physics {
         }
 
         public Boolean IsFreeze {
-            get { return isFreeze; }
+            get { return isFreeze;  }
             set {
                 isFreeze = value;
                 Sim.IPhyActionsListener?.ChangeMassIsFreeze(UID, value);
@@ -412,7 +400,7 @@ namespace QH.Physics {
             get { return (0 >= avgForceCount) ? Vector3.zero : (avgForce * new Vector4f(1f / avgForceCount)).AsVector3(); }
         }
 
-        public MassObject(Simulation sim, Single mass, Vector3 position, EMassObjectType type, float WaterDragCons = 10) {
+        public MassObject(Simulation sim, Single mass, Vector3 position, EMassObjectType type,float WaterDragCons=10) {
             Sim = sim;
             UID = Sim.NewUID;
             IID = NewIID;
@@ -453,7 +441,6 @@ namespace QH.Physics {
             Motor = source.Motor;
             WaterMotor = source.WaterMotor;
             Buoyancy = source.Buoyancy;
-            BuoyancySpeedMultiplier = source.BuoyancySpeedMultiplier;
             BuoyancyAtMinimalSpeed = source.BuoyancyAtMinimalSpeed;
             WaterDragConstant = source.WaterDragConstant;
             AirDragConstant = source.AirDragConstant;
@@ -634,7 +621,6 @@ namespace QH.Physics {
                     Velocity4f += new Vector4f(1f / (1f + speed * waterResitanceFactor) - 1f) * velocity4f;
                     flowVelocityDelta += new Vector4f((1f - 0.5f * speed * waterResitanceFactor) * Simulation.TimeQuant) * velocity4f;
                 }
-
                 posNew4f = Position4f + flowVelocityDelta;
             }
             else {

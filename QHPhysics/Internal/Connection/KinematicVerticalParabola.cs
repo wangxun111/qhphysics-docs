@@ -33,7 +33,6 @@ namespace QH.Physics {
                 return duration;
             }
         }
-
         public KinematicVerticalParabola(MassObject mass, MassObject compensatorMass, Single duration, Single timePower, VerticalParabola parabola) : base(mass, compensatorMass) {
             this.verticalParabola = parabola;
             startTime = mass.Sim.InternalTime;
@@ -42,7 +41,12 @@ namespace QH.Physics {
         }
 
         public KinematicVerticalParabola(Simulation sim, KinematicVerticalParabola source) : base(sim.MassDict[source.Mass1.UID], sim.MassDict[source.Mass2.UID], source.UID) {
-            verticalParabola = new VerticalParabola(source.Mass1.Position, source.verticalParabola.PointEnd, source.verticalParabola.PointMiddleY);
+            // 保持原有构造函数调用，但创建VerticalParabola时传入侧抛角度
+            verticalParabola = new VerticalParabola(
+                source.Mass1.Position,
+                source.verticalParabola.PointEnd,
+                source.verticalParabola.PointMiddleY,
+                source.verticalParabola.LateralAngle); // 传入侧抛角度
             startTime = 0f;
             Sync(source);
         }
@@ -66,6 +70,7 @@ namespace QH.Physics {
             if (base.Mass1.Sim.InternalTime > startTime + duration) {
                 return;
             }
+
             Single progress = Progress;
             Vector3 position = base.Mass1.Position;
             Vector3 vector = base.Mass2.Position - position;
@@ -75,18 +80,26 @@ namespace QH.Physics {
             if (magnitude > CompensationMax) {
                 vector = vector.normalized * CompensationMax;
             }
+
+            // 使用verticalParabola.GetPoint()获取轨迹点
+            // 这个方法现在会考虑侧抛角度
             Vector3 point = verticalParabola.GetPoint(progress);
+
             Vector3 b = Vector3.Lerp(lastPosition, EndPosition, base.Mass1.Sim.FrameIterationProgress);
             Vector3 vector2 = position;
             Vector3 vector3 = Vector3.Lerp(point + vector, b, progress * progress * progress * progress);
+
             if (progress < 0.5f || position.y >= base.Mass1.GroundHeight) {
                 base.Mass1.Position = vector3;
                 base.Mass1.Velocity4f = (vector3 - vector2).AsPhyVector() / Simulation.TimeQuant4f;
+
                 Single num = base.Mass1.Velocity4f.Magnitude();
                 if (num > base.Mass1.CurrentVelocityLimit && base.Mass1.CurrentVelocityLimit > 0f) {
                     base.Mass1.Velocity4f *= new Vector4f(base.Mass1.CurrentVelocityLimit / num);
                 }
             }
+
+            lastPosition = vector3;
         }
     }
 }

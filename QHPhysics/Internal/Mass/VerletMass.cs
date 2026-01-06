@@ -171,7 +171,7 @@ namespace QH.Physics {
             Vector4f position4f = Position4f;
             Vector3 position = Position;
             Vector4f vector4f3 = Position4f - prevPosition4f;
-             vector4f3.Y = Type == EMassObjectType.Fish && !isstopMass && deltaPos != Vector4f.Zero ? deltaPos.Y+(vector4f3.Y-deltaPos.Y)*0.01f : vector4f3.Y;
+             vector4f3.Y = Type == EMassObjectType.Fish && !isstopMass && deltaPos != Vector4f.Zero ? deltaPos.Y+(vector4f3.Y-deltaPos.Y)*0.1f : vector4f3.Y;
             if (base.CurrentVelocityLimit > 0f && (Mathf.Abs(vector4f3.X) > currentVelocityDeltaLimit || Mathf.Abs(vector4f3.Y) > currentVelocityDeltaLimit || Mathf.Abs(vector4f3.Z) > currentVelocityDeltaLimit)) {
                 float num = vector4f3.Magnitude();
                 vector4f3 *= new Vector4f(currentVelocityDeltaLimit / num);

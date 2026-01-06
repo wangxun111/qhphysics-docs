@@ -20,7 +20,6 @@ namespace QH.Physics {
         void ChangeMassAirDragConstant(Int32 uid, Single airDrag);
         void ChangeMassWaterDragConstant(Int32 uid, Single waterDrag);
         void ChangeMassBuoyancy(Int32 uid, Single buoyancy);
-        void ChangeMassBuoyancySpeedFactor(Int32 uid, Single factor);
         void ChangeMassVelocityLimit(Int32 uid, Single velocity);
         void ChangeMassType(Int32 uid, EMassObjectType massType);
         void ChangeMassDisableSimualtion(Int32 uid, Boolean disabled);

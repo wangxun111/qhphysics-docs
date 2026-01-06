@@ -17,7 +17,6 @@ namespace QH.Physics {
         public const Single WaterLevelEpsillon = 0.0125f;
         public const Single BuoyancySpeedMultiplierFactor = 1.3f;
         public const Single WaterSpeedLaminar = 1f;
-        public const Single MaxDynamicBuoyancy = 1000f;
         public const Single WaterFlowVelocityFactor = 0.8f;
         public const Single AirDragConstant = 0.001f;
         public const Single GroundRepulsionConstant = 2f;
@@ -29,7 +28,6 @@ namespace QH.Physics {
         public static readonly Vector4f WaterDragConstant4f = new Vector4f(WaterDragConstant);
         public static readonly Vector4f WaterLevelEpsillon4f = new Vector4f(WaterLevelEpsillon);
         public static readonly Vector4f WaterSpeedLaminar4f = new Vector4f(WaterSpeedLaminar);
-        public static readonly Vector4f MaxDynamicBuoyancy4f = new Vector4f(MaxDynamicBuoyancy);
         public static readonly Vector4f AirDragConstant4f = new Vector4f(AirDragConstant);
         public static readonly Vector4f GroundDragConstant4f = new Vector4f(GroundDragConstant);
         public static readonly Vector4f GroundAbsorptionConstant4f = new Vector4f(GroundAbsorptionConstant);
@@ -50,11 +48,6 @@ namespace QH.Physics {
         protected String name;
         private Int32 verletCycle;
         private MassObject[] tmpMasses = new MassObject[4];
-
-        private Int32[] tracedMasses;
-        public Vector3[][] Traces;
-        private Int32 traceScanPeriod;
-        private Int32 skipCounter;
 
         private Vector4f[] tmpVelocities = new Vector4f[4];
         private Dictionary<Int32, SObject> removeKeyDict = new Dictionary<Int32, SObject>(1024);
@@ -125,7 +118,6 @@ namespace QH.Physics {
                     Vector4f posYVisualOffset = new Vector4f(tmpMasses[0].VisualPositionOffset.y, tmpMasses[1].VisualPositionOffset.y, tmpMasses[2].VisualPositionOffset.y, tmpMasses[3].VisualPositionOffset.y);
                     Vector4f compoundWaterResistance = new Vector4f(tmpMasses[0].CompoundWaterResistance, tmpMasses[1].CompoundWaterResistance, tmpMasses[2].CompoundWaterResistance, tmpMasses[3].CompoundWaterResistance);
                     Vector4f buoyancy = new Vector4f(tmpMasses[0].Buoyancy, tmpMasses[1].Buoyancy, tmpMasses[2].Buoyancy, tmpMasses[3].Buoyancy);
-                    Vector4f scaledBuoyancySpeedMultiplier = new Vector4f(tmpMasses[0].ScaledBuoyancySpeedMultiplier, tmpMasses[1].ScaledBuoyancySpeedMultiplier, tmpMasses[2].ScaledBuoyancySpeedMultiplier, tmpMasses[3].ScaledBuoyancySpeedMultiplier);
                     Vector4f airDragConstant = new Vector4f(tmpMasses[0].AirDragConstant, tmpMasses[1].AirDragConstant, tmpMasses[2].AirDragConstant, tmpMasses[3].AirDragConstant);
                     Vector4f isLying = new Vector4f((tmpMasses[0].IsLying ? 1 : 0), (tmpMasses[1].IsLying ? 1 : 0), (tmpMasses[2].IsLying ? 1 : 0), (tmpMasses[3].IsLying ? 1 : 0));
 
@@ -136,8 +128,6 @@ namespace QH.Physics {
 
                     Vector4f isPosYLessEqualWaterLevelEpsillon = posY.CompareLessEqual(WaterLevelEpsillon4f);
                     isPosYLessEqualWaterLevelEpsillon &= Vector4fExtensions.one;
-
-                    buoyancy += Vector4fExtensions.one;
 
                     Vector4f fWeight = -1 * weightTmpMasses;
                     Vector4f speed0 = Vector4f.Zero;
@@ -152,20 +142,13 @@ namespace QH.Physics {
                             speed = speed.Shuffle(ShuffleSel.RotateRight);
                             speed1[j] = (Single)Math.Sqrt(speed.HorizontalAdd(speed).X);
                             compoundWaterResistance[j] *= (speed0[j] * isPosYLessEqualWaterLevelEpsillon[j]);
-                            fWeight[j] += weightTmpMasses[j] * (buoyancy[j] + scaledBuoyancySpeedMultiplier[j]) * posYReal[j];
-                            scaledBuoyancySpeedMultiplier[j] *= speed1[j];
-                            scaledBuoyancySpeedMultiplier[j] = Math.Clamp(scaledBuoyancySpeedMultiplier[j], -1f * MaxDynamicBuoyancy4f[j], MaxDynamicBuoyancy4f[j]);
+                            fWeight[j] += weightTmpMasses[j] * buoyancy[j] * posYReal[j];
                         }
                         else {
                             compoundWaterResistance[j] = 0;
                         }
                     }
 
-                    //speed0 = speed0.Sqrt().Max(WaterSpeedLaminar4f);
-                    //speed1 = speed1.Sqrt();
-                    //compoundWaterResistance *= speed0 * isPosYLessEqualWaterLevelEpsillon;
-
-                    //scaledBuoyancySpeedMultiplier = scaledBuoyancySpeedMultiplier.Min(MaxDynamicBuoyancy4f).Max(MaxDynamicBuoyancy4f.Negative());
                     airDragConstant *= Vector4fExtensions.one - posYReal;
 
                     for (Int32 k = 0; k < 4; k++) {
@@ -189,60 +172,6 @@ namespace QH.Physics {
                 }
             }
         }
-
-        public virtual void ApplyForcesToMass(MassObject mass) {
-            if (mass.IsKinematic) {
-                return;
-            }
-
-            if (base.FrameIterationIndex == 0) {
-                mass.perFrameForcesCache4f = Vector4fExtensions.down * mass.MassValue4f * GravityAcceleration4f;
-            }
-
-            Boolean flag = base.FrameIterationIndex % 3 == 0;
-            if (flag) {
-                mass.perPeriodForcesCache4f = Vector4f.Zero;
-            }
-
-            Vector4f perFrameForcesCache4f = mass.perFrameForcesCache4f;
-            if (!mass.IgnoreEnvForces) {
-                if (mass.Position.y <= mass.WaterHeight + 0.0125f) {
-                    Vector4f vector4f = mass.Velocity4f - mass.FlowVelocity;
-                    vector4f.W = 0f;
-                    Single num = 0.5f * (1f - Mathf.Clamp(mass.Position.y, -0.0125f, 0.0125f) / 0.0125f);
-                    Single num2 = vector4f.Magnitude();
-                    if (num2 < 1f) {
-                        num2 = 1f;
-                    }
-
-                    perFrameForcesCache4f -= vector4f * mass.MassValue4f * (mass.WaterDragConstant4f + new Vector4f(mass.BuoyancySpeedMultiplier * GravityAcceleration)) * new Vector4f(num2);
-                    if (flag) {
-                        Single num3 = (mass.Buoyancy + 1f) * num;
-                        Single num4 = 0f;
-                        if (mass.BuoyancySpeedMultiplier != 0f && mass.Position.y < 0f) {
-                            num4 += new Vector2(mass.Velocity4f.X - mass.FlowVelocity.X, mass.Velocity4f.Z - mass.FlowVelocity.Z).magnitude * mass.BuoyancySpeedMultiplier * BuoyancySpeedMultiplierFactor * num;
-                        }
-
-                        num4 = Mathf.Clamp(num4, -1000f, 1000f);
-                        mass.perPeriodForcesCache4f += Vector4fExtensions.up * (mass.MassValue4f * GravityAcceleration4f * new Vector4f(num3 + num4));
-                    }
-                }
-
-                if (mass.Position.y >= 0f && flag) {
-                    mass.perPeriodForcesCache4f -= (mass.Velocity4f - mass.WindVelocity) * mass.AirDragConstant4f;
-                }
-
-                perFrameForcesCache4f += mass.perPeriodForcesCache4f;
-            }
-
-            perFrameForcesCache4f += mass.Motor4f;
-            if (mass.Position.y <= mass.WaterHeight + 0.0125f) {
-                perFrameForcesCache4f += mass.WaterMotor4f;
-            }
-
-            mass.ApplyForce(perFrameForcesCache4f);
-        }
-
         private void RefreshConnectionsAndObjectsArrays() {
             if (ArrayConnections == null) {
                 ArrayConnections = new ConnectionBase[ConnectionsMaxCount];
@@ -584,52 +513,6 @@ namespace QH.Physics {
             Debug.LogError(stringBuilder4);
             flag = true;
         }
-
-        public Single MassToMassSpringDistance(MassObject lowerMass, MassObject upperMass, Single load = 0f) {
-            Single num = 0f;
-            MassObject mass = lowerMass;
-            while (mass.NextSpring != null && mass != upperMass) {
-                num = ((load != 0f) ? (num + mass.NextSpring.EquilibrantLength(load * GravityAcceleration)) : (num + mass.NextSpring.SpringLength));
-                mass = mass.NextSpring.Mass2;
-            }
-
-            return (mass != upperMass) ? (-1f) : num;
-        }
-
-        public void EnableMassTracer(Int32 traceScanPeriod, Int32[] tracedMasses) {
-            this.traceScanPeriod = traceScanPeriod;
-            skipCounter = 0;
-            this.tracedMasses = tracedMasses;
-            Traces = new Vector3[tracedMasses.Length][];
-            for (Int32 i = 0; i < Traces.Length; i++) {
-                Traces[i] = new Vector3[150 / traceScanPeriod + 1];
-            }
-        }
-
-        public void SyncMassTracer(SimulationSystem sourceSim) {
-            if (tracedMasses != null && sourceSim.Traces != null) {
-                for (Int32 i = 0; i < Traces.Length; i++) {
-                    Array.Copy(sourceSim.Traces[i], Traces[i], Traces[i].Length);
-                }
-            }
-        }
-
-        public void DebugSnapshotLog() {
-            StringBuilder stringBuilder = new StringBuilder("----- Masses -----\n");
-            for (Int32 i = 0; i < base.MassList.Count; i++) {
-                stringBuilder.AppendLine(base.MassList[i].ToString());
-            }
-
-            stringBuilder.AppendLine();
-            Debug.Log(stringBuilder.ToString());
-            stringBuilder = new StringBuilder("----- Connections -----\n");
-            for (Int32 j = 0; j < base.ConnectionList.Count; j++) {
-                stringBuilder.AppendLine(base.ConnectionList[j].ToString());
-            }
-
-            Debug.Log(stringBuilder.ToString());
-        }
-
 #endregion
     }
 }

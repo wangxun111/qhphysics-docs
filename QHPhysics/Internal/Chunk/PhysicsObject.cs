@@ -20,7 +20,6 @@ namespace QH.Physics
         public SimulationSystem Sim;
         private Boolean isKinematic;
         public MassObject CheckLayerMass;
-        public Boolean NeedCheckSurface;
 
         public EPhysicsObjectType Type { get; set; }
         public List<MassObject> Masses { get; private set; }
@@ -150,13 +149,7 @@ namespace QH.Physics
             Sim.Objects.Add(this);
             Sim.DictObjects[UID] = this;
             CheckLayerMass = null;
-            NeedCheckSurface = false;
             Sim.IPhyActionsListener.CreateAPhysicsObject(this);
-#if ENABLE_EASTMALLI_DEBUG
-            if (!sim.IsMain) {
-                QHFramework.MessengerManager.Instance.Broadcast<PhysicsObject, System.Int32>("CreatePhyObject", this, 0);
-            }
-#endif
         }
 
         public PhysicsObject(SimulationSystem sim, PhysicsObject source) {
@@ -174,12 +167,6 @@ namespace QH.Physics
 
             UID = source.UID;
             IID = -NewIID;
-            NeedCheckSurface = source.NeedCheckSurface;
-#if ENABLE_EASTMALLI_DEBUG
-            if (!sim.IsMain) {
-                QHFramework.MessengerManager.Instance.Broadcast<PhysicsObject, System.Int32>("CreatePhyObject", this, 1);
-            }
-#endif
         }
 
         public override Int32 GetHashCode() {
