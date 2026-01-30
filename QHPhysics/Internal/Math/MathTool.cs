@@ -425,7 +425,7 @@ public static class MathTool {
     }
 
     public static void GetConstraintPointCollisionInfo(PointConstraintOfRigidBody cp) {
-        LayerMask FishMask = Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast")));
+        LayerMask FishMask = Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast")) | (1 << LayerMask.NameToLayer("AssetField")));
         for (Int32 i = 0; i < cp.RaycastLocalDirections.Length; i++) {
             Vector3 vector = cp.RigidBody.Rotation * cp.RaycastLocalDirections[i];
             RaycastHit hitInfo;
@@ -444,7 +444,7 @@ public static class MathTool {
         Single result = -1000f;
         Vector3 origin = new Vector3(position.x, position.y + 0.5f, position.z);
         RaycastHit hitInfo;
-        if (!light && Physics.Raycast(origin, Vector3.down, out hitInfo, 50f, Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast")) | (1 << LayerMask.NameToLayer("Fish"))))) {
+        if (!light && Physics.Raycast(origin, Vector3.down, out hitInfo, 50f, Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast")) | (1 << LayerMask.NameToLayer("Fish")) | (1 << LayerMask.NameToLayer("AssetField"))))) {
             result = hitInfo.point.y;
             if (modify) {
                 result += 0.0125f;
@@ -538,7 +538,7 @@ public static class MathTool {
     public static void GetGroundCollision(Vector3 origin, out Vector3 point, out Vector3 normal, Single raycastHeight = 5f) {
         Vector3 origin2 = new Vector3(origin.x, origin.y + raycastHeight, origin.z);
         RaycastHit hitInfo;
-        if (Physics.Raycast(origin2, Vector3.down, out hitInfo, 50f, Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"))))) {
+        if (Physics.Raycast(origin2, Vector3.down, out hitInfo, 50f, Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast")) | (1 << LayerMask.NameToLayer("AssetField"))))) {
             point = hitInfo.point;
             normal = hitInfo.normal;
         }
@@ -559,7 +559,7 @@ public static class MathTool {
     public static void GetGroundCollision(Vector3 origin, out Boolean hit, out Vector3 point, out Vector3 normal, Single raycastHeight = 5f, Single? targetPos = null) {
         Vector3 origin2 = new Vector3(origin.x, origin.y + raycastHeight, origin.z);
         RaycastHit hitInfo;
-        if (Physics.Raycast(origin2, Vector3.down, out hitInfo, 50f, Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"))))) {
+        if (Physics.Raycast(origin2, Vector3.down, out hitInfo, 50f, Int32.MaxValue & ~((1 << LayerMask.NameToLayer("Water")) | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast")) | (1 << LayerMask.NameToLayer("AssetField"))))) {
             hit = true;
             point = hitInfo.point;
             normal = hitInfo.normal;
