@@ -26,6 +26,18 @@ namespace QH.Physics {
         private Vector4f springVector;
         private VerletMass verletMass2;
 
+        private Boolean freezeSatisfyImpulse;
+        
+        public Boolean FreezeSatisfyImpulse {
+            get {
+                return freezeSatisfyImpulse;
+            }
+            set {
+                freezeSatisfyImpulse = value;
+                ConnectionNeedSyncMark();
+            }
+        }
+
         public Single SpringConstant {
             get {
                 return springConstant;
@@ -128,6 +140,7 @@ namespace QH.Physics {
                 mass2.PriorSpring = this;
             }
 
+            freezeSatisfyImpulse = false;
             massesInvDenom = new Vector4f(1f / (base.Mass1.InvMassValue4f.X + base.Mass2.InvMassValue4f.X));
         }
 
@@ -144,6 +157,7 @@ namespace QH.Physics {
             affectMass2Factor = Vector4fExtensions.one3;
             impulseThreshold2 = source.ImpulseThreshold2;
             impulseVerletMax2 = source.ImpulseVerletMax2;
+            freezeSatisfyImpulse = source.freezeSatisfyImpulse;
             massesInvDenom = new Vector4f(1f / (base.Mass1.InvMassValue4f.X + base.Mass2.InvMassValue4f.X));
         }
 
@@ -160,6 +174,7 @@ namespace QH.Physics {
             affectMass2Factor = Vector4fExtensions.one3;
             impulseThreshold2 = source.ImpulseThreshold2;
             impulseVerletMax2 = source.ImpulseVerletMax2;
+            freezeSatisfyImpulse = source.freezeSatisfyImpulse;
             massesInvDenom = new Vector4f(1f / (base.Mass1.InvMassValue4f.X + base.Mass2.InvMassValue4f.X));
         }
 
@@ -180,6 +195,7 @@ namespace QH.Physics {
             affectMass2Factor = spring.affectMass2Factor;
             impulseThreshold2 = spring.impulseThreshold2;
             impulseVerletMax2 = spring.impulseVerletMax2;
+            freezeSatisfyImpulse = spring.freezeSatisfyImpulse;
             frictionConstant4f = spring.frictionConstant4f;
             if (spring.immediateSpringLength >= 0f) {
                 springLength = spring.immediateSpringLength;
@@ -364,6 +380,11 @@ namespace QH.Physics {
                 springLength = Mathf.Lerp(oldSpringLength, targetSpringLength, base.Mass1.Sim.FrameIterationProgress);
             }
 
+            if (freezeSatisfyImpulse)
+            {
+                return;
+            }
+            
             if (!base.Mass1.IsKinematic || !base.Mass2.IsKinematic) {
                 tension = SatisfyImpulseConstraintMass(this, base.Mass1, base.Mass2, springLength, frictionConstant4f, ImpulseThreshold2);
             }

@@ -158,11 +158,24 @@ namespace QH.Physics
             Connections = new List<ConnectionBase>();
             Sim = sim;
             for (Int32 i = 0; i < source.Masses.Count; i++) {
-                Masses.Add(Sim.MassDict[source.Masses[i].UID]);
+                if (Sim.MassDict.ContainsKey(source.Masses[i].UID))
+                {
+                    Masses.Add(Sim.MassDict[source.Masses[i].UID]);
+                }
+                else
+                {
+                    Debug.LogWarning($"找不到id={source.Masses[i].UID},type={source.Masses[i].Type}的Mass");
+                }
             }
 
             for (Int32 j = 0; j < source.Connections.Count; j++) {
-                Connections.Add(Sim.DictConnections[source.Connections[j].UID]);
+                if (Sim.DictConnections.ContainsKey(source.Connections[j].UID))
+                {
+                    Connections.Add(Sim.DictConnections[source.Connections[j].UID]);
+                }else
+                {
+                    Debug.LogWarning($"找不到id ={source.Connections[j].UID},type={source.Connections[j].Mass1.Type}-{source.Connections[j].Mass2.Type}的connection");
+                }
             }
 
             UID = source.UID;
