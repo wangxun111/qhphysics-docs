@@ -73,13 +73,6 @@ namespace QH.Physics {
             Vector4f vector4f = vmass2.Position4f - vmass1.Position4f;
             Single num = Vector4fExtensions.Dot(vector4f, vector4f);
             
-            float length=vmass1.FishData!=null?vmass1.FishData.verletSpringlength:vmass2.FishData!=null?vmass2.FishData.verletSpringlength:0;
-            
-            if (length != 0)
-            {
-                lengthsqr=length;
-            }
-            
             if (!compressible || num > lengthsqr) {
                 Single num2 = (lengthsqr / (num + lengthsqr) - 0.5f) * invMassSum;
                 
@@ -93,22 +86,12 @@ namespace QH.Physics {
             }
         }
         
-        Vector4f SetNewFriction(float friction) {
-            newFriction.X= friction;
-            newFriction.Y= friction;
-            newFriction.Z= friction;
-            newFriction.W= friction;
-            return newFriction;
-        }
-        
         public override void Solve() {
             bool isCloseVerletSpring = vmass1.FishData!=null&&!vmass1.FishData.isOpenVerletSpring || vmass2.FishData!=null&&!vmass2.FishData.isOpenVerletSpring;
             if (isCloseVerletSpring) return;
             
             Vector4f vector4f = vmass1.Position4f - vmass2.Position4f;
             Single num = vector4f.SqrMagnitude();
-
-            friction= vmass1.FishData!=null&&vmass1.FishData.verletSpringfriction>0?SetNewFriction(vmass1.FishData.verletSpringfriction):vmass2.FishData!=null&&vmass2.FishData.verletSpringfriction>0?SetNewFriction(vmass2.FishData.verletSpringfriction):friction;
 
             if (!Mathf.Approximately(0f, num)) {
                 vector4f /= new Vector4f(Mathf.Sqrt(num));
