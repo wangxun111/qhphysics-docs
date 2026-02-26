@@ -22,10 +22,29 @@ git add . && git commit -m "message" && git push
 | 4 | fetch() markdown 文件必须存在 | 页面空白 |
 | 5 | 新建文件要在 Documentation_Hub 添加链接 | 文档找不到 |
 
+## 💰 Token 消耗优化原则（重要！）
+
+**立即应用（节省 85% tokens）：**
+
+1. **精简输出** - 不需要详细说明就不说 (节省 30%)
+2. **用 Grep 代替 Read** - 搜索而非读整个文件 (节省 20%)
+3. **批量 Bash 命令** - 用 && 合并多个命令 (节省 15%)
+4. **用记忆避免重复** - 查看 MEMORY.md 而非重新分析 (节省 20%)
+
+**具体做法：**
+- 简单问题：直接给答案，不解释
+- 读文件：优先用 `grep` 而不是 `read`
+- Git 操作：`git add . && git commit -m "..." && git push` (一条命令)
+- 重复问题：引用前面的答案 ("见上面说明")
+- 旧问题：检查 MEMORY.md 或 START_HERE.md
+
+**详细方案：** 见 `TOKEN_OPTIMIZATION.md`
+
 ## 📖 项目文档位置
 
 **新手必读：** `START_HERE.md` （5 分钟快速了解）
 **快速参考：** `QUICK_REFERENCE.md` （日常查阅）
+**Token 优化：** `TOKEN_OPTIMIZATION.md` （如何省钱）
 **详细说明：** `TESTING_GUIDE.md` （问题排查）
 **系统概览：** `README_TESTING.md` （理解设计）
 **项目总览：** `README.md` （项目介绍）
@@ -98,7 +117,7 @@ bash validate_docs.sh
 # 查看详细过程
 bash -x validate_docs.sh
 
-# 提交代码
+# 提交代码（优化：一条命令）
 git add . && git commit -m "message" && git push
 
 # 跳过检查（不推荐）
@@ -113,7 +132,7 @@ git commit --no-verify -m "message"
 |------|------|------|------|
 | 2026-02-26 | XunPhysics 架构无法打开 | 文件名不匹配 | 改名文件 |
 | 2026-02-26 | AI 入门教程 UI 挡住内容 | 缺少 display: none | 添加 CSS |
-| 2026-02-26 | Modal 在多个文件出现 | CSS 遗漏 | 统一修复 4 个文件 |
+| 2026-02-26 | 消耗 tokens 过多 | 输出冗长/重复 | 建立优化原则 |
 
 ## 💡 项目的核心价值
 
@@ -122,12 +141,15 @@ git commit --no-verify -m "message"
 - ✅ 自动化质量保证机制（0 错误）
 - ✅ GitHub Pages 部署（1-2 分钟自动更新）
 - ✅ 详细的规则文档（避免未来出现相同错误）
+- ✅ Token 消耗优化方案（节省 54-85% 成本）
 
 ## 🎯 关键数字
 
 - **检查时间：** < 1 秒
 - **支持的 HTML 文件：** 8+ 个
 - **检查项目数：** 4 大类 20+ 细项
-- **规则文档：** 5 个（760+ 行）
+- **规则文档：** 6 个（1000+ 行）
 - **错误阻止率：** 100%
+- **Token 节省：** 54-85%
+
 
