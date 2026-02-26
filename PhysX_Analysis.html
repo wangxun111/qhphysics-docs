@@ -30,13 +30,13 @@
             color: var(--text);
             line-height: 1.7;
             display: flex;
-            min-height: 100vh;
+            min-height: fit-content;
         }
         nav {
-            position: fixed;
-            top: 0; left: 0;
+            position: sticky;
+            top: 0;
             width: 280px;
-            height: 100vh;
+            height: fit-content;
             background: var(--bg-card);
             border-right: 1px solid var(--border);
             overflow-y: auto;
@@ -94,8 +94,8 @@
             padding: 16px;
             height: fit-content;
             position: sticky;
-            top: 40px;
-            max-height: calc(100vh - 80px);
+            top: 0;
+            max-height: calc(100vh - 20px);
             overflow-y: auto;
         }
         #notesPanel h3 {
