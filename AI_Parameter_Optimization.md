@@ -2,7 +2,7 @@
 
 ## 一、现状分析：手工调优的痛点
 
-### 1.1 当前 QHPhysics 的调参问题
+### 1.1 当前 XunPhysics 的调参问题
 
 ```csharp
 // 需要手工调整的参数（几十个）
@@ -485,13 +485,13 @@ Agent 学会了：
 
 ---
 
-## 四、与 QHPhysics 的整合方案
+## 四、与 XunPhysics 的整合方案
 
 ### 4.1 架构设计
 
 ```
 ┌─────────────────────────────────────────┐
-│      QHPhysics 物理引擎                  │
+│      XunPhysics 物理引擎                  │
 │  (固定的高频迭代框架: 2500Hz)            │
 └────────────┬────────────────────────────┘
              ↑
@@ -519,7 +519,7 @@ from bayes_opt import BayesianOptimization
 import subprocess
 import json
 
-class QHPhysicsOptimizer:
+class XunPhysicsOptimizer:
     def __init__(self, game_executable_path):
         self.game_exe = game_executable_path
         self.history = []
@@ -588,14 +588,14 @@ class QHPhysicsOptimizer:
 
 
 if __name__ == '__main__':
-    opt = QHPhysicsOptimizer('path/to/qhphysics_game.exe')
+    opt = XunPhysicsOptimizer('path/to/qhphysics_game.exe')
     opt.optimize()
 ```
 
 ### 4.3 C# 端集成
 
 ```csharp
-// QHPhysicsAutoEval.cs - 游戏自动评估模式
+// XunPhysicsAutoEval.cs - 游戏自动评估模式
 
 public class AutoEvaluationMode
 {
@@ -708,7 +708,7 @@ public class AutoEvaluationMode
 
 ## 六、技术栈推荐
 
-### 6.1 对于 QHPhysics
+### 6.1 对于 XunPhysics
 
 ```
 推荐方案：贝叶斯优化 + 自动化评估
@@ -719,7 +719,7 @@ public class AutoEvaluationMode
 │   ├── numpy, scipy
 │   └── json (配置交互)
 │
-├── C# (QHPhysics)
+├── C# (XunPhysics)
 │   ├── 自动评估模式 (AI 控制游戏)
 │   └── JSON 配置加载
 │

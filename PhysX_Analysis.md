@@ -269,11 +269,11 @@ GPU: 约束求解、位置积分
 
 ---
 
-## 七、与 QHPhysics 对比分析
+## 七、与 XunPhysics 对比分析
 
 ### 7.1 设计理念对比
 
-| 维度 | PhysX | QHPhysics |
+| 维度 | PhysX | XunPhysics |
 |------|-------|-----------|
 | **目标** | 通用物理引擎 | 钓鱼游戏专用 |
 | **优先级** | 物理准确性 | 实时性和手感 |
@@ -282,7 +282,7 @@ GPU: 约束求解、位置积分
 
 ### 7.2 核心算法对比
 
-| 特性 | PhysX 5.x | QHPhysics |
+| 特性 | PhysX 5.x | XunPhysics |
 |------|-----------|-----------|
 | **积分方法** | 半隐式欧拉 | Verlet + 冲量混合 |
 | **时间步长** | 1/60s ~ 1/240s | 固定 0.0004s (2500Hz) |
@@ -293,7 +293,7 @@ GPU: 约束求解、位置积分
 
 ### 7.3 功能完整性对比
 
-| 功能 | PhysX | QHPhysics |
+| 功能 | PhysX | XunPhysics |
 |------|-------|-----------|
 | **刚体** | ✅ 完整 | ✅ 基础 |
 | **关节** | ✅ 20+ 种 | ✅ 4 种 |
@@ -308,7 +308,7 @@ GPU: 约束求解、位置积分
 
 ### 7.4 性能对比
 
-| 指标 | PhysX | QHPhysics |
+| 指标 | PhysX | XunPhysics |
 |------|-------|-----------|
 | **线程模型** | 多线程 + GPU | 独立线程单核 |
 | **扩展性** | 数万刚体 | 数百质点 |
@@ -330,7 +330,7 @@ GPU: 约束求解、位置积分
 ✅ 大规模场景
 ```
 
-### QHPhysics 适用场景
+### XunPhysics 适用场景
 
 ```
 ✅ 钓鱼游戏
@@ -422,7 +422,7 @@ revolute->setDriveForceLimit(maxForce);
    - 集成成本大
 
 2. **不适合特定领域** ❌
-   - 无绳索/布料原生支持（相对于 QHPhysics）
+   - 无绳索/布料原生支持（相对于 XunPhysics）
    - 无内置水物理
    - 不适合高频迭代（2500Hz）
 
@@ -430,7 +430,7 @@ revolute->setDriveForceLimit(maxForce);
    - 内存占用大
    - CPU/GPU 成本高
 
-### QHPhysics 优势
+### XunPhysics 优势
 
 1. **专用定制** ✅
    - 为钓鱼场景优化
@@ -447,7 +447,7 @@ revolute->setDriveForceLimit(maxForce);
    - 精确的鱼线模拟
    - 实时交互性好
 
-### QHPhysics 劣势
+### XunPhysics 劣势
 
 1. **功能有限** ❌
    - 不支持布料、粒子、破碎
@@ -478,7 +478,7 @@ revolute->setDriveForceLimit(maxForce);
 ✅ 需要高度精确的物理
 ```
 
-### 选择 QHPhysics 当：
+### 选择 XunPhysics 当：
 
 ```
 ✅ 专门开发钓鱼游戏
@@ -492,7 +492,7 @@ revolute->setDriveForceLimit(maxForce);
 
 ```
 ✅ PhysX 用于场景刚体（地形、建筑）
-✅ QHPhysics 用于钓鱼部分（鱼线、鱼体）
+✅ XunPhysics 用于钓鱼部分（鱼线、鱼体）
 ✅ 两个系统并行运行，独立交互
 ```
 
@@ -510,7 +510,7 @@ revolute->setDriveForceLimit(maxForce);
 → 云端物理仿真
 ```
 
-### QHPhysics 的演化可能
+### XunPhysics 的演化可能
 
 ```
 → 增加迭代约束求解
@@ -524,17 +524,17 @@ revolute->setDriveForceLimit(maxForce);
 
 ## 总结
 
-**PhysX** 和 **QHPhysics** 代表了物理引擎设计的两个极端：
+**PhysX** 和 **XunPhysics** 代表了物理引擎设计的两个极端：
 - **PhysX**：通用、准确、复杂、强大
-- **QHPhysics**：专用、快速、简洁、灵活
+- **XunPhysics**：专用、快速、简洁、灵活
 
 没有绝对的"更好"，只有"更适合"。选择取决于你的具体需求。
 
-对于钓鱼游戏，QHPhysics 已经是**最优方案**。
+对于钓鱼游戏，XunPhysics 已经是**最优方案**。
 对于其他游戏类型，PhysX 仍是**业界标准**。
 
 ---
 
 **文档版本**: v1.0
 **更新时间**: 2026年2月26日
-**对标引擎**: PhysX 5.x / QHPhysics 1.x
+**对标引擎**: PhysX 5.x / XunPhysics 1.x

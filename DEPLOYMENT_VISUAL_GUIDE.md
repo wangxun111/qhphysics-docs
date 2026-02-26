@@ -34,7 +34,7 @@ F:\new\fishinggame\QHPlugins\QHForUnity\
 └── 在这个目录中有：
     ├── Documentation_Hub.html
     ├── deploy_to_github.bat ← 我们要用这个
-    ├── QHPhysics_Architecture.html
+    ├── XunPhysics_Architecture.html
     ├── 其他文档...
     └── ...
 ```
@@ -68,7 +68,7 @@ C:\Users\YourName>cd F:\new\fishinggame\QHPlugins\QHForUnity
 F:\new\fishinggame\QHPlugins\QHForUnity>deploy_to_github.bat john123
 
 ========================================
-  QHPhysics 文档 GitHub Pages 部署脚本
+  XunPhysics 文档 GitHub Pages 部署脚本
 ========================================
 
 ✓ GitHub 用户名：john123

@@ -1,8 +1,8 @@
-# QHPhysics 物理引擎架构文档
+# XunPhysics 物理引擎架构文档
 
 ## 一、项目概述
 
-QHPhysics 是一个面向钓鱼游戏的自研物理引擎 Unity 插件，核心目标是高性能模拟鱼线、鱼竿、鱼钩、鱼体等柔性/刚性物体的物理行为。
+XunPhysics 是一个面向钓鱼游戏的自研物理引擎 Unity 插件，核心目标是高性能模拟鱼线、鱼竿、鱼钩、鱼体等柔性/刚性物体的物理行为。
 
 **技术栈**: C# / .NET Standard 2.1 / Unity
 **依赖**: Newtonsoft.Json、Mono.Simd（自带 SIMD 向量库）
@@ -273,7 +273,7 @@ sim.Update(Time.deltaTime);
 QHForUnity/
 ├── Mono.Simd/              # SIMD向量数学库
 ├── Third/                  # 第三方依赖 (Unity DLL, Json)
-└── QHPhysics/
+└── XunPhysics/
     ├── External/           # 公开接口 (IMassObject)
     └── Internal/
         ├── Simulation/     # 仿真主循环
@@ -666,51 +666,51 @@ Operate(dt):
 
 ### 12.1 定位差异
 
-| 维度 | QHPhysics | PhysX | Havok | Bullet | Box2D |
+| 维度 | XunPhysics | PhysX | Havok | Bullet | Box2D |
 |------|-----------|-------|-------|--------|-------|
 | 定位 | 钓鱼游戏专用柔体引擎 | 通用 AAA 游戏物理 | 通用 AAA 物理 | 开源通用物理 | 2D 通用物理 |
 | 核心场景 | 鱼线/鱼竿/鱼体模拟 | 刚体+载具+布娃娃 | 刚体+破碎+布娃娃 | 刚体+柔体+流体 | 2D 平台/休闲 |
 
-QHPhysics 是**领域专用求解器（Domain-Specific Solver）**，不是通用物理引擎的竞品。
+XunPhysics 是**领域专用求解器（Domain-Specific Solver）**，不是通用物理引擎的竞品。
 
 ### 12.2 积分方案对比
 
-| 特性 | QHPhysics | PhysX 5.x | Havok | Bullet 3 |
+| 特性 | XunPhysics | PhysX 5.x | Havok | Bullet 3 |
 |------|-----------|-----------|-------|----------|
 | 积分方法 | Verlet + 半隐式欧拉混合 | 半隐式欧拉 | 半隐式欧拉 | 半隐式欧拉 |
 | 时间步长 | 固定 0.0004s (2500Hz) | 通常 1/60s ~ 1/120s | 1/60s ~ 1/120s | 1/60s ~ 1/240s |
 | 每帧子步数 | ~42次 (@60fps) | 1~4 次 | 1~4 次 | 1~10 次 |
 
-**2500Hz 极高频迭代**是 QHPhysics 最激进的设计。
+**2500Hz 极高频迭代**是 XunPhysics 最激进的设计。
 
 ### 12.3 约束求解对比
 
-| 特性 | QHPhysics | PhysX 5.x | Havok | Bullet 3 |
+| 特性 | XunPhysics | PhysX 5.x | Havok | Bullet 3 |
 |------|-----------|-----------|-------|----------|
 | 求解算法 | 单遍冲量 + 位置修正 | TGS | GS 迭代 | PGS |
 | 每步迭代次数 | 1 次（无迭代） | 4~8 次 | 4~8 次 | 10~20 次 |
 
-**单遍无迭代**是 QHPhysics 与所有主流引擎最大的差异。
+**单遍无迭代**是 XunPhysics 与所有主流引擎最大的差异。
 
 ### 12.4 碰撞检测对比
 
-| 特性 | QHPhysics | PhysX 5.x | Havok | Bullet 3 |
+| 特性 | XunPhysics | PhysX 5.x | Havok | Bullet 3 |
 |------|-----------|-----------|-------|----------|
 | 宽相检测 | **无** | SAP / BVH | BVH | AABB 树 / SAP |
 | 连续碰撞(CCD) | **无** | Speculative + Sweep | 有 | 有 |
 | 碰撞复杂度 | O(n×m) 暴力 | O(n log n) | O(n log n) | O(n log n) |
 
-这是 QHPhysics **最薄弱的环节**。
+这是 XunPhysics **最薄弱的环节**。
 
 ### 12.5 柔体 / 绳索模拟对比
 
-| 特性 | QHPhysics | PhysX 5.x | Havok Cloth | Bullet | Obi |
+| 特性 | XunPhysics | PhysX 5.x | Havok Cloth | Bullet | Obi |
 |------|-----------|-----------|-------------|--------|-----|
 | 绳索模型 | Verlet 质点链 + 冲量弹簧 | 无原生绳索 | 有限 | 柔体约束 | PBD 质点链 |
 | 鱼体模型 | 四面体球关节 + 波动函数 | 无 | 无 | 四面体柔体 | 无 |
 | 水物理 | 内置浮力+水阻+深度因子 | 无 | 无 | 无 | 需要插件 |
 
-这是 QHPhysics **最大的优势领域**。
+这是 XunPhysics **最大的优势领域**。
 
 ---
 
@@ -718,7 +718,7 @@ QHPhysics 是**领域专用求解器（Domain-Specific Solver）**，不是通�
 
 ## 13.1 三层弹簧系统架构
 
-QHPhysics 实现了三层递进式的弹簧系统，用于模拟钓鱼场景中不同的物理特性：
+XunPhysics 实现了三层递进式的弹簧系统，用于模拟钓鱼场景中不同的物理特性：
 
 | 层级 | 类名 | 求解策略 | 应用场景 | 特点 |
 |------|------|---------|---------|------|
@@ -930,7 +930,7 @@ RodTip --spring0-- M1 --spring1-- M2 --spring2-- ... --springN-- Hook
 - spring1：拉 M1 向 M2，拉 M2 向前（部分抵消 spring0 的校正）
 - 链越长，末端累积误差越大
 
-与主流引擎(PGS/TGS)的区别：主流引擎在一个 substep 内迭代多次(4~20次)，QHPhysics 只做 1 遍，靠 2500Hz 高频弥补。
+与主流引擎(PGS/TGS)的区别：主流引擎在一个 substep 内迭代多次(4~20次)，XunPhysics 只做 1 遍，靠 2500Hz 高频弥补。
 
 ## 13.5 与 Hooke 定律的关系
 
@@ -1004,4 +1004,4 @@ Debug.Log($"  ThresholdApplied: {Tension >= ImpulseThreshold2}");
 | **性能** | SIMD 批处理 + 轮转 | 2500Hz 高频下的可承受成本 |
 | **兼容性** | 与 VerletMass/Bend 混用 | 钓鱼场景的综合需求 |
 
-Spring 系统是 QHPhysics **最核心的创新**。它不追求通用性或学术正确性，而是为钓鱼手感深度定制，这正是其强大之处——也是最大的局限。
+Spring 系统是 XunPhysics **最核心的创新**。它不追求通用性或学术正确性，而是为钓鱼手感深度定制，这正是其强大之处——也是最大的局限。

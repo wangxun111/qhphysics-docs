@@ -68,7 +68,7 @@ https://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html
 ```
 https://wangxun111.github.io/qhphysics-docs/AI_Tuning_Getting_Started.html
 https://wangxun111.github.io/qhphysics-docs/AI_Parameter_Optimization.html
-https://wangxun111.github.io/qhphysics-docs/QHPhysics_Architecture.html
+https://wangxun111.github.io/qhphysics-docs/XunPhysics_Architecture.html
 https://wangxun111.github.io/qhphysics-docs/PhysX_Analysis.html
 ```
 

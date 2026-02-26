@@ -1,6 +1,6 @@
 # 文档中心 - 完整导航
 
-欢迎来到 QHPhysics 钓鱼游戏物理引擎的完整文档中心！
+欢迎来到 XunPhysics 钓鱼游戏物理引擎的完整文档中心！
 
 这里汇集了所有关于物理引擎架构、AI参数调优、PhysX对标分析的资料。
 
@@ -36,9 +36,9 @@
 
 ---
 
-### 🎮 我想了解 QHPhysics 引擎架构
+### 🎮 我想了解 XunPhysics 引擎架构
 
-**[QHPhysics 完整架构文档](QHPhysics_Architecture.html)** ⭐⭐⭐⭐
+**[XunPhysics 完整架构文档](XunPhysics_Architecture.html)** ⭐⭐⭐⭐
 - 📄 1007 行 | 13 个章节
 - 🔧 完整的系统架构解析
 - ⚙️ 深度的 Spring 系统分析（第13章）
@@ -54,12 +54,12 @@
 
 **[PhysX 深度分析与对比](PhysX_Analysis.html)** ⭐⭐⭐⭐
 - 📄 540 行 | 12 个章节
-- 🔍 详细的 PhysX vs QHPhysics 对比（第7章）
+- 🔍 详细的 PhysX vs XunPhysics 对比（第7章）
 - ⚖️ 优缺点全面分析（第10章）
 - 🎯 选型建议（第11章）
 - **推荐指数**: 选型必读
 
-**适合**：需要在 PhysX 和 QHPhysics 间选择的人
+**适合**：需要在 PhysX 和 XunPhysics 间选择的人
 **不适合**：已经决定好引擎的人
 
 ---
@@ -92,7 +92,7 @@
         └─ 集成评估函数
         └─ 调试和改进
 
-第6-7天: 阅读 QHPhysics 架构了解背景
+第6-7天: 阅读 XunPhysics 架构了解背景
         └─ 理解为什么参数调优有效
 ```
 
@@ -108,7 +108,7 @@
         └─ 学习其他优化算法
         └─ 灵敏度分析、参数联动
 
-第3天: QHPhysics 架构（第12-13章）
+第3天: XunPhysics 架构（第12-13章）
       └─ 理解为什么某些参数重要
 
 第4天: PhysX 对比分析
@@ -123,7 +123,7 @@
 第1天: 快速浏览入门教程（了解流程）
       └─ 30分钟
 
-      QHPhysics 架构全篇阅读
+      XunPhysics 架构全篇阅读
       └─ 2小时，重点：整体架构 + 核心算法
 
       PhysX 对比（第7、10、11章）
@@ -150,7 +150,7 @@
         ↓                                   ↓
 
     🚀 AI 参数调优系列               🏗️ 架构分析系列
-    ├─ 入门教程 ⭐ 新手必读          ├─ QHPhysics 架构
+    ├─ 入门教程 ⭐ 新手必读          ├─ XunPhysics 架构
     └─ 深度分析 (4种方案详解)       └─ PhysX 对标分析
 ```
 
@@ -171,7 +171,7 @@
 |--------|------|------|------|--------|
 | AI参数调优入门教程 | 800+ | 7 | ⭐ 简单 | ⭐⭐⭐⭐⭐ |
 | AI参数调优深度分析 | 923 | 9 | ⭐⭐⭐ 复杂 | ⭐⭐⭐⭐ |
-| QHPhysics 架构 | 1007 | 13 | ⭐⭐ 中等 | ⭐⭐⭐⭐ |
+| XunPhysics 架构 | 1007 | 13 | ⭐⭐ 中等 | ⭐⭐⭐⭐ |
 | PhysX 分析对比 | 540 | 12 | ⭐⭐ 中等 | ⭐⭐⭐⭐ |
 
 ---
@@ -182,14 +182,14 @@
 
 - [🚀 AI入门教程](AI_Tuning_Getting_Started.html) - 立即开始
 - [🧠 AI深度分析](AI_Parameter_Optimization.html) - 进阶学习
-- [🏗️ QHPhysics架构](QHPhysics_Architecture.html) - 系统设计
+- [🏗️ XunPhysics架构](XunPhysics_Architecture.html) - 系统设计
 - [⚔️ PhysX对比](PhysX_Analysis.html) - 选型参考
 
 ### 下载和查看源码
 
 - [AI入门教程源码](AI_Tuning_Getting_Started.md) - Markdown
 - [AI深度分析源码](AI_Parameter_Optimization.md) - Markdown
-- [QHPhysics源码](complete_doc.md) - Markdown
+- [XunPhysics源码](complete_doc.md) - Markdown
 - [PhysX源码](PhysX_Analysis.md) - Markdown
 
 ---
@@ -211,7 +211,7 @@
 
 建议：先学入门，再学深度分析。
 
-### Q: 需要学 QHPhysics 架构吗？
+### Q: 需要学 XunPhysics 架构吗？
 
 **A**: 取决于你的角色：
 - **参数调优工程师** = 不需要（入门教程足够）
@@ -249,7 +249,7 @@ AI入门教程：
 Day 1: AI入门教程全篇（3小时）
 Day 2: 在自己的项目中实践（2小时）
 Day 3: 遇到问题查第三章 FAQ（随时）
-Day 4: 阅读 QHPhysics 架构（2小时，可选）
+Day 4: 阅读 XunPhysics 架构（2小时，可选）
 Day 5: 优化效果，读深度分析（可选）
 ```
 
@@ -261,7 +261,7 @@ Day 5: 优化效果，读深度分析（可选）
 Week 1:
   ├─ AI入门教程（Day 1-2）
   ├─ AI深度分析（Day 3-4）
-  └─ QHPhysics架构（Day 5）
+  └─ XunPhysics架构（Day 5）
 
 Week 2:
   ├─ PhysX分析（Day 1）
@@ -276,7 +276,7 @@ Week 2:
 - **文档系统版本**: v3.0
 - **最后更新**: 2026年2月26日
 - **包含内容**:
-  - ✅ QHPhysics 完整架构
+  - ✅ XunPhysics 完整架构
   - ✅ PhysX 深度分析
   - ✅ AI 参数调优（入门 + 深度）
   - ✅ 完整案例和源码

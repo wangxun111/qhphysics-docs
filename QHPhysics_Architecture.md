@@ -1,8 +1,8 @@
-# QHPhysics 物理引擎架构文档
+# XunPhysics 物理引擎架构文档
 
 ## 一、项目概述
 
-QHPhysics 是一个面向钓鱼游戏的自研物理引擎 Unity 插件，核心目标是高性能模拟鱼线、鱼竿、鱼钩、鱼体等柔性/刚性物体的物理行为。
+XunPhysics 是一个面向钓鱼游戏的自研物理引擎 Unity 插件，核心目标是高性能模拟鱼线、鱼竿、鱼钩、鱼体等柔性/刚性物体的物理行为。
 
 **技术栈**: C# / .NET Standard 2.1 / Unity
 **依赖**: Newtonsoft.Json、Mono.Simd（自带 SIMD 向量库）
@@ -273,7 +273,7 @@ sim.Update(Time.deltaTime);
 QHForUnity/
 ├── Mono.Simd/              # SIMD向量数学库
 ├── Third/                  # 第三方依赖 (Unity DLL, Json)
-└── QHPhysics/
+└── XunPhysics/
     ├── External/           # 公开接口 (IMassObject)
     └── Internal/
         ├── Simulation/     # 仿真主循环

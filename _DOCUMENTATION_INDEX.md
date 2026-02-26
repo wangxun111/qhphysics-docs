@@ -2,8 +2,8 @@
 
 ## 📖 可用文档
 
-### 1. QHPhysics 完整架构文档 ⭐
-- **网页**: `QHPhysics_Architecture.html` 👈 **打开这个**
+### 1. XunPhysics 完整架构文档 ⭐
+- **网页**: `XunPhysics_Architecture.html` 👈 **打开这个**
 - **数据**: `complete_doc.md` (1007 行)
 - **内容**: 13 个完整章节 + Spring 深度分析
 - **功能**: 
@@ -69,7 +69,7 @@
 - **网页**: `PhysX_Analysis.html` 👈 **打开这个**
 - **数据**: `PhysX_Analysis.md` (540 行)
 - **内容**: 12 个完整章节 + 深度对比
-- **功能**: 与 QHPhysics 文档完全相同的样式和笔记系统
+- **功能**: 与 XunPhysics 文档完全相同的样式和笔记系统
 
 **章节列表**:
 - 一、项目概述
@@ -78,15 +78,15 @@
 - 四、核心算法（仿真循环、积分、TGS 求解、GJK 碰撞检测）
 - 五、性能特性（多线程、GPU 加速、内存模型）
 - 六、高级特性（车辆、破碎、液体粒子）
-- 七、与 QHPhysics 对比分析 ⭐ **重点**
+- 七、与 XunPhysics 对比分析 ⭐ **重点**
   - 设计理念对比
   - 核心算法对比
   - 功能完整性对比
   - 性能对比
 - 八、使用场景
 - 九、集成与使用
-- 十、优缺点分析（PhysX 优势/劣势、QHPhysics 优势/劣势）
-- 十一、选择建议（何时用 PhysX、何时用 QHPhysics、混合方案）
+- 十、优缺点分析（PhysX 优势/劣势、XunPhysics 优势/劣势）
+- 十一、选择建议（何时用 PhysX、何时用 XunPhysics、混合方案）
 - 十二、发展趋势
 - 总结
 
@@ -96,11 +96,11 @@
 
 | 文档 | 链接 | 说明 |
 |------|------|------|
-| QHPhysics | `QHPhysics_Architecture.html` | 1007 行完整文档 + Spring 分析 |
-| PhysX | `PhysX_Analysis.html` | 540 行深度报告 + QHPhysics 对比 |
+| XunPhysics | `XunPhysics_Architecture.html` | 1007 行完整文档 + Spring 分析 |
+| PhysX | `PhysX_Analysis.html` | 540 行深度报告 + XunPhysics 对比 |
 | AI调优入门 | `AI_Tuning_Getting_Started.html` | ⭐ 新！详细教程 + 完整案例 |
 | AI调优理论 | `AI_Parameter_Optimization.html` | 923 行理论深度 + 3个案例 |
-| 对比分析 | 两个文档中的 **第七/十章** | PhysX 和 QHPhysics 对比 |
+| 对比分析 | 两个文档中的 **第七/十章** | PhysX 和 XunPhysics 对比 |
 
 ---
 
@@ -108,7 +108,7 @@
 
 ### PhysX_Analysis.html 中的关键章节
 
-**第七章：与 QHPhysics 对比分析**
+**第七章：与 XunPhysics 对比分析**
 - 设计理念对比表
 - 核心算法对比表
 - 功能完整性对比表
@@ -117,13 +117,13 @@
 **第十章：优缺点分析**
 - PhysX 优势（功能、精确、性能、标准）
 - PhysX 劣势（复杂、不适合特定领域、资源占用）
-- QHPhysics 优势（专用定制、轻量级、高频迭代）
-- QHPhysics 劣势（功能有限、可扩展性差、算法限制）
+- XunPhysics 优势（专用定制、轻量级、高频迭代）
+- XunPhysics 劣势（功能有限、可扩展性差、算法限制）
 
 **第十一章：选择建议**
 - ✅ 选择 PhysX 当...
-- ✅ 选择 QHPhysics 当...
-- ✅ 混合方案（PhysX + QHPhysics）
+- ✅ 选择 XunPhysics 当...
+- ✅ 混合方案（PhysX + XunPhysics）
 
 ---
 
@@ -144,7 +144,7 @@
    - 笔记自动保存到本地浏览器 (localStorage)
 
 3. **笔记隔离**
-   - QHPhysics 的笔记存储在 `qhphysics_notes`
+   - XunPhysics 的笔记存储在 `qhphysics_notes`
    - PhysX 的笔记存储在 `physx_analysis_notes`
    - 两个文档的笔记不会互相干扰
 
@@ -154,9 +154,9 @@
 
 ```
 F:\new\fishinggame\QHPlugins\QHForUnity\
-├── 📄 QHPhysics_Architecture.html      ← 打开
+├── 📄 XunPhysics_Architecture.html      ← 打开
 ├── 📄 complete_doc.md                  ← 自动加载
-├── 📄 QHPhysics_Architecture.md        ← 备份
+├── 📄 XunPhysics_Architecture.md        ← 备份
 │
 ├── 📄 PhysX_Analysis.html              ← 打开  
 ├── 📄 PhysX_Analysis.md                ← 自动加载
@@ -171,14 +171,14 @@ F:\new\fishinggame\QHPlugins\QHForUnity\
 
 ## ✨ 特色对比
 
-| 特性 | QHPhysics | PhysX | 说明 |
+| 特性 | XunPhysics | PhysX | 说明 |
 |------|-----------|-------|------|
 | 文档行数 | 1007 | 540 | PhysX 更精凝 |
 | 章节数 | 13 | 12 | 内容互补 |
 | 对比分析 | ✅ 有 | ✅ 有 | 都包含详细对比 |
 | 笔记系统 | ✅ 支持 | ✅ 支持 | 独立存储，不互扰 |
 | 导航菜单 | ✅ 自动生成 | ✅ 自动生成 | 动态构建 |
-| 返回链接 | - | ✅ 返回 QHPhysics | 方便导航 |
+| 返回链接 | - | ✅ 返回 XunPhysics | 方便导航 |
 
 ---
 
@@ -196,8 +196,8 @@ F:\new\fishinggame\QHPlugins\QHForUnity\
 2. 再读 `AI_Parameter_Optimization.html` 的第二章（详细方案分析）
 3. 最后读 `AI_Tuning_Getting_Started.html` 第四章（进阶技巧）
 
-### 如果你想了解 QHPhysics 架构
-1. 打开 `QHPhysics_Architecture.html`
+### 如果你想了解 XunPhysics 架构
+1. 打开 `XunPhysics_Architecture.html`
 2. 从"一、项目概述"开始
 3. 重点关注"十三、Spring 系统深度分析"
 4. 参考"十二、与主流物理引擎的综合对比"了解优劣
@@ -205,11 +205,11 @@ F:\new\fishinggame\QHPlugins\QHForUnity\
 ### 如果你想了解 PhysX 并对标评估
 1. 打开 `PhysX_Analysis.html`
 2. 从"一、项目概述"开始
-3. 重点关注"七、与 QHPhysics 对比分析"
+3. 重点关注"七、与 XunPhysics 对比分析"
 4. 参考"十、优缺点分析"和"十一、选择建议"
 
 ### 如果你想做架构选型
-1. 先读 QHPhysics 的"十二章"
+1. 先读 XunPhysics 的"十二章"
 2. 再读 PhysX 的"七、十、十一章"
 3. 对比两份报告中的表格
 4. 根据"选择建议"做出决策
@@ -218,7 +218,7 @@ F:\new\fishinggame\QHPlugins\QHForUnity\
 
 ## 📊 统计数据
 
-- **总文档数**: 4 个主文档 (QHPhysics + PhysX + AI理论 + AI入门)
+- **总文档数**: 4 个主文档 (XunPhysics + PhysX + AI理论 + AI入门)
 - **总文档行数**: 3270+ 行 (含代码)
 - **总章节数**: 30+ 个顶级章节
 - **总字数**: 约 25000+ 中文字
@@ -231,7 +231,7 @@ F:\new\fishinggame\QHPlugins\QHForUnity\
 
 | 文档 | 行数 | 章节 | 特点 |
 |------|------|------|------|
-| QHPhysics 架构 | 1007 | 13 | 完整系统 + Spring深度分析 |
+| XunPhysics 架构 | 1007 | 13 | 完整系统 + Spring深度分析 |
 | PhysX 分析 | 540 | 12 | 对标分析 + 选型建议 |
 | AI参数调优入门 | 800+ | 7 | ⭐ 实践导向 + 完整案例 |
 | AI参数调优理论 | 923 | 9 | 深度分析 + 3个案例研究 |

@@ -111,7 +111,7 @@
 
 <h2 id="sec-1">13.1 三层弹簧系统架构</h2>
 
-<p>QHPhysics 实现了三层递进式的弹簧系统，用于模拟钓鱼场景中不同的物理特性：</p>
+<p>XunPhysics 实现了三层递进式的弹簧系统，用于模拟钓鱼场景中不同的物理特性：</p>
 
 <table>
     <thead>
@@ -333,7 +333,7 @@ mass2.Position += damping</code></pre>
     <li>链越长，末端累积误差越大</li>
 </ul>
 
-<p><strong>与主流引擎(PGS/TGS)的区别：</strong>主流引擎在一个 substep 内迭代多次(4~20次)，QHPhysics 只做 1 遍，靠 2500Hz 高频弥补。</p>
+<p><strong>与主流引擎(PGS/TGS)的区别：</strong>主流引擎在一个 substep 内迭代多次(4~20次)，XunPhysics 只做 1 遍，靠 2500Hz 高频弥补。</p>
 
 <h2 id="sec-5">13.5 与 Hooke 定律的关系</h2>
 
@@ -452,7 +452,7 @@ Debug.Log($"  ThresholdApplied: {Tension >= ImpulseThreshold2}");</code></pre>
 </table>
 
 <p style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #30363d;">
-    Spring 系统是 QHPhysics <strong>最核心的创新</strong>。它不追求通用性或学术正确性，而是为钓鱼手感深度定制，这正是其强大之处——也是最大的局限。
+    Spring 系统是 XunPhysics <strong>最核心的创新</strong>。它不追求通用性或学术正确性，而是为钓鱼手感深度定制，这正是其强大之处——也是最大的局限。
 </p>
 
 <hr style="margin: 32px 0; border: none; border-top: 1px solid #30363d;">

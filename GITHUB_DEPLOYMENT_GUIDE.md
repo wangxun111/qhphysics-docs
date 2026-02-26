@@ -101,7 +101,7 @@ git remote add origin https://github.com/your_github_username/qhphysics-docs.git
 
 ```bash
 git add .
-git commit -m "docs: Initial commit - QHPhysics documentation hub"
+git commit -m "docs: Initial commit - XunPhysics documentation hub"
 ```
 
 ### Step 4: 推送到 GitHub
@@ -137,7 +137,7 @@ https://your_github_username.github.io/qhphysics-docs/Documentation_Hub.html
 
 **其他文档**：
 ```
-https://your_github_username.github.io/qhphysics-docs/QHPhysics_Architecture.html
+https://your_github_username.github.io/qhphysics-docs/XunPhysics_Architecture.html
 https://your_github_username.github.io/qhphysics-docs/PhysX_Analysis.html
 https://your_github_username.github.io/qhphysics-docs/AI_Tuning_Getting_Started.html
 https://your_github_username.github.io/qhphysics-docs/AI_Parameter_Optimization.html

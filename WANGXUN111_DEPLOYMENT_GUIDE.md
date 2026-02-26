@@ -107,9 +107,9 @@ https://wangxun111.github.io/qhphysics-docs/AI_Tuning_Getting_Started.html
 https://wangxun111.github.io/qhphysics-docs/AI_Parameter_Optimization.html
 ```
 
-**QHPhysics 完整架构**：
+**XunPhysics 完整架构**：
 ```
-https://wangxun111.github.io/qhphysics-docs/QHPhysics_Architecture.html
+https://wangxun111.github.io/qhphysics-docs/XunPhysics_Architecture.html
 ```
 
 **PhysX 深度分析**：
