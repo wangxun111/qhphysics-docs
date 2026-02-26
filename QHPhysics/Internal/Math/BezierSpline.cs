@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace QH.Physics {
     public class BezierSpline {
@@ -127,6 +128,7 @@ namespace QH.Physics {
         }
 
         public virtual Vector3 TransformByCylinder(Vector3 pos) {
+            
             Vector3 point = Point();
             Vector3 vecDerivative = Derivative();
             Vector3 vec1 = vecDerivative.normalized;
@@ -135,6 +137,8 @@ namespace QH.Physics {
             Quaternion quaternion = Quaternion.AngleAxis(radian * 57.29578f, vec2);
             Vector3 vector = new Vector3(pos.x, pos.y, 0f);
             Vector3 position = point + quaternion * vector;
+            
+            
             return position;
         }
 

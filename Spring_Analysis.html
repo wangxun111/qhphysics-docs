@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring 系统深度分析</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.8;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3, h4 { margin-top: 24px; margin-bottom: 16px; }
+        h1 { font-size: 32px; color: #58a6ff; }
+        h2 { font-size: 24px; color: #79c0ff; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
+        h3 { font-size: 20px; color: #a5d6ff; }
+        h4 { font-size: 16px; }
+        p { margin-bottom: 16px; }
+        table {
+            border-collapse: collapse;
+            margin: 16px 0;
+            width: 100%;
+        }
+        table thead {
+            background: #161b22;
+        }
+        table th, table td {
+            border: 1px solid #30363d;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        table tbody tr:nth-child(odd) {
+            background: #0d1117;
+        }
+        table tbody tr:nth-child(even) {
+            background: #161b22;
+        }
+        code {
+            background: #1c2128;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 2px 6px;
+            color: #d2a8ff;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        pre {
+            background: #1c2128;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 12px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #f0883e;
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        strong { color: #fff; }
+        em { color: #79c0ff; }
+        .toc {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        .toc h3 { margin-top: 0; font-size: 16px; }
+        .toc ul { list-style: none; margin-left: 0; }
+        .toc a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        .toc a:hover { text-decoration: underline; }
+        .toc li { margin-bottom: 4px; }
+        .toc .level2 { margin-left: 0; }
+        .toc .level3 { margin-left: 16px; }
+    </style>
+</head>
+<body>
+
+<h1>Spring 系统深度分析</h1>
+
+<div class="toc">
+    <h3>目录</h3>
+    <ul>
+        <li class="level2"><a href="#sec-1">13.1 三层弹簧系统架构</a></li>
+        <li class="level2"><a href="#sec-2">13.2 冻结机制（FreezeSatisfyImpulse）</a></li>
+        <li class="level2"><a href="#sec-3">13.3 张力与边界条件</a></li>
+        <li class="level2"><a href="#sec-4">13.4 链式弹簧与累积误差</a></li>
+        <li class="level2"><a href="#sec-5">13.5 与 Hooke 定律的关系</a></li>
+        <li class="level2"><a href="#sec-6">13.6 性能特性</a></li>
+        <li class="level2"><a href="#sec-7">13.7 缺陷与改进方向</a></li>
+        <li class="level2"><a href="#sec-8">13.8 调试与可视化建议</a></li>
+        <li class="level2"><a href="#sec-9">13.9 总结：设计哲学</a></li>
+    </ul>
+</div>
+
+<h2 id="sec-1">13.1 三层弹簧系统架构</h2>
+
+<p>QHPhysics 实现了三层递进式的弹簧系统，用于模拟钓鱼场景中不同的物理特性：</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>层级</th>
+            <th>类名</th>
+            <th>求解策略</th>
+            <th>应用场景</th>
+            <th>特点</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Level 1</strong></td>
+            <td><strong>Spring</strong></td>
+            <td>脉冲约束（速度基）</td>
+            <td>主约束求解</td>
+            <td>高精度，高复杂度</td>
+        </tr>
+        <tr>
+            <td><strong>Level 2</strong></td>
+            <td><strong>VerletSpring</strong></td>
+            <td>位置约束（PBD）</td>
+            <td>辅助迭代</td>
+            <td>快速简洁，收敛快</td>
+        </tr>
+        <tr>
+            <td><strong>Level 3</strong></td>
+            <td><strong>TetrahedronTorsionSpring</strong></td>
+            <td>几何约束+力矩</td>
+            <td>弯曲/扭转</td>
+            <td>专用约束，精准控制</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Spring 类的核心职责</h3>
+
+<p><code>Spring</code> 继承 <code>ConnectionBase</code> 并实现 <code>IImpulseConstraint</code> 接口，是钓线物理的骨干。</p>
+
+<p><strong>关键成员变量：</strong></p>
+
+<pre><code>protected Single springConstant;           // 弹簧刚度 (k值)
+protected Single springLength;             // 当前长度
+protected Single targetSpringLength;       // 目标长度
+protected Single tension;                  // 当前张力
+protected Boolean freezeSatisfyImpulse;    // 冻结求解标志（新功能）
+protected Single impulseThreshold2;        // 张力阈值
+protected Single impulseVerletMax2;        // Verlet最大张力
+protected Vector4f affectMass1Factor;      // Mass1 影响因子（0~1）
+protected Vector4f affectMass2Factor;      // Mass2 影响因子（0~1）</code></pre>
+
+<p><strong>求解流程（SatisfyImpulseConstraint）：</strong></p>
+
+<pre><code>1. 计算位置偏差
+   posOffset = mass2.Position - mass1.Position
+   posOffsetLen = |posOffset|
+
+2. 检查应该拉伸的条件
+   if (isRepulsive || posOffsetLen > springLength):
+     计算伸长量和方向
+     stretch = posOffsetLen - springLength
+     direction = posOffset / posOffsetLen
+
+3. 计算脉冲张力
+   effectiveInvMass = invMass1 + invMass2
+   tension = stretch * effectiveInvMass * invTimeStep
+
+4. 应用速度修正（不直接修正位置！）
+   velocityDelta = direction * tension
+
+5. 阻尼衰减（沿弹簧轴方向）
+   damping = dot(relativeVelocity, direction) * friction
+   velocityDelta -= damping
+
+6. 应用到质点（考虑影响因子）
+   mass1.velocity += velocityDelta * invMass1 * affectMass1Factor
+   mass2.velocity += velocityDelta * invMass2 * affectMass2Factor</code></pre>
+
+<h3>VerletSpring 类的快速迭代</h3>
+
+<p><code>VerletSpring</code> 基于<strong>位置约束</strong>而非速度，一步直接修正位置。这对鱼线链的稳定性至关重要。</p>
+
+<p><strong>Satisfy() 方法 - 距离约束：</strong></p>
+
+<pre><code>// 防压缩性检查：只在被拉伸时纠正
+if (!compressible || currentLenSqr > lengthSqr)
+{
+    // 标量：控制修正幅度
+    scalar = (lengthSqr / (currentLenSqr + lengthSqr) - 0.5f) * invMassSum
+
+    // 直接修正位置（无需等待速度积分）
+    mass1.Position -= delta * (scalar * mass1.InvMass)
+    mass2.Position += delta * (scalar * mass2.InvMass)
+}</code></pre>
+
+<p><strong>Solve() 方法 - 阻尼约束：</strong></p>
+
+<pre><code>// 计算速度投影
+relVelProj = dot(mass1.PositionDelta, direction)
+           - dot(mass2.PositionDelta, direction)
+
+// 沿弹簧轴应用摩擦
+damping = direction * relVelProj * friction
+
+mass1.Position -= damping
+mass2.Position += damping</code></pre>
+
+<p><strong>与 Spring 类的互补：</strong></p>
+<ul>
+    <li>Spring：速度级，精度高，但需要等待1~2步才能修正位置</li>
+    <li>VerletSpring：位置级，立即修正，但只在有条件执行时生效</li>
+</ul>
+
+<h3>TetrahedronTorsionSpring 类 - 复杂约束</h3>
+
+<p>用于模拟钓竿/支撑点的弯曲与扭转。采用四面体 + 旋转矩阵的设计。</p>
+
+<p><strong>结构：</strong> 1个中心点(Mass1) + 3个周围控制点(Tetrahedron[1~3])</p>
+
+<h2 id="sec-2">13.2 冻结机制（FreezeSatisfyImpulse）</h2>
+
+<p>最近添加的功能（commit bf76f74），允许运行时动态禁用约束求解。</p>
+
+<p><strong>设计目的：</strong></p>
+
+<pre><code>public Boolean FreezeSatisfyImpulse {
+    get { return freezeSatisfyImpulse; }
+    set {
+        freezeSatisfyImpulse = value;
+        ConnectionNeedSyncMark();
+    }
+}</code></pre>
+
+<p><strong>在 Solve() 中的应用：</strong></p>
+
+<pre><code>public override void Solve() {
+    // 线性插值目标长度
+    if (!Mathf.Approximately(targetSpringLength, springLength)) {
+        springLength = Mathf.Lerp(oldSpringLength, targetSpringLength,
+                                 frameIterationProgress);
+    }
+
+    // 【新增】冻结标志检查
+    if (freezeSatisfyImpulse) {
+        return;  // 保留结构，但不求解约束
+    }
+
+    // 继续执行约束求解
+    tension = SatisfyImpulseConstraintMass(this, Mass1, Mass2,
+                                          springLength, frictionConstant4f,
+                                          ImpulseThreshold2);
+}</code></pre>
+
+<p><strong>应用场景：</strong></p>
+<ol>
+    <li><strong>动画插值时期</strong> - 在特定动画帧锁定弹簧，防止物理干扰</li>
+    <li><strong>特殊交互</strong> - 如鱼线放松、缠绕等特殊状态</li>
+    <li><strong>性能优化</strong> - 在低性能设备上选择性禁用非关键约束</li>
+    <li><strong>调试</strong> - 快速关闭某条弹簧以观察其他物理行为</li>
+</ol>
+
+<h2 id="sec-3">13.3 张力与边界条件</h2>
+
+<h3>张力计算</h3>
+
+<p>Spring 类不使用 Hooke 定律（F = -kx），而是通过脉冲约束间接实现：</p>
+
+<pre><code>张力 = (currentLength - restLength) * effectiveInvMass * timeStepInv</code></pre>
+
+<p><strong>这种设计的优势：</strong></p>
+<ul>
+    <li>与 Verlet 积分原生兼容（不需要速度）</li>
+    <li>与高频(2500Hz)迭代配套，单步修正量自动缩放</li>
+    <li>不受 springConstant 的数值爆炸影响（阈值+摩擦天然稳定）</li>
+</ul>
+
+<h3>三重阈值保护</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>参数</th>
+            <th>作用</th>
+            <th>典型值</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>impulseThreshold2</code></td>
+            <td>低张力时免除摩擦计算（防抖动）</td>
+            <td>0.0</td>
+        </tr>
+        <tr>
+            <td><code>impulseVerletMax2</code></td>
+            <td>Verlet 质点张力上限（防爆炸）</td>
+            <td>100.0</td>
+        </tr>
+        <tr>
+            <td><code>affectMass1Factor / affectMass2Factor</code></td>
+            <td>软约束因子（0~1 灵活衰减）</td>
+            <td>1.0</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="sec-4">13.4 链式弹簧与累积误差</h2>
+
+<p>钓线模型为多段弹簧串联：</p>
+
+<pre><code>RodTip --spring0-- M1 --spring1-- M2 --spring2-- ... --springN-- Hook</code></pre>
+
+<p><strong>单遍求解的问题：</strong></p>
+
+<p>单遍扫描从 spring0 到 springN，每条弹簧只求解一次：</p>
+<ul>
+    <li>spring0：拉 M1 向 RodTip</li>
+    <li>spring1：拉 M1 向 M2，拉 M2 向前（部分抵消 spring0 的校正）</li>
+    <li>链越长，末端累积误差越大</li>
+</ul>
+
+<p><strong>与主流引擎(PGS/TGS)的区别：</strong>主流引擎在一个 substep 内迭代多次(4~20次)，QHPhysics 只做 1 遍，靠 2500Hz 高频弥补。</p>
+
+<h2 id="sec-5">13.5 与 Hooke 定律的关系</h2>
+
+<p><strong>常见误解：</strong> "Spring 中的 springConstant 就是 k，遵循 F = -kx"</p>
+
+<p><strong>实际：</strong> Spring 并<strong>不使用</strong> springConstant 进行张力计算！</p>
+
+<p>张力完全由 effectiveInvMass 和 timeStep 推导，与 springConstant 无关。</p>
+
+<p><strong>springConstant 的实际用途：</strong> 计算平衡长度</p>
+
+<p><strong>为什么 Spring 不用 Hooke？</strong></p>
+<ol>
+    <li>鱼线应该是 <strong>不可拉伸约束</strong>（近似无限刚度）</li>
+    <li>用约束求解器比显式力计算更稳定（天然数值阻尼）</li>
+    <li>与 Verlet 积分框架原生兼容</li>
+</ol>
+
+<h2 id="sec-6">13.6 性能特性</h2>
+
+<h3>SIMD 向量化</h3>
+
+<pre><code>protected Vector4f massesInvDenom;  // 用 Vector4f 存储单个值
+protected Vector4f frictionConstant4f;
+protected Vector4f affectMass1Factor;
+
+// 批量计算时利用 SIMD
+mass1.Velocity4f += velocityDelta * mass1.InvMassValue4f * affectMass1Factor;</code></pre>
+
+<p><strong>优势：</strong></p>
+<ul>
+    <li>4 个单精度浮点并行计算（理论 4x 加速）</li>
+    <li>统一的向量接口，便于批处理</li>
+</ul>
+
+<h2 id="sec-7">13.7 缺陷与改进方向</h2>
+
+<h3>当前限制</h3>
+
+<ol>
+    <li><strong>链式累积误差</strong> - 鱼线超长时可见拉伸
+        <ul>
+            <li>改进方案：在一个 substep 内迭代 2~3 遍求解</li>
+        </ul>
+    </li>
+    <li><strong>单向约束不完整</strong> - affectFactor 可以软化但不能实现完全单向
+        <ul>
+            <li>改进方案：引入显式单向标志</li>
+        </ul>
+    </li>
+    <li><strong>冻结机制粒度</strong> - 只能冻结整条弹簧
+        <ul>
+            <li>改进方案：支持时间线性衰减</li>
+        </ul>
+    </li>
+    <li><strong>静摩擦缺失</strong> - 只有动摩擦
+        <ul>
+            <li>改进方案：在低速/静止时引入静摩擦阈值</li>
+        </ul>
+    </li>
+</ol>
+
+<h2 id="sec-8">13.8 调试与可视化建议</h2>
+
+<h3>关键参数检查清单</h3>
+
+<pre><code>Debug.Log($"Spring {id}:");
+Debug.Log($"  Length: {CurrentSpringLength:F3} / {SpringLength:F3}");
+Debug.Log($"  Tension: {Tension:F3}");
+Debug.Log($"  Frozen: {FreezeSatisfyImpulse}");
+Debug.Log($"  Friction: {FrictionConstant:F3}");
+Debug.Log($"  ThresholdApplied: {Tension >= ImpulseThreshold2}");</code></pre>
+
+<h2 id="sec-9">13.9 总结：Spring 系统的设计哲学</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>维度</th>
+            <th>设计选择</th>
+            <th>理由</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>求解方式</strong></td>
+            <td>脉冲约束，非 Hooke</td>
+            <td>鱼线约束，需要位置精度</td>
+        </tr>
+        <tr>
+            <td><strong>迭代策略</strong></td>
+            <td>单遍 + 高频</td>
+            <td>实时性 vs 精度的平衡</td>
+        </tr>
+        <tr>
+            <td><strong>稳定性</strong></td>
+            <td>多重阈值截断</td>
+            <td>防数值爆炸，保证可玩性</td>
+        </tr>
+        <tr>
+            <td><strong>灵活性</strong></td>
+            <td>冻结/影响因子/阈值</td>
+            <td>支持丰富的交互场景</td>
+        </tr>
+        <tr>
+            <td><strong>性能</strong></td>
+            <td>SIMD 批处理 + 轮转</td>
+            <td>2500Hz 高频下的可承受成本</td>
+        </tr>
+        <tr>
+            <td><strong>兼容性</strong></td>
+            <td>与 VerletMass/Bend 混用</td>
+            <td>钓鱼场景的综合需求</td>
+        </tr>
+    </tbody>
+</table>
+
+<p style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #30363d;">
+    Spring 系统是 QHPhysics <strong>最核心的创新</strong>。它不追求通用性或学术正确性，而是为钓鱼手感深度定制，这正是其强大之处——也是最大的局限。
+</p>
+
+<hr style="margin: 32px 0; border: none; border-top: 1px solid #30363d;">
+
+<p style="text-align: center; color: #8b949e; font-size: 12px; margin-top: 32px;">
+    生成时间：2026-02-26 | 文件：Spring_Analysis.html
+</p>
+
+</body>
+</html>
