@@ -1,82 +1,123 @@
-﻿param(
-    [string]$InputPath,
-    [string]$OutputName = ""
+# 单文件转换脚本 (升级版)
+# 文件: G:\Copilot_OutPut\FishingGame\Scripts\ConvertMdToHtml.ps1
+param (
+    [string]$InputPath
 )
-# 1. Validate Input
-if (-not $InputPath) {
-    Write-Error "Please provide an InputPath. Usage: .\ConvertMdToHtml.ps1 -InputPath '..\KnowledgeBase\MyDoc.md'"
-    return
+
+if (-not (Test-Path $InputPath)) {
+    Write-Error "File not found: $InputPath"
+    exit
 }
-$FullPath = Resolve-Path $InputPath
-if (-not (Test-Path $FullPath)) {
-    Write-Error "Input file not found: $FullPath"
-    return
-}
-$FileName = [System.IO.Path]::GetFileNameWithoutExtension($FullPath)
-if ($OutputName -eq "") {
-    $OutputName = $FileName
-}
-# 2. Prepare Output Path
+
+$FileName = [System.IO.Path]::GetFileNameWithoutExtension($InputPath)
 $HtmlDir = "G:\Copilot_OutPut\FishingGame\html"
-if (-not (Test-Path $HtmlDir)) { New-Item -ItemType Directory -Path $HtmlDir -Force | Out-Null }
-$OutputPath = Join-Path $HtmlDir "$OutputName.html"
-# 3. Read Markdown Content
-$mdContent = Get-Content -Path $FullPath -Raw -Encoding UTF8
-# 4. Simple Markdown Parsing logic (Regex based)
-# Escaping HTML chars
-$htmlBody = $mdContent -replace "&", "&amp;" -replace "<", "&lt;" -replace ">", "&gt;"
-# Code Blocks ```...```
-$htmlBody = [regex]::Replace($htmlBody, "(?s)```(.*?)```", { param($m) 
-    return "<pre>" + $m.Groups[1].Value + "</pre>" 
-})
-# Headers
-$htmlBody = $htmlBody -replace '(?m)^# (.*?)$', '<h1>$1</h1>'
-$htmlBody = $htmlBody -replace '(?m)^## (.*?)$', '<h2>$1</h2>'
-$htmlBody = $htmlBody -replace '(?m)^### (.*?)$', '<h3>$1</h3>'
-$htmlBody = $htmlBody -replace '(?m)^#### (.*?)$', '<h4>$1</h4>'
-# Bold
-$htmlBody = $htmlBody -replace '\*\*(.*?)\*\*', '<strong>$1</strong>'
-# Inline Code
-$htmlBody = $htmlBody -replace '`([^`]+)`', '<code>$1</code>'
-# Links [text](url)
-$htmlBody = $htmlBody -replace '\[(.*?)\]\((.*?)\)', '<a href="$2">$1</a>'
-# Lists - (Simple)
-$htmlBody = $htmlBody -replace '(?m)^- (.*?)$', '<li>$1</li>'
-# Wrap lists (Heuristic: consecutive lis should be in ul)
-# For simplicity in this script, we rely on CSS to style list items, or just basic replacement.
-# A perfect parser is complex, but this handles basic bullet points.
-# Paragraphs (Blank lines indicate new paragraph)
-$htmlBody = $htmlBody -replace '(?m)^\s*$', '<br/>' 
-# 5. Wrap in HTML Template with CSS
+$OutputPath = "$HtmlDir\$FileName.html"
+
+# Write-Host ">>> Processing $FileName..." -ForegroundColor Cyan
+
+# 读取内容
+$mdContent = Get-Content -Path $InputPath -Raw -Encoding UTF8
+if ($mdContent -eq $null) { $mdContent = "" }
+
+# 转义特殊字符，避免破坏 HTML 结构
+$safeContent = $mdContent.Replace("&", "&amp;").Replace("`"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;")
+
 $htmlTemplate = @"
 <!DOCTYPE html>
-<html lang='zh-CN'>
+<html lang="zh-CN">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>$FileName</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$FileName - Fishing Game Docs</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Highlight.js Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github.min.css">
+    
     <style>
-        body { font-family: "Microsoft YaHei", sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; background-color: #fcfcfc; }
-        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 30px;}
-        h2 { color: #2980b9; margin-top: 25px; border-left: 4px solid #3498db; padding-left: 10px; background: #ecf0f1; padding-top:5px; padding-bottom:5px;}
-        h3 { color: #16a085; margin-top: 20px; }
-        code { background-color: #f8f9fa; padding: 2px 5px; border-radius: 4px; font-family: Consolas, monospace; color: #e74c3c; border: 1px solid #e1e4e8; }
-        pre { background-color: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: Consolas, monospace; line-height: 1.4; }
-        strong { color: #c0392b; }
-        li { margin-bottom: 5px; }
-        a { color: #3498db; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
-        blockquote { border-left: 4px solid #ddd; padding-left: 15px; color: #777; margin: 15px 0; }
-        .timestamp { font-size: 0.8em; color: #999; text-align: right; border-top: 1px solid #eee; margin-top: 50px; padding-top: 10px; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f6f8; padding: 20px; color: #333; }
+        .container { max-width: 960px; margin: 0 auto; }
+        
+        .markdown-body { 
+            background: #fff; 
+            padding: 50px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-top: 20px;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        
+        /* Markdown 样式增强 */
+        .markdown-body h1 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 25px; color: #2c3e50; }
+        .markdown-body h2 { border-bottom: 1px solid #eee; padding-bottom: 8px; margin-top: 40px; margin-bottom: 20px; color: #34495e; }
+        .markdown-body a { color: #3498db; text-decoration: none; }
+        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body blockquote { border-left: 4px solid #3498db; padding-left: 15px; background: #f8f9fa; color: #666; font-style: italic; }
+        .markdown-body code { background: #f1f2f6; padding: 2px 5px; border-radius: 4px; color: #e74c3c; font-family: Consolas, monospace; }
+        .markdown-body pre { background: #f6f8fa; padding: 15px; border-radius: 6px; overflow: auto; }
+        .markdown-body pre code { background: transparent; padding: 0; color: inherit; }
+        .markdown-body img { max-width: 100%; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .markdown-body ul, .markdown-body ol { padding-left: 2rem; }
+        .markdown-body li { margin-bottom: 5px; }
+        
+        /* 导航栏 */
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .back-btn { text-decoration: none; background: #fff; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #555; font-weight: 500; transition: all 0.2s; }
+        .back-btn:hover { transform: translateX(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); color: #3498db; }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .markdown-body { padding: 20px; }
+        }
     </style>
 </head>
 <body>
-    $htmlBody
-    <div class="timestamp">Generated by AI Assistant Toolchain on $(Get-Date)</div>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="../index.html" class="back-btn">&larr; 返回文档首页</a>
+            <span class="text-muted small">Generated by AI Toolchain</span>
+        </div>
+        
+        <div id="content" class="markdown-body">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">正在渲染文档...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 原始 Markdown 数据 (隐藏) -->
+    <textarea id="md-source" style="display:none;">$safeContent</textarea>
+
+    <!-- 依赖库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mdSource = document.getElementById('md-source').value;
+            const contentDiv = document.getElementById('content');
+            
+            if (!mdSource.trim()) {
+                contentDiv.innerHTML = '<div class="alert alert-warning">文档内容为空</div>';
+                return;
+            }
+
+            try {
+                contentDiv.innerHTML = marked.parse(mdSource);
+                hljs.highlightAll();
+            } catch (e) {
+                contentDiv.innerHTML = '<div class="alert alert-danger">渲染失败: ' + e.message + '</div>';
+            }
+        });
+    </script>
 </body>
 </html>
 "@
-# 6. Write Output
-$htmlTemplate | Out-File -FilePath $OutputPath -Encoding UTF8
-Write-Host "Success: Converted '$FileName' to HTML."
-Write-Host "Location: $OutputPath"
+
+Set-Content -Path $OutputPath -Value $htmlTemplate -Encoding UTF8
+Write-Host "    [OK] Generated: $OutputPath" -ForegroundColor Green
+
