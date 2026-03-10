@@ -1,0 +1,2 @@
+rows=3491 duration=116.535s flips=65 flips_per_sec=0.558
+lineDrainSpeed mean=-0.0121 mean_abs=0.7679 p95_abs=1.6466

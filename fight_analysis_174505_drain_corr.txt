@@ -1,0 +1,7 @@
+rows=4689 duration=157.926s flip_count=907 flip_rate=5.743/s
+abs_delta_mean_flip=0.212045 abs_delta_mean_nonflip=0.411448 point_biserial_r=-0.1593
+window_0.2s_avg_abs_delta_around_flips=0.409841 nonflip_avg_abs_delta=0.411448
+friction=1.1772:
+  flip_count=906 flip_rate=5.822/s
+  abs_delta_mean_flip=0.212279 abs_delta_mean_nonflip=0.418265 point_biserial_r=-0.1650
+  window_0.2s_avg_abs_delta_around_flips=0.410216 nonflip_avg_abs_delta=0.418265

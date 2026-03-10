@@ -1,0 +1,94 @@
+# AI 协同开发工作流标准化指南 (AI-Driven Development Workflow)
+
+本文档旨在记录并标准化基于大语言模型（AI Agent）的项目开发流程，结合了本项目（FishingGame）的实战经验与行业最佳实践。
+
+## 一、 实战总结：DAC 数值调优闭环 (The Data-Analyze-Code Loop)
+针对数值敏感、物理模拟或复杂逻辑调试场景，推荐使用此闭环。这是我们在调优“博鱼拉力抖动”问题时总结的高效模式。
+
+### 1. Data (数据标准化)
+*   **目标**: 将感性的“手感”转化为可量化的“数据”。
+*   **操作**:
+    *   在关键逻辑处（如博鱼拉力计算）埋点。
+    *   导出格式统一的 CSV/Log 文件。
+    *   **规范**: 文件名带时间戳，存放在统一目录（如 `G:\Copilot_OutPut\FishingGame\Data`）。
+
+### 2. Analyze (自动化诊断)
+*   **目标**: 让 AI 替人读数据，发现肉眼不可见的规律。
+*   **操作**:
+    *   上传/指定数据文件路径。
+    *   要求 AI 编写 Python 脚本进行统计分析（计算均值、方差、翻转频率、极值分布）。
+    *   **指令示例**: “分析 `fight_force_xxx.csv`，统计 `friction=1.1772` 段的 `ratio` 翻转频率。”
+
+### 3. Code (决策与执行)
+*   **目标**: 基于数据证据修改代码，而非盲目试错。
+*   **操作**:
+    *   AI 提出 2-3 个基于数据的优化方案（如：方案A-积分判定 vs 方案B-纯时间锁定）。
+    *   人类开发者做选择题（Selection）。
+    *   AI 执行原子化代码修改（Atomic Edit）。
+    *   **安全网**: 每次修改后立即运行 `get_errors` 检查语法风险（如空值访问 `GetValueOrDefault`）。
+
+---
+
+## 二、 专业级 AI 开发通用流程 (General Professional Workflow)
+
+### 1. 上下文工程 (Context Engineering)
+AI 的表现取决于它知道多少当前项目的上下文。
+*   **项目地图**: 在对话开始时，明确当前工作目录结构。
+*   **显式引用**: 不要说“改那个函数”，要说“修改 `RodBehaviour.cs` 中的 `ChangeForceDynamic` 方法”。
+*   **记忆外挂**: 建立外部文档（如本文档），记录已达成的共识、关键参数和设计决策，在新会话中作为 Context 输入，避免 AI“失忆”。
+
+### 2. 结构化任务分拆 (Structured Task Decomposition)
+不要扔给 AI 一个巨大的、模糊的需求。我们将任务分为“新功能开发”和“复杂调优”两类策略。
+
+#### A. 新功能开发 (Feature Implementation)
+*   **策略**: 自底向上 (Bottom-Up)。
+*   **分拆步骤**:
+    1.  **数据结构**: “定义 `FishActionNode` 的核心字段。”
+    2.  **核心算法**: “实现基于阻尼的拉力计算公式。”
+    3.  **胶水逻辑**: “将算法接入 Unity Update 循环。”
+    4.  **表现层**: “实现 UI 状态变化的视觉反馈。”
+
+#### B. 复杂调优/Debug (Optimization & Debugging)
+*   **策略**: 观测-假设-验证 (ODDA Loop)。这是解决“拉力抖动”问题的关键路径。
+*   **分拆步骤**:
+    1.  **观测设施 (Instrumentation)**: “不要急着改代码。先写一个 CSV 导出器，记录每一帧的 `force`、`ratio` 和 `state`。”
+    2.  **数据复现 (Reproduction)**: “生成几组不同摩擦力（如 `friction=1.1772`）下的 Log 文件。”
+    3.  **假设提出 (Hypothesis)**: “让 AI 分析 Log。AI 发现是‘物理弹跳’导致的高频噪声。”
+    4.  **方案验证 (Pilot)**: “实现‘积分方案 (Score)’的原型，先不考虑完美参数，只看机制是否生效。”
+    5.  **参数收敛 (tuning)**: “基于新 Log，调整 `ScoreThreshold` 和 `CoolDown`，直到抖动频率 < 1次/秒。”
+
+### 3. 防御性编程与自检 (Defensive Coding)
+AI 可能会忽略边界情况（如 `Nullable<T>`），人类需要作为 Reviewer。
+*   **指令策略**: “请检查代码中的空引用风险、类型转换错误和性能热点。”
+*   **工具链**: 结合 IDE 的 Compile Error 反馈，要求 AI 修复所有 Warning（如我们修复的 `actionData` 命名警告和 `.Value` 空指针风险）。
+
+### 4. 知识归档 (Knowledge Distillation)
+*   将 AI 分析长 Log 的结果归档为文本文件，而不是散落在聊天记录里。
+*   将 AI 生成的复杂算法逻辑（如贝塞尔曲线生成、物理从动公式）提取为独立的 Markdown 技术文档，作为项目资产。
+*   **结构化索引更新协议**:
+    *   每当生成新的 `DeepDive_*.md` 文档时，必须**立即**将其链接插入到上级结构文档（如 `Core_Gameplay_DeepDive.md`）的对应章节下。
+    *   确保 `Index.md` -> `Overview.md` -> `DeepDive.md` 的层级导航链完整，禁止制造“孤岛文档”。
+
+#### 自动化文档维护 (Auto-Documentation)
+为了保持文档与代码同步，我们在 `G:\Copilot_OutPut\FishingGame` 下部署了自动化工具：
+*   **Generate**: `generate_dashboard.py` - 手动生成单页 HTML 仪表盘。
+*   **Watch**: `watch_dashboard.py` - 启动后自动监听 `.md` 文件变化并实时更新 HTML。
+*   **AI 职责**: AI 在修改文档后，应主动运行生成脚本，或提醒用户运行 Watcher。
+
+---
+
+## 三、 本项目特定配置 (Project Configuration)
+
+### 目录规范
+*   **生成输出目录**: `G:\Copilot_OutPut\FishingGame` (存放 CSV 分析报告、生成的文档)
+*   **记忆库目录**: `G:\FishingGame_Workspace\AnalysisMemory` (存放历史关键数据)
+
+### 关键参数快照 (当前最佳实践)
+针对 `RodBehaviour.cs` 的防抖动设置：
+*   `CRITICAL_RATIO_MIN/MAX`: **0.60f / 1.40f** (更宽的临界区)
+*   `STATE_LOCK_TIME`: **9.0s** (强锁定)
+*   `RATIO_SCORE_ENTER`: **1.30f** (高积分阈值)
+*   `RATIO_SCORE_DECAY_TAU`: **4.0f** (平滑衰减)
+
+---
+*Created by GitHub Copilot & User on 2026-03-05*

@@ -1,0 +1,5 @@
+rows=4689 duration=157.926s
+ratio_flips=907 flips_per_sec=5.743
+drain_sign_flips=0 flips_per_sec=0.000
+flip_within_0.2s_of_drain_flip=0 ratio=0.000
+avg_abs_lineDrainSpeed_within_0.2s_of_ratio_flip=0.6835

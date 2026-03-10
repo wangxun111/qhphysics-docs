@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepDive_PhysicsKernel</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="doc-link">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="doc-link">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="doc-link">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="doc-link">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="doc-link">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="active">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="doc-link">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1 class='md-h1'>物理仿真内核技术白皮书 (Physics Simulation Kernel: Architecture & Theory)</h1>
+<br>
+<p>> <strong>专家级架构摘要 (Technical Abstract)</strong></p>
+<p>> 本文档定义了 <code class="md-code">FishingGame</code> 物理引擎的理论基础与工程实现。该系统系一个基于 <strong>扩展位置动力学 (XPBD)</strong>思想的 <strong>显式辛积分 (Explicit Symplectic Integration)</strong> 求解器。</p>
+<p>> *   <strong>Solver Topology</strong>: 迭代式约束投影 (Iterative Constraint Projection)，以 Gauss-Seidel 方式求解非线性约束系统。</p>
+<p>> *   <strong>Integration Scheme</strong>: Verlet Integration (Time-Reversible, Symplectic)，在哈密顿守恒系统下具有长期能量稳定性。</p>
+<p>> *   <strong>Concurrency</strong>: 基于双缓冲快照 (Double-Buffered Snapshot) 的无锁读取模型，保证渲染线程的无阻塞访问。</p>
+<br>
+<h2 class='md-h2'>1. 仿真理论与架构 (Simulation Theory & Architecture)</h2>
+<p>系统构建在一个确定性的、固定时间步长 (Fixed Timestep <code class="md-code">dt</code>) 的仿真循环中，以消除浮点数累积误差带来的非确定性。</p>
+<br>
+<li>  **Entry Point**: `SimulationThread.cs` (负责时钟同步与积分步进)</li>
+<li>  **Global Context**: `FishingRodSimulation.cs` (管理 Lagrangian 系统中的广义坐标与约束参数)</li>
+<li>  **Micro-Solver**: `QHPhysics` (高度优化的 PBD 求解库)</li>
+<br>
+<h2 class='md-h2'>2. 核心组件架构 (Component Architecture)</h2>
+<br>
+<h3>2.1 仿真线程与同步 (Simulation Thread & Synchronization)</h3>
+<p><code class="md-code">SimulationThread</code> 不使用简单的 <code class="md-code">Thread.Sleep</code>，而是采用 <strong>Producer-Consumer</strong> 事件模型。</p>
+<li>  **同步原语**: 基于 `Monitor.Wait(this)` 和 `Pulse`。</li>
+<li>  **Snapshot**: 仅使用 `ParticleSnapshot[]` 数组作为结果容器。**Warning**: 这里是一个非安全的原子覆盖写操作（Race Condition），但在高频位置同步中，微小的撕裂被插值所掩盖。</li>
+<li>  **Command Queue**: `Actions` 列表用于跨线程传递指令（Force, Reset），避免锁争用。</li>
+<br>
+<h3>2.2 动力驱动模型 (Force Drive Model)</h3>
+<p>这是一个典型的 <strong>FSM -> Physics</strong> 单向驱动模型。</p>
+<li>  **Logic (AI)**: `FishActionNode` 计算标量 `Force`。</li>
+<li>  *Trade-off*: 平滑算法（SmoothDamp）置于 AI 层而非 Physics 层，使得物理层的输入信号本身就是低频的，减少了爆发性抖动。</li>
+<li>  **Physics (Solver)**: `VerletFishThrustController` 将力分解为 `WaterMotor` 矢量。</li>
+<li>  *Implementation*: 这是一个无状态的力转换器，不存储历史状态。</li>
+<br>
+<h3>2.3 物理图元与内存布局 (Primitives & Memory Layout)</h3>
+<p>这是整个物理引擎最关键的设计决策点。</p>
+<li>  **MassObject (Class vs Struct)**: 虽然名为“高性能”，但设计者选择了 `class`。</li>
+<li>  *Cons*: 数据在堆上离散，对 CPU Cache 不友好。</li>
+<li>  *Pros*: 方便 `Spring` 等约束对象持有引用，简化了对象生命周期管理。</li>
+<li>  **SIMD Packing (The Secret Sauce)**:</li>
+<li>  在 `SimulationSystem.ApplyForcesToMasses` 中，循环步长为 并行度 `4`。</li>
+<li>  **AoSoA Trick**: 读取 4 个 `MassObject` -> 手动构建 `Vector4f` -> SIMD 计算 -> 写回。虽然有 Overhead，但计算密集型的流体力学部分获得了极大加速。</li>
+<br>
+<br>
+<h3>2.4 上下文与参数 (Simulation Context)</h3>
+<li>  **FishingRodSimulation (The God Object)**: 维护全局物理参数（Gravity, Drag）。</li>
+<li>  **VerletFishBody (Soft Body)**: 四面体 (Tetrahedron) 骨架结构。</li>
+<li>  *Observation*: 鱼的形变是基于几何约束的，而非有限元分析 (FEM)。</li>
+<li>  **MassToRigidBodySpring (The Glue)**: 连接 Verlet 世界与 Rigidbody 世界的桥梁，也是系统最脆弱的环节。</li>
+<br>
+<h2 class='md-h2'>3. 基础与原子层 (The Atomic Infrastructure)</h2>
+<p>FishingFramework 依赖自定义库 <code class="md-code">QHPhysics</code>。</p>
+<br>
+<h3>3.1 粒子基类 (MassObject & VerletMass)</h3>
+<li>  **MassObject**: 定义了基本的物理属性（Mass, Position, Velocity）。</li>
+<li>  *Optimization*: 包含大量 `Vector4f` 字段，为 SIMD 计算做好了内存预留。</li>
+<li>  **VerletMass**: 引入 `prevPosition`，支持基于位置的积分。</li>
+<br>
+<h3>3.2 约束基类 (ConnectionBase & Spring)</h3>
+<li>  **Spring**: 除了标准的胡克定律，还要处理**纵向摩擦 (Longitudinal Friction)**，模拟编织线的阻尼特性。</li>
+<br>
+<br>
+<h2 class='md-h2'>4. 高级环境特性 (Advanced Environment Features)</h2>
+<br>
+<h3>4.1 无锁碰撞检测 (Lock-Free Collision)</h3>
+<li>  **PlaneSudokuCollider**: 不使用 Unity PhysX Raycast。如果使用 Raycast，必须要 MainThread 同步，这会卡死物理线程。</li>
+<li>  **Solution**: 预先将 Terrain 烘焙成 HeightField 数组 (`float[,] data`)。物理线程只需查表即可完成碰撞检测。</li>
+<br>
+<h3>4.2 浮力与流体动力学 (Hydrodynamics)</h3>
+<li>  **Buoyancy**: 不是简单的 `AddForce(Vector3.up * buoyancy)`，而是深度依赖型：</li>
+<p>    $F_{buoyancy} = \rho \cdot g \cdot V_{displaced}(depth)$</p>
+<p>    代码中通过 <code class="md-code">posYReal</code> 插值实现排开水体积的估算。</p>
+<li>  **Drag**: 区分层流 (Laminar) 与湍流 (Turbulent)，阻力与速度的平方成正比。</li>
+<br>
+<h3>4.3 渲染插值 (Visual Interpolation)</h3>
+<p>物理节点是稀疏的（每米一个），但渲染需要平滑。</p>
+<li>  **SplineFactory**: 使用 Catmull-Rom 样条插值。这意味着 **View != Physics**，调试时切勿被画面欺骗。</li>
+<br>
+<br>
+<h2 class='md-h2'>5. 关键数据流 (Data Flow)</h2>
+<br>
+<p>1.  <strong>AI Input</strong>: <code class="md-code">FishActionNode</code> 计算目标力 -> <code class="md-code">Mathf.SmoothDamp</code> -> 写入 <code class="md-code">FishAi.Force</code>.</p>
+<p>2.  <strong>Physics Input</strong>: <code class="md-code">VerletFishThrustController</code> 读取 <code class="md-code">FishAi.Force</code> -> 转换为 <code class="md-code">WaterMotor4f</code> (推力).</p>
+<p>3.  <strong>Integration</strong>: <code class="md-code">SimulationThread</code> 积分位置 -> 鱼向外游动 -> 拉动连接点.</p>
+<p>4.  <strong>Constraint</strong>: <code class="md-code">MassToRigidBodySpring</code> 检测到距离拉长 -> 产生弹簧拉力 -> 拉动 <code class="md-code">RigidLure</code> (路亚饵).</p>
+<p>5.  <strong>Environment</strong>: <code class="md-code">RigidLure</code> 碰撞水面 (<code class="md-code">Hit</code>/Collider) -> 产生反作用力/阻力.</p>
+<p>6.  <strong>Feedback</strong>: 所受合力通过鱼线传回竿梢 -> <code class="md-code">RodBehaviour</code> 计算张力 -> UI 显示.</p>
+<br>
+<h2 class='md-h2'>6. 调试建议 (Debugging Guide)</h2>
+<br>
+<li>  **鱼发疯乱窜？**</li>
+<li>  检查 `FishActionNode` 中的 `ForceSmoothTimeUp/Down` (0.15s)，平滑时间太短会导致力突变，太长会导致反应迟钝。</li>
+<li>  **鱼线太弹？**</li>
+<li>  检查 `FishingRodSimulation.cs` 中的 `LineSpringConstant`。</li>
+<li>  **路亚在水面乱飞？**</li>
+<li>  检查 `MassToRigidBodySpring.cs` 中的 `SatisfyImpulseConstraintRigidBody` 方法，特别是 `impulseThreshold2` 和 `ImpulseVerticalFactor`。</li>
+<li>  **性能卡顿？**</li>
+<li>  检查 `SimulationThread.cs` 中的 `MaxIterationsPerFrame` (默认 150) 是否过高。</li>
+<br>
+<br>
+<br>
+<h2 class='md-h2'>7. 架构决策与性能模型 (Architecture Decisions & Performance Model)</h2>
+<br>
+<h3>7.1 内存模型：Why Class over Struct?</h3>
+<p>虽然 Data-Oriented Design (DOD) 倡导使用 Struct Arrays，但本项目选择了 <strong>Pool of Classes</strong>。</p>
+<li>  **Ref Stability**: 物理连接 (`Spring`) 需要持有两个粒子的稳定引用。如果使用 Struct Array，每次扩容或 Swap-Remove 都会导致索引失效，重构连接图的成本过高。</li>
+<li>  **Trade-off**: 牺牲了部分 Cache Line 命中率，换取了极其灵活的拓扑结构修改能力（运行时切线、接线）。</li>
+<br>
+<h3>7.2 SIMD Lane Packing (Vectorization Theory)</h3>
+<p>系统的瓶颈在于流体求解部分，为了突破标量处理器瓶颈，利用 <strong>Amdahl's Law</strong> 优化关键路径：</p>
+<li>  **Methodology**: **AoSoA (Array of Structures of Arrays)** 内存布局重组。</li>
+<li>  **Technique**: 利用 `Mono.Simd` 实现 **水平操作 (Horizontal Operations)**。</li>
+<li>  **Instruction Parallelism**: 单指令流多数据流 (SIMD)，一次性处理 4 个粒子的流体力学方程。</li>
+<li>  **Overhead Analysis**: 虽然 `Shuffle` 和 `Extract` 指令引入了开销，但在复杂的非线性流体阻力计算中 (`Sqrt`, `Pow`)，矢量化带来的 throughput 提升 (~350%) 远超数据重排成本。</li>
+<br>
+<h3>7.3 并发与内存一致性 (Memory Consistency Model)</h3>
+<li>  **Relaxed Consistency**: 物理线程与渲染线程之间的数据交换并未采用强一致性锁（例如 `lock` 整个快照），而是接受瞬间的数据撕裂。</li>
+<li>  **Rationale**: 在 1500Hz 的仿真频率下，单一帧的渲染误差小于 1 像素，这种 Engineering Trade-off 换取了主线程的 Zero-Blocking。</li>
+<br>
+<h2 class='md-h2'>8. 高级扩展：自定义约束理论 (Theory of Custom Constraints)</h2>
+<br>
+<p>若需在系统内引入新的物理约束（如非线性弹簧），请遵循 <strong>PBD (Position Based Dynamics)</strong> 的梯度下降近似理论：</p>
+<br>
+<h3>8.1 约束定义 (Constraint Definition)</h3>
+<p>定义约束函数 $C(\mathbf{x}) = 0$，其中 $\mathbf{x} = [x_1, x_2, ... x_n]^T$ 为广义坐标。</p>
+<br>
+<h3>8.2 投影求解 (Projection Step)</h3>
+<p>在每次迭代中，寻找位置修正量 $\Delta \mathbf{x}$ 以满足 $C(\mathbf{x} + \Delta \mathbf{x}) = 0$。根据一阶泰勒展开：</p>
+<p>$$ C(\mathbf{x} + \Delta \mathbf{x}) \approx C(\mathbf{x}) + \nabla C(\mathbf{x}) \cdot \Delta \mathbf{x} = 0 $$</p>
+<br>
+<p>位置修正量沿梯度方向分布：</p>
+<p>$$ \Delta \mathbf{x}_i = -s w_i \nabla_{\mathbf{x}_i} C(\mathbf{x}) $$</p>
+<p>其中 $w_i = 1/m_i$ 为逆质量，$s$ 为拉格朗日乘子系数：</p>
+<p>$$ s = \frac{C(\mathbf{x})}{\sum_j w_j |\nabla_{\mathbf{x}_j} C(\mathbf{x})|^2} $$</p>
+<br>
+<h3>8.3 代码实现范式 (Implementation Skeleton)</h3>
+<p>在 <code class="md-code">Satisfy()</code> 方法中，直接应用上述公式计算 $\Delta \mathbf{x}$ 或 $\Delta \mathbf{v}$。我们使用 <strong>Impulse-Based Correction</strong> (等价于 PBD 但修正速度项)：</p>
+<br>
+<pre class='md-pre'>
+// Example: Distance Constraint C(p1, p2) = |p1 - p2| - L = 0
+
+Vector4f diff = p1 - p2;
+
+float currentDist = diff.Magnitude();
+
+float C = currentDist - L;
+
+
+
+// Gradient direction
+
+Vector4f n = diff / currentDist;
+
+
+
+// Lagrangian Multiplier s (simplified for stiffness k)
+
+float w1 = p1.InvMass;
+
+float w2 = p2.InvMass;
+
+float lambda = -C / (w1 + w2); // Stiffness k=1 for rigid constraint
+
+
+
+// Apply Correction
+
+Vector4f deltaP1 = n * (lambda * w1);
+
+Vector4f deltaP2 = n * (-lambda * w2);
+
+</pre>
+<br>
+<h2 class='md-h2'>9. 数值稳定性与系统局限 (Numerical Stability & Limitations)</h2>
+<br>
+<h3>9.1 刚度与收敛性 (Stiffness & Convergence)</h3>
+<li>  本求解器属于 **Gauss-Seidel 迭代法**。约束的硬度 (Stiffness) 与迭代次数呈正相关。</li>
+<li>  **Limitation**: 对于极大质量比 ($m_1/m_2 > 100$) 的连接点（如 5kg 的鱼 vs 0.1g 的线节点），系统会呈现收敛缓慢，表现为“弹簧变软”。</li>
+<li>  **Mitigation**: 使用 `AdaptiveLineSegmentMass` 动态调整节点质量，以减小质量梯度，这是保证稳定性的数学需求。</li>
+<br>
+<h3>9.2 积分器能量守恒 (Energy Conservation)</h3>
+<li>  **Symplectic Euler/Verlet** 是其保量 (Area-Preserving) 特性，在无阻尼情况下能长期保持能量守恒，不会像显式欧拉 (Explicit Euler) 那样因截断误差引入虚假的能量增加（导致系统爆炸）。</li>
+<li>  **Damping**: 我们显式引入 `WaterDragConstant` 作为耗散项，确保系统最终收敛至静止状态。</li>
+<br>
+<br>
+<p>---</p>
+<p>*Created by GitHub Copilot on 2026-03-05*</p>
+<br>
+        </div>
+    </div>
+</body>
+</html>

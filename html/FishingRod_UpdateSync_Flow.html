@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flow Analysis: FishingRod_UpdateSync_Flow</title>
+    <style>body { font-family: sans-serif; padding: 20px; }</style>
+</head>
+<body>
+    <h2>Execution Flow Visualization (Call Graph)</h2>
+    <p><strong>Entry Point:</strong> UpdateBeforeSync</p>
+    <p><strong>Source:</strong> F:\new\fishinggame\Assets\FishingFramework\Physics\FishingRodSimulation.cs</p>
+    <div class="mermaid">
+flowchart TD
+    Start(UpdateBeforeSync)
+    style Start fill:#f9f,stroke:#333,stroke-width:4px
+    UpdateBeforeSync --> UpdateOneSegmentLine
+    UpdateBeforeSync --> UpdateNonUniformLine
+    UpdateBeforeSync --> UpdateTackleSpringMaxImpulse
+    UpdateBeforeSync --> RealignLineHorizontalMasses
+
+    </div>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>

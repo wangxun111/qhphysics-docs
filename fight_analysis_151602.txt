@@ -1,0 +1,15 @@
+rows=633
+smoothedForce mean=3.3430 min=0.0024 max=19.5472 p2p=19.5448 rms=4.0249
+zero-cross half_period=2.7683 period=5.5366 crosses=2
+ratio flips @1.0=207
+segments:
+  0-65 friction=3.5316 len=66 p2p=19.5448 rms=5.7603 ratio_flips=6
+  66-66 friction=0.0706 len=1 p2p=0.0000 rms=0.0000 ratio_flips=0
+  67-67 friction=1.1772 len=1 p2p=0.0000 rms=0.0000 ratio_flips=0
+  68-88 friction=2.3544 len=21 p2p=13.6338 rms=4.9596 ratio_flips=4
+  89-91 friction=1.1772 len=3 p2p=0.1341 rms=0.0548 ratio_flips=1
+  92-96 friction=0.0706 len=5 p2p=0.3888 rms=0.1430 ratio_flips=0
+  97-106 friction=1.1772 len=10 p2p=0.3539 rms=0.1219 ratio_flips=3
+  107-133 friction=2.3544 len=27 p2p=0.5024 rms=0.1436 ratio_flips=9
+  134-632 friction=1.1772 len=499 p2p=1.8693 rms=0.2855 ratio_flips=182
+ratio min=0.0000 max=6.6927

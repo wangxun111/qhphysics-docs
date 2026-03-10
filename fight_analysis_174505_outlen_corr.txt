@@ -1,0 +1,10 @@
+friction=1.1772 rows=4599 duration=155.612s window=1.0s bins=155
+flip_rate_mean=5.6710/s flip_rate_std=1.8977
+out_len_mean=0.660512 out_len_std=0.468732
+corr_outLen_vs_flipRate=-0.2022
+top_windows_by_out_len:
+  2.315-3.315s flips=0 flip_rate=0.000/s out_len=2.812350
+  29.315-30.315s flips=4 flip_rate=4.000/s out_len=1.896870
+  9.315-10.315s flips=5 flip_rate=5.000/s out_len=1.828753
+  8.315-9.315s flips=4 flip_rate=4.000/s out_len=1.824349
+  10.315-11.315s flips=3 flip_rate=3.000/s out_len=1.624124

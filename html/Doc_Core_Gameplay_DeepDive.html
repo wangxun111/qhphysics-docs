@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core_Gameplay_DeepDive</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="doc-link">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="doc-link">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="doc-link">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="doc-link">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="active">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="doc-link">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="doc-link">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1 class='md-h1'>核心玩法层深度拆解 (Deep Dive: Core Gameplay Domain)</h1>
+<br>
+<p>基于 <code class="md-code">FishingFramework</code> 的代码结构与物理实现机制，我们将“核心玩法层”进一步细分为以下四个子系统。在针对手感、物理表现或钓鱼流程进行修改时，请精准定位到对应的子系统。</p>
+<br>
+<h2 class='md-h2'>1. 物理仿真内核 (Physics Simulation Kernel)</h2>
+<p>*这是整个钓鱼体验的“物理引擎”，负责底层的纯数学与其力学计算。并不直接处理 Unity 的 GameObject，而是处理纯数据。*</p>
+<br>
+<li>  **位置**: `FishingFramework/Physics`</li>
+<li>  **深度解析文档**: **[Deep Dive: Physics Kernel](./DeepDive_PhysicsKernel.md)**</li>
+<li>  **核心类**:</li>
+<li>  `VerletFishBody.cs`, `VerletFishBendStrain.cs`: 使用 Verlet 算法模拟鱼的柔性身体摆动与受力形变。</li>
+<li>  `SimulationThread.cs`: 物理计算似乎在独立线程或高频循环中运行，以保证计算精度。</li>
+<li>  **关键职责**: 模拟鱼体的真实摆动物理，而非简单的动画播放。</li>
+<br>
+<li>  **柔性体与弹簧系统 (Soft Body & Spring System)**</li>
+<li>  **核心类**:</li>
+<li>  `FishingRodSimulation.cs`: 鱼竿弯曲的数学模型核心。</li>
+<li>  `MassToRigidBodySpring.cs`: 模拟鱼线/鱼竿连接处的弹性阻尼关系（Hooke's Law + Damping）。</li>
+<li>  **关键职责**: 计算竿梢的弯曲程度、鱼线的张力传递。这是解决“抖动”问题的源头。</li>
+<br>
+<h2 class='md-h2'>2. 钓鱼逻辑实体 (Fishing Entities)</h2>
+<p>*将物理内核的计算结果映射到 Unity 世界的游戏对象 (GameObject) 上，处理具体的游戏行为。*</p>
+<br>
+<li>  **竿组系统 (Rod Assembly)**</li>
+<li>  **位置**: `FishingFramework/Module/Rod`</li>
+<li>  **核心类**:</li>
+<li>  `RodBehaviour.cs`: 鱼竿的主控逻辑。</li>
+<li>  `BendingSegment.cs`: 鱼竿分节弯曲的表现控制。</li>
+<li>  `RodPodController.cs`: 竿架系统（支架钓法支持）。</li>
+<li>  **关键职责**: 根据 `FishingRodSimulation` 的数据更新鱼竿模型的骨骼/Mesh 形变。</li>
+<br>
+<li>  **线轮系统 (Line & Reel System)**</li>
+<li>  **位置**: `FishingFramework/Module/{Line, Reel}`</li>
+<li>  **核心类**:</li>
+<li>  `LineController.cs`: 鱼线渲染与物理节点同步。</li>
+<li>  `ReelController.cs`: 卷线器逻辑（收线速度、卸力刹车 Friction）。</li>
+<li>  **关键职责**: 处理玩家收线操作 (`ReelIn`)，计算当前的线长与张力反馈到物理内核。</li>
+<br>
+<li>  **鱼类行为系统 (Fish Entity System)**</li>
+<li>  **位置**: `FishingFramework/Module/Fish`</li>
+<li>  **核心类**:</li>
+<li>  `FishController.cs`: 鱼的实体控制。</li>
+<li>  `FishAi.cs`: 鱼的 AI 决策（游动方向、挣扎力度）。</li>
+<li>  `FishBite...*.cs`: 复杂的咬钩判定逻辑（吸入、吞食、吐钩）。</li>
+<li>  **关键职责**: 决定鱼在水下的具体位置和状态，驱动物理模型移动。</li>
+<br>
+<h2 class='md-h2'>3. 流程状态机 (State Management / FSM)</h2>
+<p>*管理钓鱼过程的生命周期，决定当前能不能操作，以及处于什么阶段。*</p>
+<br>
+<li>  **位置**: `FishingFramework/Module/FSM`</li>
+<li>  **核心模块**:</li>
+<li>  **PlayerState**: `Idle` -> `Casting` (抛竿) -> `Waiting` (等鱼) -> `Fighting` (搏鱼) -> `Landing` (提鱼)。</li>
+<li>  **FishState**: `Roaming` (巡游) -> `Approaching` (靠近) -> `Biting` (咬钩) -> `Struggling` (挣扎)。</li>
+<li>  **HookState**: 钩子的状态（在水下、在鱼嘴里、挂底）。</li>
+<li>  **关键职责**: 作为一个总控中心，协调 Input 和 Entity。例如：只有在 `Fighting` 状态下，`ReelController` 的刹车逻辑才生效。</li>
+<br>
+<h2 class='md-h2'>4. 环境交互 (Environmental Interaction)</h2>
+<p>*处理实体与水体、地面的物理交互。*</p>
+<br>
+<li>  **位置**: `FishingFramework/Module/{Water, Hit, Float}`</li>
+<li>  **核心类**:</li>
+<li>  `WaterFXManager.cs`: 水花、波纹特效生成。</li>
+<li>  `RigidBodyController.cs`: 刚体碰撞处理。</li>
+<li>  **关键职责**: 检测鱼饵入水、鱼跳出水面、鱼线切割水面的物理反馈。</li>
+<br>
+<p>---</p>
+<br>
+<h3>开发指导 (Development Guidelines)</h3>
+<br>
+<p>当您想解决类似“拉力抖动”的问题时：</p>
+<br>
+<p>1.  <strong>第一步 (FSM Check)</strong>: 检查 <code class="md-code">PlayerState</code> 是否在 <code class="md-code">Fighting</code> 状态正确切换，没有在 <code class="md-code">Waiting</code> 和 <code class="md-code">Fighting</code> 之间反复横跳。</p>
+<p>2.  <strong>第二步 (Entity Check)</strong>: 检查 <code class="md-code">ReelController</code> 的收线速度与 <code class="md-code">RodBehaviour</code> 的弯曲更新是否同步。</p>
+<p>3.  <strong>第三步 (Physics Core)</strong>: 如果表现层没问题，直接深入 <code class="md-code">FishingFramework/Physics/MassToRigidBodySpring.cs</code>，调整阻尼系数 (Damping) 或弹簧系数 (Stiffness)。这是最根本的解决之道。</p>
+<p>4.  <strong>第四步 (Environment)</strong>: 检查是否如之前所说，是因为 <code class="md-code">Water</code> 表面的碰撞检测 (<code class="md-code">Hit</code>) 导致了物理计算的突变。</p>
+<br>
+        </div>
+    </div>
+</body>
+</html>

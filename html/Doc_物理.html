@@ -1,0 +1,949 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="active">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="doc-link">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="doc-link">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="doc-link">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="doc-link">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="doc-link">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="doc-link">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1>物理</h1>
+<ul>
+<li>简介</li>
+</ul>
+<ul>
+<li>脚本解析</li>
+<li>框架</li>
+<li>解析：</li>
+<li>按照钓组生成整体关联的物理功能系统</li>
+<li>每个钓组生成两套物理功能系统，一套结算，一套对应现实的功能模型</li>
+<li>核心功能是钓组内部的物理演算，钓组之间并不产生关联。每条鱼只和当前钓组关联。不能和其他钓组直接相关</li>
+<li>基本都是线性的质点和质点之间的模拟。鱼会多一点四面体。</li>
+<li>核心是：</li>
+<li>1.不同物体质点之间的关联方式</li>
+<li>2.相同物体内部的质点关联方式</li>
+<li>3.质点对物体的作用方式</li>
+<li>4.质点和地形碰撞之间关联方式</li>
+<li>5.质点和水之间的计算方式</li>
+<li>后续扩展：用不同的质点模型（四面体）模拟物体</li>
+<li>FishingRodSimulation</li>
+<li>继承simulationSystem，功能壳</li>
+<li>简述：</li>
+<li>该系统通过模块化设计实现钓具物理模拟：</li>
+<li>1) 柔性鱼线（质点+弹簧）</li>
+<li>2) 刚体鱼饵</li>
+<li>3) 碰撞鱼钩。</li>
+<li>关键创新点在于动态分段优化和基于质量的碰撞阈值系统，平衡了物理精度与性能。</li>
+<li>负责多个系统构建</li>
+<li>鱼线系统构建：bulidLine</li>
+<li>分段建模：将鱼线分解为多个质点（MassObject）和弹簧（Spring）连接</li>
+<li>鱼线分段算法：</li>
+<li>根据鱼线长度动态优化分段数量</li>
+<li>近距离使用高密度分段，远距离优化性能</li>
+</ul>
+<ul>
+<li>参数控制：</li>
+<li>segmentLength：每段长度（默认0.05米）</li>
+<li>segmentMass：质点质量（默认2e-5kg）</li>
+<li>buoyancy：浮力系数</li>
+<li>鱼饵系统构建：AddTopWaterLure</li>
+<li>物理参数：</li>
+<li>BuoyancyVolumetric：基于体积的浮力计算</li>
+<li>LateralWaterResistance：横向水阻（1.0-0.15）</li>
+<li>WalkingFactor：水面游动系数</li>
+<li>关键物理计算:</li>
+<li>基于阿基米德原理：浮力 = 密度 × 重力 × 体积</li>
+<li>体积估算：size³ × 0.09（立方体近似）</li>
+</ul>
+<ul>
+<li>鱼钩系统实现:</li>
+<li>结构：鱼饵刚体 → 鱼钩连接点 → 鱼钩碰撞体</li>
+<li>物理特性：</li>
+<li>高弹性系数（RodSpringConstant*5）</li>
+<li>全碰撞检测（FullBody）</li>
+<li>忽略环境力（IgnoreEnvironment=true）</li>
+</ul>
+<ul>
+<li>连接系统实现</li>
+<li>部件连接机制：</li>
+</ul>
+<ul>
+<li>弹簧参数：</li>
+<li>弹性系数：500 N/m</li>
+<li>刚体连接：</li>
+<li>使用MassToRigidBodySpring特殊弹簧连接刚体与质点</li>
+</ul>
+<ul>
+<li>物理参数系统</li>
+</ul>
+<ul>
+<li>碰撞阈值系统</li>
+<li>基于质量动态调整碰撞检测灵敏度</li>
+</ul>
+<ul>
+<li>simulationSystem</li>
+<li>解析：计算体</li>
+<li>总结：用于需要复杂环境交互的模拟场景（如钓鱼游戏中的渔具物理）</li>
+<li>分层架构：基础Simulation+扩展SimulationSystem</li>
+<li>Simulation</li>
+<li>继承IPhyActionsListener</li>
+<li>这是一个物理引擎事件监听接口，用于在物理引擎状态变化时接收通知。主要处理三类对象的生命周期和属性变更：</li>
+<li>质量点（massObject:）</li>
+<li>物理连接（ConnectionBase）</li>
+<li>物理对象（PhysicsObject）</li>
+<li>PhysicsObject 是物理模拟系统中的核心类，管理物理对象的质点和连接，并与 SimulationSystem 紧密集成:如verletFishBody.</li>
+<li>解析</li>
+<li>架构：</li>
+<li>通过 Masses 和 Connections 聚合物理组件</li>
+<li>提供统一的接口操作所有组件（如 IsKinematic 递归设置所有质点）</li>
+<li>符合 "整体-部分" 关系，简化复杂物理对象的操作</li>
+<li>作用：维护关联所有Mass或Connectbase的的状态和结算的核心方法。</li>
+<li>功能</li>
+<li>创建对象时，会将消息通知到其他模块</li>
+<li>void CreateAMass(MassObject mass);</li>
+<li>void CreateAConnection(ConnectionBase connection);</li>
+<li>void CreateAPhysicsObject(PhysicsObject phyObj);</li>
+<li>SIMD优化：全链路向量化计算</li>
+<li>内存管理：连续数组+对象池</li>
+<li>约束分帧：降低单帧计算压力</li>
+<li>调试支持：完善的泄漏检测机制</li>
+<li>变量：</li>
+<li>核心参数</li>
+<li>参数名                                                     默认值                物理意义</li>
+<li>GravityAcceleration                            9.81                       重力加速度 (m/s²)</li>
+<li>WaterDragConstant                            10                           水阻力系数</li>
+<li>MaxDynamicBuoyancy                      1000                      最大动态浮力限制</li>
+<li>GroundFrictionDelta                            0.035                    地面摩擦系数</li>
+<li>TimeQuant                                               0.0004                  固定时间步长 (400μs)</li>
+<li>MassObject[] masses  质点    存储位置/速度/质量等物理属性</li>
+<li>ConnectionBase[] ArrayConnections   连接  处理弹簧/杆件等约束关系</li>
+<li>方法</li>
+<li>ApplyForcesToMasses</li>
+<li>批量计算质点受到的复合外力：</li>
+<li>浮力：buoyancy 参数控制</li>
+<li>水阻力：compoundWaterResistance 与速度相关</li>
+<li>空气阻力：airDragConstant 参数控制</li>
+<li>重力：GravityAcceleration4f 常量</li>
+<li>1.水位计算</li>
+<li>y_real=posY + posYVisualOffset（视觉偏差）</li>
+<li>0.5 * (1 - clamp(y_real，-0.0125，0.0125)/0.0125)：//质点半径也为0.0125</li>
+<li>2.速度计算</li>
+<li>tmpVelocities[j] = velocity - flowVelocity; // 相对水流速度</li>
+<li>分解出两个速度：</li>
+<li>speed0速度整体模长:  计算阻力</li>
+<li>speed1水平方向的模长平方：用于特定方向浮力修正</li>
+<li>3.浮力计算</li>
+<li>公式：浮力 = 质量 × g × (基础浮力系数 + 动态浮力修正) × 浸入比例</li>
+<li>buoyancy += Vector4f.one; // 基础浮力</li>
+<li>+1为了调整区间（-1，0，1）到（0，2），即（没有浮力，强浮力）</li>
+<li>实际浮力系数 = 1 + Buoyancy ≈ 液体密度/物体密度。  根据比例对比水的密度</li>
+<li>scaledBuoyancySpeedMultiplier *= speed1.Sqrt() .Min(1000).Max(-1000);</li>
+<li>动态浮力系数：</li>
+<li>浸入比例</li>
+<li>posY_clamped = clamp(posY_real, -ε, ε)</li>
+<li>depth = 0.5 × (1 - posY_clamped/ε)  最终=（0，0.5f）</li>
+<li>Vector4f fWeight = weightTmpMasses * (buoyancy + scaledBuoyancySpeedMultiplier) * posYReal * ignoreEnvForces - weightTmpMasses;</li>
+<li>posYReal =(Vector4fExtensions.one - posYReal / WaterLevelEpsillon4f) * Vector4fExtensions.half</li>
+<li>净浮力=质点重量 × (基础浮力系数 + 速度修正浮力)*  浸没系数*   环境掩码-体重</li>
+<li>总结：</li>
+<li>1.主要是posYReal作为侵入水体程度 控制整体的重力大小</li>
+<li>0 表示物体完全在水面以上 =》完全重力weightTmpMasses</li>
+<li>1 表示物体完全在水面以下 =》 浮力抵消重力</li>
+<li>0.5 表示物体正好在水面上  =》 一半重力</li>
+<li>4.水阻力计算</li>
+<li>compoundWaterResistance= MassValue * (WaterDragConstant + BuoyancySpeedMultiplier * 9.81f)</li>
+<li>compoundWaterResistance=speed0* isPosYLessEqualWaterLevelEpsillon</li>
+<li>isPosYLessEqualWaterLevelEpsillon =1，水阻力才会被应用，物体在水面或水面以下时（即Y坐标≤WaterLevelEpsillon）</li>
+<li>isPosYLessEqualWaterLevelEpsillon =0，物体在水面以上，水阻力被完全忽略</li>
+<li>5.空气阻力</li>
+<li>airForce = - (tmpMasses[k].Velocity4f - tmpMasses[k].WindVelocity) * airDragConstant[k];   相对风速度差* 空气阻力常量</li>
+<li>6.合力计算</li>
+<li>force=- compoundWaterResistance[k]* tmpVelocities[k]；水阻力</li>
+<li>force+=净浮力+airForce +Motor4f（=0）+WaterMotor4f（鱼在水中的比例）</li>
+<li>update</li>
+<li>将渲染帧拆分成物理帧时间片0.0004.</li>
+<li>根据当前的物理帧时间片的索引计算当前这一波计算的进度.</li>
+<li>NumOfIterations = (int)(dt / 0.0004f) + 1;</li>
+<li>FrameProgress = (float)(i + 1) / (float)NumOfIterations;</li>
+<li>Mass管理</li>
+<li>基础容器：simulationSystem的MassList，MassDict。</li>
+<li>生成流程：由Main simulationSystem生成，同步给非Main simulatinsystem。</li>
+<li>非Main simulatinsystem，</li>
+<li>SimulationThread.StructureSync，根据sourceMass创建Mass，在MassObject创建方法中直接添加到 simulation.MassDict。并将Mass添加到simulation.Masslist。</li>
+<li>Main simulatinsystem：</li>
+<li>physicsObject在创建自身时会初始化所有关联的Masses。如verletObject的addMass将生成的Mass直接添加到physicsObject.Masses</li>
+<li>VerletFishBody.UpdateSim将PhysicsObject的Masses都复制到simulation.MassList中.</li>
+<li>simulation.RefreshObjectArrays同步MassList到MassDict中</li>
+<li>物理</li>
+<li>物理体</li>
+<li>VerletObject:</li>
+<li>介绍：VerletObject 类是一个用于物理模拟的类，它继承自 PhyObject 类并扩展了其功能。通过提供添加质量、弹簧和四面体结构的方法，VerletObject 类支持复杂的物理模拟场景。这些方法允许灵活地构建和配置物理对象，以模拟不同的物理行为。</li>
+<li>VerletObject 类提供了几个受保护的方法，这些方法可能用于在类的内部或派生类中使用：</li>
+<li>addMass：创建一个新的 VerletMass 对象，并将其添加到物理对象的质量列表中。该方法还设置了质量的一些属性，如半径、浮力、是否忽略环境等</li>
+<li>addSpring：</li>
+<li>创建一个新的 VerletSpring 对象，并将其添加到物理对象的连接列表中。该方法允许指定弹簧的摩擦力、自定义长度和是否可压缩。</li>
+<li>长度：如果没有传入，则取关联两个mass点的位置向量长度</li>
+<li>摩擦力：默认0.1</li>
+<li>addTetrahedron：添加一个由四个 VerletMass 对象组成的四面体结构到物理对象中。该方法还添加了连接这些质量的弹簧。</li>
+<li>两两节点之间spring相互影响。</li>
+<li>addBallJoint：创建一个新的 TetrahedronBallJoint 对象，并将其添加到物理对象的连接列表中。该方法允许指定两个四面体的索引、刚度和摩擦力。</li>
+<li>不同的四面体都是由索引对应的两两相互影响。</li>
+<li>质点</li>
+<li>mass</li>
+<li>功能：基础物理质点，包含关键方法和属性</li>
+<li>建模</li>
+<li>simulate</li>
+<li>阻力系数：根据在水中的部分,超出水面没有数组</li>
+<li>水阻参数=0.5（1-mathf.clamp(pos.y,-defaultRadius,defaultRadius)/defaultRadius）=(1,0)</li>
+<li>speed=clamp(velocity,maxspeed*0.5)</li>
+<li>waterResitanceFactor =CompoundWaterResistance*水阻参数*t/mass</li>
+<li>速度</li>
+<li>speed<1</li>
+<li>阻力速度=(waterResitanceFactor * (0.5f * waterResitanceFactor - 1f))*velocity</li>
+<li>speed>1</li>
+<li>阻力速度=(1f / (1f + speed * waterResitanceFactor) - 1f) * velocity4f</li>
+<li>verletMass</li>
+<li>简介</li>
+<li>参数</li>
+<li>方法</li>
+<li>Simulate</li>
+<li>heightchunk</li>
+</ul>
+<ul>
+<li>1.碰撞体计算出反弹向量 => 垂直向上</li>
+<li>2.计算反弹后的位置 => 物体到碰撞体外测的距离长度</li>
+<li>3.计算速度的修正量，库伦摩擦力+法向量反弹。</li>
+<li>4.处理上一帧位移</li>
+<li>FrictionVelocity</li>
+<li>简介：公式:F=uN,其中F为摩擦力,N为系统的正向力而u则定义为摩擦因子。该模型表明,摩擦力的大小取决于摩擦的系数</li>
+<li>静态摩擦力+动态摩擦力+法向压力</li>
+</ul>
+<ul>
+<li>流程</li>
+<li>速度=>切向速度+法向速度</li>
+<li>静态摩擦力=法向速度*静态摩擦系数</li>
+<li>动态摩擦力=法向速度*动态摩擦系数</li>
+<li>速度变动=V * (切向速度 - 动态摩擦力) / 切向速度</li>
+<li>问题</li>
+<li>库伦对速度的修改？</li>
+<li>法向反弹力对速度的修改？</li>
+<li>切线速度和动摩擦力直接做数值加减？</li>
+<li>建模</li>
+<li>连接</li>
+<li>ConnectionBase</li>
+<li>连接的基础管理类</li>
+<li>方法</li>
+<li>SetMasses：设置两个mass</li>
+<li>Solve：基础解算</li>
+<li>Sync：同步source的mass</li>
+<li>ConnectionNeedSyncMark：主线程通知物理线程需要数据同步</li>
+<li>DetectRefLeaks：调试是否在系统中</li>
+<li>IImpulseConstraint</li>
+<li>冲量求解接口</li>
+<li>VerletSpring</li>
+<li>一个用于物理模拟的弹簧类，它继承自 VerletConstraint 类，并提供了多个方法和属性来模拟弹簧的物理行为，包括设置弹簧的长度、摩擦力、质量体等，以及解决弹簧的满足和摩擦力问题</li>
+<li>继承：VerletConstraint</li>
+<li>ConnectionBase</li>
+<li>方法：</li>
+<li><strong>Sync 方法</strong>：</li>
+<li>参数：ConnectionBase source</li>
+<li>功能：同步源对象的属性到当前对象。</li>
+<li><strong>SetMasses 方法</strong>：</li>
+<li>参数：Mass mass1, Mass mass2（可选参数）</li>
+<li>功能：设置连接的质量体，并标记需要同步。</li>
+<li><strong>Satisfy 方法</strong>：</li>
+<li>功能：根据拉伸度恢复长度，典型的Verlet/PBD（Position Based Dynamics）</li>
+<li>运行：一物理帧可能运行多次</li>
+<li>解析</li>
+<li>恢复比例：</li>
+<li>Single num2 = (lengthsqr / (num + lengthsqr) - 0.5f) * invMassSum;</li>
+<li>（0   -   -0.5），即一次调整的最大距离=0.5倍弹簧长度，按照重量分配</li>
+<li><strong>Solve 方法</strong>：</li>
+<li>功能：阻尼调整运动趋势</li>
+<li>运行：一物理帧运行一次</li>
+<li>解析</li>
+<li>计算关联的两个mass之间的位置向量。</li>
+<li>每个mass会计算自身的位移，和位置向量之间的偏差向量。</li>
+<li>两个偏差向量的求和得到影响向量。</li>
+<li>最终向量=影响向量-向量-摩擦力。</li>
+<li>将mass的位置和最终向量求和。</li>
+<li>核心</li>
+<li>Single f = Vector4.Dot(vmass1.PositionDelta4f, vector4f) - Vector4.Dot(vmass2.PositionDelta4f, vector4f);</li>
+<li>Vector4f vector4f2 = vector4f * new Vector4f(f) * friction;</li>
+<li>总结：获取当前的移动趋势，并通过摩擦力减少这种趋势。类似于干啥都有阻力，减少事情当前的趋势力度。</li>
+<li>问题：</li>
+<li>solve为主要计算方式，satisfy只是进行数据的校验补充？</li>
+<li>verletBend</li>
+<li>用verlet和pbd实现的弯曲约束</li>
+<li>satisfy做结算，可能多次，solve做一次阻尼</li>
+<li>satisfy</li>
+<li>计算公式：旋转+旋转位置+拉伸位置</li>
+<li>基础数据：</li>
+<li>1.局部旋转q1=quetation.inverse(mass1.Rotation)</li>
+<li>相对旋转Qoffset=mass2.Rotation*q1</li>
+<li>2.局部向量v1=q1*(mass2.pos-mass1.pos)</li>
+<li>基于mass1的局部坐标计算mass2的旋转变化</li>
+<li>mass1新旋转下的坐标变化</li>
+<li>Q2new=Qoffset*q1new,相对旋转变化</li>
+<li>但是杆子还会位移对旋转产生影响</li>
+<li>Q=vec3.lerp(mass1.Rotation*v1,mass2.pos-mass1.pos)</li>
+<li>从理想连线到实际连线的旋转</li>
+<li>Qfinal=Q*Q2new</li>
+<li>除了在mass1的基础坐标系中旋转变化，还要受到当前连线旋转的变化影响</li>
+<li>位置变化,即当mass1的位置旋转时mass2的位置应该如何变化</li>
+<li>v2=(mass2.pos-mass1.pos)</li>
+<li>Vnew=vector3.lerp(mass2.position,mass1.position+mass1.rotation*v1)</li>
+<li>长度变化，即当bend的长度变化时如何变化</li>
+<li>恢复系数：len1:原有长度，len2当前长度</li>
+<li>factor=len1/(len1+len2)-0.5</li>
+<li>mass2.pos+=factor*(mass2.pos-mass1.pos)</li>
+<li>mass1.pos-=factor*(mass2.pos-mass1.pos)</li>
+<li>solve</li>
+<li>Pos=（mass1相对位置变化-mass2相对位置变化）*friction</li>
+<li>mass1.pos-=Pos</li>
+<li>mass2.pos+=Pos</li>
+<li>典型的 Verlet/PBD 阻尼写法：不改弹性约束本身，只消除相对运动能量</li>
+<li>Magnet</li>
+<li>用于鱼饵和鱼嘴之间的力作用。在鱼没有咬钩前进行模拟相互之间的力互动</li>
+<li>实现了一个可切换的双向力场，能够在两个质量对象之间产生吸引或排斥作用</li>
+<li>Spring</li>
+<li>简介</li>
+<li>冲量直接作用于速度。即: 力   <===>   速度</li>
+<li>链接两个质量点，传递弹簧形变力+阻尼力</li>
+<li>基础概念</li>
+<li>冲量 = 力 × 时间 = 质量 × 速度变化</li>
+<li>公式</li>
+<li>J = F·Δt = m·Δv</li>
+<li>F=m*a</li>
+<li>v=v0+a·Δt</li>
+<li>v=v0+J/m</li>
+<li>模型</li>
+<li>弹簧模型</li>
+<li>胡克定律：F = -k × Δx    。弹簧系数*弹簧形变</li>
+<li>弹性力=弹性系数Stiffness* 形变距离*方向</li>
+<li>符合胡克定律：</li>
+<li>F = -k × x</li>
+<li>F：弹簧的回复力（N，牛顿）</li>
+<li>k：弹簧的劲度系数（N/m，刚度，越大越硬）</li>
+<li>x：弹簧的形变量（m，当前长度-原长，正为拉伸，负为压缩）</li>
+<li>负号表示力的方向总是与形变量相反，即总是试图恢复到原长。</li>
+<li>本实现：冲量 J = F × Δt=m×a× Δt= m × Δv</li>
+<li>两个质点的相对速度</li>
+<li>Δv=J/m1-(-J/m2).            冲量相对两个质点，方向相反</li>
+<li>Δv=J*(1/m1+1/m2)</li>
+<li>J=Δv/(1/m1+1/m2)          基于相对速度计算冲量</li>
+<li>Δv=（弹簧形变）/Δt</li>
+<li>Δv是两个物体的速度差，这个速度差在Δv刚好产生想要的形变长度</li>
+<li>这个速度差需要的冲量为J</li>
+<li>J/m=v1,J/m1=v2,Δv=v1-v2.</li>
+<li>阻尼模型</li>
+<li>阻尼力=阻尼系数Damping * 速度差* 方向</li>
+<li>速度差：在方向的速度差</li>
+<li>抑制弹簧系统的震荡</li>
+<li>F_damping = -c × v_rel</li>
+<li>F_damping：阻尼力</li>
+<li>c：阻尼系数（阻尼越大，系统越快停止振荡）</li>
+<li>v_rel：两端质量点沿弹簧方向的相对速度</li>
+<li>本实现：基于相对速度的冲量修正</li>
+<li>mass和Verletmass交互模型</li>
+<li>最大冲量限制：</li>
+<li>冲量>ReelFrictionForce*t  ?  clamp(ReelFrictionForce*t)</li>
+<li>问题</li>
+<li>vector4f9：为什么速度和冲量一起计算？</li>
+<li>默认m=1,J=M*V=V,即冲量=速度</li>
+<li>对弹簧的影响（Impact）： 这个错误导致弹簧的阻尼效果与物体质量产生了错误的耦合：</li>
+<li>质量 > 1 的物体：冲量 velocityMass1Delta 数值很大（包含了质量）。代码将其直接加到速度上，导致计算出的“相对速度”被人为极度放大。结果是产生巨大的阻尼力，<span>Math.Abs(J) >> Math.Abs(v)</span>，弹簧会变得异常粘滞，甚至因为摩擦力震荡而爆炸。</li>
+<li>质量 < 1 的物体：冲量数值被缩小，阻尼效果会比预期的弱，弹簧可能停不下来。</li>
+<li>No</li>
+<li>velocityMass1Delta是速度的修正量</li>
+<li>mass1的冲量=num*mass1*方向</li>
+<li>作用于mass1的冲量=num*mass1</li>
+<li>mass1的速度变化=num*mass1*方向/mass1</li>
+<li>=num*方向</li>
+<li>目前最合理的解释是质量缺失了，后面会补上，并且会参考unity的spring</li>
+<li>建模</li>
+<li>核心目的：在拉伸中，维持距离</li>
+<li>核心机制：冲量恢复，J=mv=Ft,双物体系统：J=Offset/t/(1/m1+1/m2)</li>
+<li>关联因素：质点质量，质点位置，时间片</li>
+<li>运行机制：拉伸距离-恢复冲量-速度修正</li>
+<li>细节：刚性：每次恢复比例，阻尼力：防止来回乱跳 F阻=V*系数</li>
+<li>当前模型：一帧恢复导致，鱼无法拉动line，需要将line和hook连接部分特殊处理，限制hook恢复度</li>
+<li>问题：</li>
+<li>一帧回弹导致弹性太强</li>
+<li>通过刚性修改恢复速度</li>
+<li>Bend</li>
+<li>模拟两个质点间的弯曲和伸缩,以及阻尼。弯曲是mass2的理想位置和当前位置之间的弹簧，伸缩是mass1和mass2之间的弹簧.阻尼力是基于总速度计算的</li>
+<li>关键方法</li>
+<li>solve</li>
+<li>合力=弯曲力+伸缩力+阻尼力</li>
+<li>弯曲力：  即F=k*offset</li>
+<li>mass2Posnew = 基于mass1的旋转和mass1+mass2的向量，计算出mass2的目标位置</li>
+<li>位移向量Movemass2=mass2Posnew -mass2Pos</li>
+<li>力=Movemass2*BendConstant(弯曲刚度)</li>
+<li>伸缩力   即F=k*offset</li>
+<li>力=(mass1Pos-mass2Pos).normal*(currLength-springLenth)*SpringConstant</li>
+<li>阻尼力   <strong>F = −cv</strong></li>
+<li>力=(mass1Velocity-mass2Velocity)*FrictionConstant</li>
+<li>冲量Impulse=F*t</li>
+<li>最终还是修改速度</li>
+<li>mass1Velocity += Impulse / m</li>
+<li>问题</li>
+<li>1.弯曲力的计算逻辑，为什么那个视为力</li>
+<li>如果将mass2理想Pos和mass2CurrPos之间看作是个弹簧，根据胡克定律计算从理想位置被拉伸到当前位置所需的冲量</li>
+<li>2.弯曲力是直接计算理想pos-currPos，之间的长度可能不是mass1-mass2的长度</li>
+<li>本身就处于伸缩状态，所以长度是无法直接给定的，只能从当前位置给一个朝着理想位置的冲量</li>
+<li>KinematicConnection</li>
+<li>总结</li>
+<li>连接“游戏世界”与“物理世界”的桥梁。它不产生弹力或阻力，而是根据时间进度 frameProgress，强行将物理质点“搬运”到插值后的位置，并反算出相应的物理速度，从而让那些由动画驱动的物体（如手中的竿子）能与纯物理物体（如鱼线、鱼饵）进行自然的物理交互。</li>
+<li>1. 核心功能</li>
+<li>作为物理驱动器：它连接到一个 MassObject（通常是竿柄的根质点），使其位置和旋转不再由物理受力（重力、拉力）决定，而是完全由外部输入（如动画或手柄位置）决定。</li>
+<li>子步（Sub-step）平滑插值：由于物理模拟的频率（如 0.0004s）通常远高于游戏渲染帧率（如 0.016s），该脚本负责在每一帧的 prior（上一位置）和 next（目标位置）之间进行插值，确保在物理引擎的每一次微小迭代中，质点的运动是连续且平滑的，避免发生“瞬移”导致的物理爆炸。</li>
+<li>2.计算逻辑</li>
+<li>根据传入的位置，进行位置迭代和速度计算</li>
+<li>MassToRigidBodySpring</li>
+<li>思考</li>
+<li>1.为什么线竿用spring+massobject，钩和鱼使用verletspring+verletMas</li>
+<li>verlet稳定，spring可以变软硬</li>
+<li>鱼关联</li>
+<li>TetrahedronWithBall</li>
+<li>介绍：一个复杂的物理模拟类，它模拟了两个四面体结构之间的球形关节连接。通过调整刚度、摩擦系数和波动参数，可以模拟出丰富的物理行为，如弯曲、旋转和波动效果。这个类在物理引擎中可能用于模拟软体物理、布料模拟或其他需要复杂连接的物理场景</li>
+<li>属性</li>
+<li>FirstChordMass / SecondChordMass：四面体的首个mass。</li>
+<li>方法：</li>
+<li>Sync：同步源对象的属性到当前对象，包括四面体结构、刚度和摩擦系数等</li>
+<li>applyWaveDeviation：应用波动效果，返回一个 Quaternion 表示的旋转</li>
+<li>1.波动偏差</li>
+<li>首模型首点的位移偏差和首模型的首点和二模型的首点的连线计算投影位移（运动）</li>
+<li>只有沿着连线方向，才会产生波，区分不同方向的运动对波浪的影响。</li>
+<li>计算弦上位移，归一到（0，1），对应后面2πft.得到角度（0，2π）</li>
+<li>计算弧度</li>
+<li>位移变化带入简谐公式</li>
+<li>= A × sin(2πft + φ )</li>
+<li>整个sin就是搭建的一个公式：按照弦方式变化的弧度计算公式</li>
+<li>计算角度</li>
+<li>最终角度 = (基础弯曲 + 波动角度) × 弧度转角度系数</li>
+<li>计算角度对应的旋转</li>
+<li>Quaternion.AngleAxis(最终角度, WaveAxis)</li>
+<li>理念</li>
+<li>鱼类游动时产生的周期性弯曲波动，从头到尾传播，根据力产生扭曲的主要机制</li>
+<li>波动角度</li>
+<li>波动角度 = A × sin(2πft + φ + θ)</li>
+<li>A = WaveDeviationAmp (振幅),此处是一个角度，允许的变动角度</li>
+<li>f = WaveDeviationFreq (频率)，变化率</li>
+<li>t = chordPathAccum (时间累积)</li>
+<li>φ = WaveDeviationPhase (相位偏移)，起始位置</li>
+<li>θ = BendAngle (基础弯曲角度)</li>
+<li>Tips:sin的参数为弧度，2pi=360. pi=180</li>
+<li>总结</li>
+<li>第一个质点间的位移变化量，经过弦变化方式，计算出弧度，转变为角度，经过右轴计算出旋转。</li>
+<li>问题</li>
+<li>为什么使用vector3.right，这种右轴，不会造成上下点头？</li>
+<li>在局部坐标系中右侧其实是背部，上：底部三角形的法线  前：底部中心-mass4     右，垂直鱼体，即背部</li>
+<li>Satisfy：满足连接条件，通过调整四面体顶点的位置来模拟连接处的物理行为，包括波动和旋转效果。静态的力维持物理结构</li>
+<li>1.波动偏差</li>
+<li>2.位移调教</li>
+<li>第一个模型的底部三角中心点和第二个模型的第一个点计算位移</li>
+<li>并将一半的位移作用到第二个模型的第一个点</li>
+<li>1/6的位移作用到第一个模型的底部三个点</li>
+<li>效果：第一个模型的底部和第二个模型的头部不断的靠近，整个模型拉长了？</li>
+<li>四面体内部是拉长，但是verletspring会调节</li>
+<li>需要分析每次拉扯后的数据变化</li>
+<li>3.坐标系构建</li>
+<li>上方向 (Y轴)：-（第一个点-中心点）</li>
+<li>前方向 (Z轴)：中心点-第四个点</li>
+<li>问题：为什么是不垂直的两个向量</li>
+<li>修改为垂直的两个向量，效果不变</li>
+<li>因为quaternion.lookrotation(forward,up)内部会进行一次正交化</li>
+<li>4.旋转计算</li>
+<li>Slerp(当前旋转, 关联四面体旋转 × 逆波动旋转, 刚度系数)</li>
+<li>刚度系数= Stiffness * StiffnessMultiplier * 0.099999994f;</li>
+<li>Stiffness =（ 0.1f , 0.02f , 0.02f , 0.01f ）</li>
+<li>StiffnessMultiplier  = 1</li>
+<li>思路：</li>
+<li>目标旋转=四面体的局部旋转，会朝着关联四面体的旋转*弦旋转，关联度为刚度系数。</li>
+<li>弦旋转第一个四面体是逆波旋转</li>
+<li>简单理解：第一个四面体和第二个四面体之间旋转是在刚度系数的加持下互相转换的。但是新的波动旋转是由1转递向2，所以2的旋转被削减了波动旋转，传递给1，而1的旋转叠加波动旋转，传递给2.</li>
+<li>即1旋转=2旋转 * 逆波旋转 *   t .     2旋转=1旋转* 波旋转 *  t</li>
+<li>坐标系建立：</li>
+<li>主方向向上：从0点指向中心点的向量</li>
+<li>前方向向前：从3点指向中心点</li>
+<li>5.应用旋转</li>
+<li>新位置 = 目标旋转 × (逆当前旋转 × 旧位置)</li>
+<li>即：先转换成无目标位置= (逆当前旋转 × 旧位置)， 再转换成新旋转下的目标位置</li>
+<li>只有地面三个点才会应用旋转</li>
+<li>tips</li>
+<li>原点是底部中心点？</li>
+<li>按照底部中心点和其他点的相对位移，类似是模型坐标系的点，进行位置计算。</li>
+<li>6.动量守恒</li>
+<li>所有质点的总位置经过调整应该相等，将偏差均分到所有电上</li>
+<li>思考：</li>
+<li>整体分为拉扯力+旋转力</li>
+<li>拉扯力：直接按照比例计算，互相影响的两个点按照比例参数互相靠近</li>
+<li>旋转力：建立局部坐标系，计算自身旋转，波旋转的传递对互相的旋转影响，将最终旋转作用于局部坐标位置</li>
+<li>Solve：</li>
+<li>解决连接处的摩擦力问题，根据摩擦系数调整四面体顶点的速度。动态的力运行</li>
+<li>按照索引一一对应，每个点的当前帧位移的差值* friction</li>
+<li>总结：</li>
+<li>模型：</li>
+<li>四面体间shoumass的旋转力，前四面体的底部mass点和后四面体的首mass点位置力。</li>
+<li>四面体间相互对应点间的摩擦力</li>
+<li>局部坐标系受到某个旋转的影响，1个主动，1个被动。改变了坐标系的旋转</li>
+<li>局部坐标系的每个点在坐标系变化时的变动</li>
+<li>关键变量</li>
+<li>弧度</li>
+<li>首mass的位移投射到首mass间的连线，投射的运动距离d</li>
+<li>弧度s+=max(d,0.02)*freq*2         //递增</li>
+<li>s=s%1  (0,1)范围</li>
+<li>h=amp*sin(2Pi*(-s)+phase)         //向左偏移</li>
+<li>角度</li>
+<li>q=qua.angleaxis(h,vec.right)       //弧度转角度</li>
+<li>局部坐标系</li>
+<li>右：3mass-底部中心</li>
+<li>前：0mass-底部中心             //错：底部中心-3mass</li>
+<li>上：vector.cross(前，右)     //错：0mass-底部中心</li>
+<li>坐标系的旋转=quaternion.lookrotation(前，上);</li>
+<li>旋转施加到局部坐标系</li>
+<li>q1=lerp(q1,(q2*rev(q)),t)</li>
+<li>q2=lerp(q2,(q1*q),t)</li>
+<li>推理</li>
+<li>从前往后，互相影响，前旋转=后旋转*逆旋转  ，所以受到影响较小</li>
+<li>后旋转=前旋转*旋转 ,受到影响较大。同时后面下一个链接计算时，前面的那个也不会受到旋转的影响，每个四面体只受到一个四面体的影响。</li>
+<li>坐标系内部受到旋转更新位置</li>
+<li>基础位置向量=pos-zeroPos</li>
+<li>基础位置更新向量=qua现在  *（（qua原来的逆）* 基础位置向量）</li>
+<li>位置=zeroPos+基础位置更新向量</li>
+<li>首mass不参与</li>
+<li>群体位置守恒</li>
+<li>所有位置调整之后质心不会改变</li>
+<li>拆解</li>
+<li>基础计算+设计结构</li>
+<li>VerletFishBendStrain</li>
+<li>弯曲限制器：主要影响鱼体旋转的幅度，和变化的参数。</li>
+<li>思路</li>
+<li>计算当前弯曲度</li>
+<li>对齐目标弯曲度</li>
+<li>核心方法，1.不理解，不能用  2.不理解能用  3.理解能用  4.灵活应用</li>
+<li>CurrentBend：当前弯曲度</li>
+<li>当前鱼的姿态</li>
+<li>基点：所有四面体第一个mass位置的求和平均</li>
+<li>a:第一个四面体的首点-基点</li>
+<li>b:基点-最后一个四面体的首点</li>
+<li>法线f=vector.cross(a,b),基于当前弯曲平面的法线</li>
+<li>✅ 往哪边转：箭头向上=右转，箭头向下=左转</li>
+<li>✅ 转得多急：箭头越长=转弯越急</li>
+<li>✅ 是否在转：箭头为0=直行，不为0=在转弯</li>
+<li>第一个四面体的弯曲方向:上方向=首点-底层中心点，右方向=底层中心点-第四个点</li>
+<li>根据弯曲法线和首四面体弯曲方向的相似度：正值=右转，负值=左转，绝对值大小=弯曲程度</li>
+<li>点积 = 检查两个方向有多相似</li>
+<li>1.0 = 完全一样</li>
+<li>0.0 = 完全垂直</li>
+<li>-1.0 = 完全相反</li>
+<li>0.5 = 一半相似</li>
+<li>Solve:</li>
+<li>1.当前弯曲，差值弯曲角度+刚度系数</li>
+<li>弯曲角度是0 ->maxBendAngle(Pi/5)</li>
+<li>刚度系数是1->1.5f</li>
+<li>作用：当弯曲时逐步提升弯曲的角度，提高弯曲的刚性系数</li>
+<li>2.弯曲到达极限,或之前弯曲和当前弯曲方向相反，或之前没有弯曲</li>
+<li>3.没有弯曲时，重置所有数值</li>
+<li>继续点：</li>
+<li>StartBendStrain没有接，接了效果不大</li>
+<li>StopBendStrain</li>
+<li>问题：</li>
+<li>四面体的第四个点是什么位置，向上是底部中间点指向第一个点，向右是第四个点指向底部中间点？对</li>
+<li>弯曲方向是指什么</li>
+<li>小结：</li>
+<li>12.1没有完全攻克，主要是四面体的点位和旋转，并不十分明确。继而无法断定弯曲方向计算。</li>
+<li>关键且基础的细节不够清晰。</li>
+<li>12.2  明确调用开关的地方，不同参数变动的意义，录制视频，追踪进度</li>
+<li>12.3 限制四面体旋转，和结算起鱼点，先调试上鱼。 再分析四面体数据，尤其是pos数据。</li>
+<li>调试</li>
+<li>1.maxbendangle 最大融合角度</li>
+<li>2.amp 幅度</li>
+<li>3.freq 频率</li>
+<li>TetrahedronRollStabilizer</li>
+<li>鱼体稳定器</li>
+<li>思路：</li>
+<li>目标：稳定鱼体的某个三角形面（四面体底部三角形），让它朝向目标方向，如up。</li>
+<li>检测方式</li>
+<li>三角形面和目标方向的夹角</li>
+<li>即目标方向tan(Angle) = 在y轴的投射y / x轴的投射x</li>
+<li>angle即角度：在坐标系中和x轴的夹角</li>
+<li>纠正方式</li>
+<li>clamp(当前角度，最大允许角度2.86=0.05弧度) * 刚度系数</li>
+<li>效果</li>
+<li>有用：鱼背部朝上</li>
+<li>挣扎：适当翻滚</li>
+<li>上鱼：保持鱼的正确朝向，便于展示</li>
+<li>核心：</li>
+<li>目标方向：up  *  两两四面体首mass连线  ==  鱼体脊椎连线的右侧</li>
+<li>三角形面片：四面体底部三角形</li>
+<li>计算方式：</li>
+<li>局部坐标系</li>
+<li>x轴：底部中心点-顶点3</li>
+<li>y轴:    底部的法线 * x轴  ==  偏向x轴的斜向上的轴</li>
+<li>角度误差：</li>
+<li>Single errorAngle = Atan2(Dot(localY, target), Dot(localX, target))</li>
+<li>即目标方向和x轴对齐才不会进行修正？对</li>
+<li>只是采用这个平面局部坐标系是，稳定器只是在当前的平面中做旋转调整。x轴对齐目标（up*(首mass连线)=模型右侧）</li>
+<li>纠正方式</li>
+<li>将获取的角度应用于所有底部三角形面片的点</li>
+<li>计算其他几个点在局部坐标系中的角度</li>
+<li>最终角度angle = 点自身的坐标系角度 + 偏差角度</li>
+<li>公式：新的点=中心点+cos（angle）*  x轴 + sin（angle）*    y轴</li>
+<li>最终重量平衡，将之前的中心位置和改变后的中心位置差值，平均到所有新的位置上</li>
+<li>问题：</li>
+<li>1.目标方向好像指向鱼体的左侧，局部坐标的x轴是指向右侧</li>
+<li>unity是左手坐标系，目标方向指向鱼的右侧!!!</li>
+<li>总结</li>
+<li>模型：</li>
+<li>四面体的底面三角形，构建局部坐标系，计算目标向量的偏移角度，给到三个底面的点，通过局部坐标的xy轴和角度，计算出新的底面三个点位置。</li>
+<li>关键变量</li>
+<li>局部坐标系</li>
+<li>x轴:第三个mass-底部中心点</li>
+<li>y轴：vector3.cross(底面法线,x轴),朝下？不影响</li>
+<li>目标向量</li>
+<li>vector3.cross(vector3.up,相邻四面体的首mass连线)</li>
+<li>算法</li>
+<li>atan(vector3.dot(y轴,targetdir),vector3.dot(x轴,targetdir))</li>
+<li>pos中心点+y轴*sin(偏移角度)*（原有节点-中心点）长度+x轴*cos(偏移角度)*（原有节点-中心点）</li>
+<li>即pos=中心点+x轴*投射的长度+y轴投射的长度</li>
+<li>轴投射的长度=sin(偏移角度)*（原有节点-中心点）长度</li>
+<li>VerletFishThrustController</li>
+<li>鱼的动力系统：</li>
+<li>将行为的力施加在鱼身上的Mass点：Mouth点=1.1* Force .Root点=-0.1* Force</li>
+<li>设计意图：提供力的扭矩，造成鱼的发力感</li>
+<li>verletfishbody:</li>
+<li>AbstractFishBody</li>
+<li>继承VerletObject, IFishObject</li>
+<li>简介：在物理系统中，代表鱼的身体。</li>
+<li>成员</li>
+<li>HookStateEnum：鱼基础状态</li>
+<li>NotHooked：未挂钩</li>
+<li>HookedSwimming：挂钩并游泳</li>
+<li>HookedShowing：挂钩并展示</li>
+<li>hookState：HookStateEnum类型，表示鱼的挂钩状态。</li>
+<li>BendStiffnessMultiplier：Single类型，表示弯曲刚度的乘数。</li>
+<li>TotalMass：Single类型，只读属性，表示鱼的总质量。</li>
+<li>Edge：Single类型，保护字段，表示鱼的边缘长度。</li>
+<li>ChordRotation：Single类型，保护字段，表示鱼的弦旋转角度。</li>
+<li>thrust：VerletFishThrustController类型，表示鱼的推力控制器。</li>
+<li>VerletFishThrustController</li>
+<li>Mouth：抽象属性，返回MassObject类型，表示鱼的嘴部。</li>
+<li>Root：抽象属性，返回MassObject类型，表示鱼的根部。</li>
+<li>UnderwaterRatio：抽象属性，返回Single类型，表示鱼在水下的比例。</li>
+<li>TetrahedronHeight：抽象属性，返回Single类型，表示鱼体四面体的高度。</li>
+<li>方法</li>
+<li><strong>ComputeWaterDrag</strong>：计算水阻力，接受名义力和最大速度作为参数，为鱼的每个质量点设置水阻力常数。</li>
+<li><strong>ComputeSpeedForce</strong>：计算速度力，接受目标速度作为参数，返回计算得到的速度力。</li>
+<li><strong>SetThrust</strong>：设置推力，接受一个Vector3类型的力和一个Boolean类型的反转标志作为参数，用于设置鱼的推力方向和大小。</li>
+<li><strong>参数</strong>：</li>
+<li>force：Vector3类型，表示推力的大小和方向。</li>
+<li>reverse：Boolean类型，表示推力是否反转。</li>
+<li><strong>功能</strong>：该方法将传入的力转换为物理向量，并设置到鱼的推力控制器上，同时根据反转标志设置推力的方向。</li>
+<li>VerletFishThrustController</li>
+<li>继承：ConnectionBase</li>
+<li>简介：用于物理模拟中的鱼身体推力控制，实现，推力的同步、引用更新、质量点设置以及推力计算和应用的功能。这个类在物理模拟中起到了关键作用，使得鱼能够根据设定的推力在水中游动。</li>
+<li>成员</li>
+<li>字段：</li>
+<li>force：Vector4f类型，表示推力的大小和方向。</li>
+<li>reverse：Boolean类型，表示推力是否反转。</li>
+<li>forceDistributeFactor：Vector4f类型，只读字段，表示推力分布因子。</li>
+<li>body：AbstractFishBody类型，表示与推力控制器关联的鱼身体。</li>
+<li>mouth：VerletMass类型，表示鱼的嘴部质量点。</li>
+<li>root：VerletMass类型，表示鱼的根部质量点。</li>
+<li>方法</li>
+<li><strong>Sync</strong>：重写自ConnectionBase，用于同步另一个VerletFishThrustController对象的状态。</li>
+<li><strong>UpdateReferences</strong>：重写自ConnectionBase，用于更新引用，特别是更新与鱼身体的关联。</li>
+<li><strong>SetMasses</strong>：重写自ConnectionBase，用于设置连接的质量点，这里特别设置了嘴部和根部质量点。</li>
+<li><strong>Solve</strong>：重写自ConnectionBase，是核心方法，用于计算并应用推力到鱼的身体上。根据是否反转推力，分别计算嘴部和根部的水动力。</li>
+<li>首先根据鱼的水下比例调整推力。</li>
+<li>然后，根据推力分布因子进一步调整推力。</li>
+<li>最后，根据是否反转推力，将计算得到的推力应用到鱼的嘴部和根部质量点上。</li>
+<li>TetrahedronTorsionSpring</li>
+<li>上鱼时模拟：</li>
+<li>问题：</li>
+<li>什么时候去掉的？</li>
+<li>思考</li>
+<li>总结整体的鱼的物理结构，功能壳，执行流</li>
+<li>曲线</li>
+<li>TorsionBezierSpline</li>
+<li>方法</li>
+<li>GetRightAxis：根据当前点的比例，获取比例周边的所有点的右轴加权和。</li>
+<li>TriangleWindow：获取数据周边的比例。越接近当前点比例约大。max(1-abs(x-c),0)。</li>
+<li>Derivative：计算曲线在当前所选点参数位置的一阶导数（切线方向）</li>
+<li>PointDerivative：</li>
+<li>CurvedCylinderRotation:生成基于贝塞尔曲线切线方向和自定义右轴方向的旋转四元数，用于确定物体沿曲线运动时的基准朝向</li>
+<li>1.forward=Derivative().normalized获取切线方向</li>
+<li>2.right=GetRightAxis().normalized右轴方向，控制曲线横截面的水平方向</li>
+<li>3.Vector3.Cross(forward,right).normalized获取垂直方向</li>
+<li>问题：</li>
+<li>位置</li>
+<li>root节点的位置调整？</li>
+<li>mass节点的位置</li>
+<li>鱼身上被拉长，质点问题？</li>
+<li>质点位置有问题</li>
+<li>旋转</li>
+<li>旋转的方向调整？</li>
+<li>mass节点的旋转</li>
+<li>快速方案和长期方案？</li>
+<li>方案不需要完美，结果优先？</li>
+<li>思考</li>
+<li>如何构建一个贝塞尔曲线应用体系？</li>
+<li>竿组</li>
+<li>RodObject</li>
+<li>杆子的物理构成</li>
+<li>创建</li>
+<li>RootMass：第一个mass，用KinematicConnection锁死</li>
+<li>TipMass：最后一个mass</li>
+<li>每两个mess用Bend衔接</li>
+<li>工具</li>
+<li>VerticalParabola</li>
+<li>用于抛物线构筑</li>
+<li>KinematicVerticalParabola</li>
+<li>线程管理</li>
+<li>SimulationThread</li>
+<li>简介：FishingFramework 物理引擎中负责物理模拟的后台线程管理脚本。它通过多线程技术提高游戏性能，支持多种粒子操作类型，并提供性能分析工具以优化物理模拟的性能。同时，该脚本还注重线程安全，使用同步锁来确保数据的一致性和完整性。</li>
+<li><strong>继承与实现</strong>：实现了 IPhyActionsListener 和 IPhyProfiler 接口。</li>
+<li><strong>主要成员</strong>：</li>
+<li><strong>枚举</strong>：ThreadCycleState 和 ParticleActionType，分别用于表示线程状态和粒子操作类型</li>
+<li><strong>结构体</strong>：ParticleAction 和 ParticleSnapshot，用于封装粒子操作数据和粒子快照数据</li>
+<li><strong>类</strong>：ProfilingSegment，用于性能分析</li>
+<li><strong>字段</strong>：包括线程状态、粒子操作数组、快照数组、同步锁等</li>
+<li><strong>方法</strong>：包括线程启动、重启、重置、同步等待等</li>
+<li><strong>主要方法</strong>：</li>
+<li>SyncMain</li>
+<li>解析：作为主线程与物理模拟线程的同步入口点，负责协调双线程间的数据交换和状态同步，确保物理模拟结果能正确应用到主线程。</li>
+<li>sim同步MassObj数据到source，如：Position，</li>
+<li>sim同步PhyObj数据到source，如：ChordRotation</li>
+<li>执行SyncSim，</li>
+<li>SyncSim：</li>
+<li>增删mass和connection。</li>
+<li>更新particleAction数据，source到sim</li>
+<li>更新全局mass的数值</li>
+<li>更新所有mass的数值</li>
+<li>更新特定的mass事件</li>
+<li>更新碰撞</li>
+<li>更新connection</li>
+<li>StructureSync：</li>
+<li>增删mass和connection。</li>
+<li>massObject::</li>
+<li>质量点Mass</li>
+<li>包含simulation，创建新的mass时会将创建消息同步给继承IPhyActionsListener：创建在source质点，解算在物理质点。</li>
+</ul>
+<ul>
+<li>问题：</li>
+<li>source 和sim Mass之间的区别？</li>
+<li>source 是由PhysicsObject直接创建，并持有。</li>
+<li>sim是根据PhyActionsListener的particleActionsimulation创建。</li>
+<li>source 和sim之间会互相持有。</li>
+<li>source 和 sim 之间数据传递的方式？</li>
+<li>sim    =====>  source 结算的数据，方式：syncMain    如Position。</li>
+<li>source=====> sim    部分特殊的数据 方式：ParticleAction</li>
+<li>connection</li>
+<li>ConnectionBase,</li>
+<li>会在创建中利用mass的继承IPhyActionsListener直接监听事件并添加</li>
+</ul>
+<ul>
+<li>2.2 ParticleAction 结构体</li>
+<li>用于封装粒子操作，包括操作类型、唯一标识符（UID）和数据。</li>
+<li>数据可以是标量、向量、四元数或布尔值。</li>
+<li>2.3 ParticleSnapshot 结构体</li>
+<li>用于封装粒子的快照数据，包括唯一标识符、位置和速度。</li>
+<li>2.4 ProfilingSegment 类</li>
+<li>用于性能分析，包括性能分析的名称、计时器、调用次数、总滴答数等。</li>
+<li>3. 脚本功能</li>
+<li>3.1 线程管理</li>
+<li>通过创建和管理一个后台线程来执行物理模拟，以提高游戏性能。</li>
+<li>提供了线程启动（Start）、重启（Restart）和重置（Reset）的方法。</li>
+<li>3.2 粒子操作</li>
+<li>支持多种粒子操作类型，如位置、旋转、速度、力等。</li>
+<li>通过 ParticleAction 结构体封装粒子操作数据，并通过数组进行管理。</li>
+<li>3.3 性能分析</li>
+<li>通过 ProfilingSegment 类进行性能分析，以优化物理模拟的性能。</li>
+<li>3.4 同步与锁</li>
+<li>使用同步锁（SyncLock）来确保线程安全。</li>
+<li>提供了同步等待（WaitForThreadSync）的方法。</li>
+<li>4. 脚本特点</li>
+<li><strong>多线程</strong>：通过后台线程执行物理模拟，提高游戏性能。</li>
+<li><strong>粒子操作</strong>：支持多种粒子操作类型，并通过结构体进行封装和管理。</li>
+<li><strong>性能分析</strong>：提供了性能分析工具，以优化物理模拟的性能。</li>
+<li><strong>线程安全</strong>：使用同步锁确保线程安全，避免数据竞争和死锁。</li>
+<li>部件</li>
+<li>线</li>
+<li>线挂载在手上：</li>
+<li>运行流程：</li>
+<li>流程：</li>
+<li>初始化流程：</li>
+<li>RodSlot创建SimulationThread+FishingRodSimulation（作为sourceSimulation，创建verletfishbody等的源，因为fish1stbehaviour直接使用rodslot.simulation生成fishbody）。</li>
+<li>SimulationThread创建的时候会注入两个FishingRodSimulation，Main在rodslot中持有，非Main在SimulationThread中。非Main是主要的物理结算。</li>
+<li>Main会用来创建Mass，并通过同步到非Main中</li>
+<li>运行流程:</li>
+<li>sourceSim和Sim之间的组件生产关联</li>
+<li>sourcesim是主线程的，sim是物理模拟线程的</li>
+<li>sourcesim的phyobject创建时会通知simthread，之后会在sim中直接创建phyobj</li>
+<li>phyobject创建时，会创建自身需要的mass和connection，执行updatesim将自身的mass和connection传递给sourcesim， 即phyobject关联sourcesim</li>
+<li>单个mass或者connectionbase的建立都会通过simthread在sim中添加</li>
+<li>但是sim的phyobject怎么关联mass或者connection</li>
+<li>sim中直接创建phyobj的创建，会传入sourcesim，根据sourcesim的phyobj的mass和connection的id直接找到sim中之前创建的mass和connection。TIps:必须先创建组件再创建phyobj</li>
+<li>总结：所有创建工作在StructureSync，是所有同步工作的第一项SyncSim</li>
+<li>MainSimulation和非MainSimulation之间组件信息的通信SyncMain</li>
+<li>物理线程到主线程</li>
+<li>Rod1stBehaviour.simulate(lateUpdate)---RodSlot.SimulationThread.SyncMain---同步非Main的Mass的数值到Main的Mass</li>
+<li>主线程source到物理线程</li>
+<li>根据需要更新</li>
+<li>PhysicsObjects:</li>
+<li>Sim.IPhyActionsListener.ChangePhysicsObjectNeedSyncMark(base.UID)</li>
+<li>物理体进行必要的数据同步</li>
+<li>connectionbase：</li>
+<li>Mass1.Sim.IPhyActionsListener?.ChangeConnectionNeedSyncMark(UID);</li>
+<li>找到通信中心simulationthread，进行必要的数据同步</li>
+<li>Mass的参数param   thread.syncsim</li>
+<li>Sim.IPhyActionsListener?.ChangeMassBuoyancySpeedFactor(UID, value)</li>
+<li>如果UId<0，则所有的mass都要进行赋值</li>
+<li>非Main simulation的结算流程</li>
+<li>simulationThread的Threadproc --- simulationSystem.update --- Simulation.Operate --- Simulation.Solve(力计算) --- Simulation.Simulate( Pos)</li>
+<li>时间按照Time.deltatime --- 每帧间隔在相差在一定的范围 ---  按照物理帧切分时间块。</li>
+<li>sim的数据怎么传递给sourcesim</li>
+<li>threads.sync会首先同步sim的mass数据和phyobj的数据给sourcesim.</li>
+<li>不是syncmain</li>
+<li>流程：</li>
+<li>先同步sim数据其次才是将sourceSim的结构和参数同步给sim</li>
+<li>更新流程</li>
+<li>Rod1stBehaviour.OnLateUpdate</li>
+<li>SimulatePhysics:主线程的物理解算</li>
+<li>UpdateHeightMapChunks</li>
+<li>更新mass的地形块高度</li>
+<li>UpdateStreamInfo</li>
+<li>更新massObject的流速:FlowVelocity</li>
+<li>simulate</li>
+<li>RodSlot.Simulation</li>
+<li>问题：</li>
+<li>其他四面体是第一个四面体驱动的？第一个四面体阻断之后其他的都会掉下去，说明其他四面体的数据是第一个驱动的，但是锁住第一个的主mass，剩余3个小mass还是会变动，同时其他四面体还是会变动</li>
+<li>通过action驱动的？只是更新数据用的。实际还是mass自身的计算。</li>
+<li>物理是在当前的上面改，还是有对应的产品对标</li>
+<li>业务层的改动范围</li>
+<li>整体物理的代码内部改动范围</li>
+<li>特定的数值改动方式</li>
+</ul>
+<ul>
+<li>路线图</li>
+<li>整体运行流程:物理结算的部分和接受结果部分，两者的切分，以及两种通信方式。</li>
+<li>整体系统需要掌握基本的流程和组成，以及常用的运行路线。</li>
+<li>单个物理质点的力计算</li>
+<li>关键公式和参数</li>
+<li>数值验证</li>
+<li>质点之间的相互关联方式</li>
+<li>关键公式和参数</li>
+<li>数值验证</li>
+<li>鱼的行为调试</li>
+<li>数值调试</li>
+<li>总结：</li>
+<li>基础结构：功能壳+计算体</li>
+<li>功能壳：</li>
+<li>业务基本组成。</li>
+<li>对应功能划分模块，如一个钓组，一条鱼。负责各个细分功能的创建。</li>
+<li>一般负责生命周期的管理</li>
+<li>计算体：</li>
+<li>数据为主。</li>
+<li>对应基础的计算规则，如Mass，Spring在不同情况下计算方法。划分范围对应最小的Mass，在一起计算时组成的最小集合。如simulationSystem。</li>
+<li>思考</li>
+<li>1.magnet和spring之间的对比：magnet应用牛顿第三定律（作用力和反作用力），spring应用胡克定律（材料不损坏的情况下，内部的应力）。</li>
+<li>2.如果遇到公式，可以先将公式的作用确定，继续流程。剩余公式的基本原理可以放到后面不紧急的时间慢慢消化。</li>
+<li>建模</li>
+<li>mass执行最基础的原子，mass基础的属性，决定使用它的基本算法</li>
+<li>spring串接两个mass，是最基本的组织形式</li>
+<li>推进计划</li>
+<li>1.速度参数</li>
+<li>2.博鱼链条</li>
+<li>3.生命周期</li>
+<li>4.基础结构组成</li>
+</ul>
+        </div>
+    </div>
+</body>
+</html>

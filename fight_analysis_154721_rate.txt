@@ -1,0 +1,5 @@
+rows=601 duration=40.102s flips@1.0=193 flips_per_sec=4.813
+segments:
+  0-36 friction=3.5316 duration=2.421s flips=1 flips_per_sec=0.413 samples=37
+  37-37 friction=0.0706 duration=0.000s flips=0 flips_per_sec=0.000 samples=1
+  38-600 friction=1.1772 duration=37.549s flips=192 flips_per_sec=5.113 samples=563

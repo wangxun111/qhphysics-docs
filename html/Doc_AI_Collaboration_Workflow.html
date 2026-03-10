@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI_Collaboration_Workflow</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="doc-link">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="doc-link">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="doc-link">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="active">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="doc-link">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="doc-link">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="doc-link">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1 class='md-h1'>AI 协同开发工作流标准化指南 (AI-Driven Development Workflow)</h1>
+<br>
+<p>本文档旨在记录并标准化基于大语言模型（AI Agent）的项目开发流程，结合了本项目（FishingGame）的实战经验与行业最佳实践。</p>
+<br>
+<h2 class='md-h2'>一、 实战总结：DAC 数值调优闭环 (The Data-Analyze-Code Loop)</h2>
+<p>针对数值敏感、物理模拟或复杂逻辑调试场景，推荐使用此闭环。这是我们在调优“博鱼拉力抖动”问题时总结的高效模式。</p>
+<br>
+<h3>1. Data (数据标准化)</h3>
+<li>  **目标**: 将感性的“手感”转化为可量化的“数据”。</li>
+<li>  **操作**:</li>
+<li>  在关键逻辑处（如博鱼拉力计算）埋点。</li>
+<li>  导出格式统一的 CSV/Log 文件。</li>
+<li>  **规范**: 文件名带时间戳，存放在统一目录（如 `G:\Copilot_OutPut\FishingGame\Data`）。</li>
+<br>
+<h3>2. Analyze (自动化诊断)</h3>
+<li>  **目标**: 让 AI 替人读数据，发现肉眼不可见的规律。</li>
+<li>  **操作**:</li>
+<li>  上传/指定数据文件路径。</li>
+<li>  要求 AI 编写 Python 脚本进行统计分析（计算均值、方差、翻转频率、极值分布）。</li>
+<li>  **指令示例**: “分析 `fight_force_xxx.csv`，统计 `friction=1.1772` 段的 `ratio` 翻转频率。”</li>
+<br>
+<h3>3. Code (决策与执行)</h3>
+<li>  **目标**: 基于数据证据修改代码，而非盲目试错。</li>
+<li>  **操作**:</li>
+<li>  AI 提出 2-3 个基于数据的优化方案（如：方案A-积分判定 vs 方案B-纯时间锁定）。</li>
+<li>  人类开发者做选择题（Selection）。</li>
+<li>  AI 执行原子化代码修改（Atomic Edit）。</li>
+<li>  **安全网**: 每次修改后立即运行 `get_errors` 检查语法风险（如空值访问 `GetValueOrDefault`）。</li>
+<br>
+<p>---</p>
+<br>
+<h2 class='md-h2'>二、 专业级 AI 开发通用流程 (General Professional Workflow)</h2>
+<br>
+<h3>1. 上下文工程 (Context Engineering)</h3>
+<p>AI 的表现取决于它知道多少当前项目的上下文。</p>
+<li>  **项目地图**: 在对话开始时，明确当前工作目录结构。</li>
+<li>  **显式引用**: 不要说“改那个函数”，要说“修改 `RodBehaviour.cs` 中的 `ChangeForceDynamic` 方法”。</li>
+<li>  **记忆外挂**: 建立外部文档（如本文档），记录已达成的共识、关键参数和设计决策，在新会话中作为 Context 输入，避免 AI“失忆”。</li>
+<br>
+<h3>2. 结构化任务分拆 (Structured Task Decomposition)</h3>
+<p>不要扔给 AI 一个巨大的、模糊的需求。我们将任务分为“新功能开发”和“复杂调优”两类策略。</p>
+<br>
+<h4>A. 新功能开发 (Feature Implementation)</h4>
+<li>  **策略**: 自底向上 (Bottom-Up)。</li>
+<li>  **分拆步骤**:</li>
+<p>    1.  <strong>数据结构</strong>: “定义 <code class="md-code">FishActionNode</code> 的核心字段。”</p>
+<p>    2.  <strong>核心算法</strong>: “实现基于阻尼的拉力计算公式。”</p>
+<p>    3.  <strong>胶水逻辑</strong>: “将算法接入 Unity Update 循环。”</p>
+<p>    4.  <strong>表现层</strong>: “实现 UI 状态变化的视觉反馈。”</p>
+<br>
+<h4>B. 复杂调优/Debug (Optimization & Debugging)</h4>
+<li>  **策略**: 观测-假设-验证 (ODDA Loop)。这是解决“拉力抖动”问题的关键路径。</li>
+<li>  **分拆步骤**:</li>
+<p>    1.  <strong>观测设施 (Instrumentation)</strong>: “不要急着改代码。先写一个 CSV 导出器，记录每一帧的 <code class="md-code">force</code>、<code class="md-code">ratio</code> 和 <code class="md-code">state</code>。”</p>
+<p>    2.  <strong>数据复现 (Reproduction)</strong>: “生成几组不同摩擦力（如 <code class="md-code">friction=1.1772</code>）下的 Log 文件。”</p>
+<p>    3.  <strong>假设提出 (Hypothesis)</strong>: “让 AI 分析 Log。AI 发现是‘物理弹跳’导致的高频噪声。”</p>
+<p>    4.  <strong>方案验证 (Pilot)</strong>: “实现‘积分方案 (Score)’的原型，先不考虑完美参数，只看机制是否生效。”</p>
+<p>    5.  <strong>参数收敛 (tuning)</strong>: “基于新 Log，调整 <code class="md-code">ScoreThreshold</code> 和 <code class="md-code">CoolDown</code>，直到抖动频率 < 1次/秒。”</p>
+<br>
+<h3>3. 防御性编程与自检 (Defensive Coding)</h3>
+<p>AI 可能会忽略边界情况（如 <code class="md-code">Nullable<T></code>），人类需要作为 Reviewer。</p>
+<li>  **指令策略**: “请检查代码中的空引用风险、类型转换错误和性能热点。”</li>
+<li>  **工具链**: 结合 IDE 的 Compile Error 反馈，要求 AI 修复所有 Warning（如我们修复的 `actionData` 命名警告和 `.Value` 空指针风险）。</li>
+<br>
+<h3>4. 知识归档 (Knowledge Distillation)</h3>
+<li>  将 AI 分析长 Log 的结果归档为文本文件，而不是散落在聊天记录里。</li>
+<li>  将 AI 生成的复杂算法逻辑（如贝塞尔曲线生成、物理从动公式）提取为独立的 Markdown 技术文档，作为项目资产。</li>
+<li>  **结构化索引更新协议**:</li>
+<li>  每当生成新的 `DeepDive_*.md` 文档时，必须**立即**将其链接插入到上级结构文档（如 `Core_Gameplay_DeepDive.md`）的对应章节下。</li>
+<li>  确保 `Index.md` -> `Overview.md` -> `DeepDive.md` 的层级导航链完整，禁止制造“孤岛文档”。</li>
+<br>
+<h4>自动化文档维护 (Auto-Documentation)</h4>
+<p>为了保持文档与代码同步，我们在 <code class="md-code">G:\Copilot_OutPut\FishingGame</code> 下部署了自动化工具：</p>
+<li>  **Generate**: `generate_dashboard.py` - 手动生成单页 HTML 仪表盘。</li>
+<li>  **Watch**: `watch_dashboard.py` - 启动后自动监听 `.md` 文件变化并实时更新 HTML。</li>
+<li>  **AI 职责**: AI 在修改文档后，应主动运行生成脚本，或提醒用户运行 Watcher。</li>
+<br>
+<p>---</p>
+<br>
+<h2 class='md-h2'>三、 本项目特定配置 (Project Configuration)</h2>
+<br>
+<h3>目录规范</h3>
+<li>  **生成输出目录**: `G:\Copilot_OutPut\FishingGame` (存放 CSV 分析报告、生成的文档)</li>
+<li>  **记忆库目录**: `G:\FishingGame_Workspace\AnalysisMemory` (存放历史关键数据)</li>
+<br>
+<h3>关键参数快照 (当前最佳实践)</h3>
+<p>针对 <code class="md-code">RodBehaviour.cs</code> 的防抖动设置：</p>
+<li>  `CRITICAL_RATIO_MIN/MAX`: **0.60f / 1.40f** (更宽的临界区)</li>
+<li>  `STATE_LOCK_TIME`: **9.0s** (强锁定)</li>
+<li>  `RATIO_SCORE_ENTER`: **1.30f** (高积分阈值)</li>
+<li>  `RATIO_SCORE_DECAY_TAU`: **4.0f** (平滑衰减)</li>
+<br>
+<p>---</p>
+<p>*Created by GitHub Copilot & User on 2026-03-05*</p>
+<br>
+        </div>
+    </div>
+</body>
+</html>

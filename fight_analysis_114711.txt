@@ -1,0 +1,9 @@
+rows=2589 duration=86.541s
+smoothedForce mean=2.3629 min=0.0000 max=14.8560 p2p=14.8560 rms=2.0860
+ratio flips @1.0=96 flips_per_sec=1.109
+segments:
+  0-70 friction=3.5316 duration=2.381s flips=1 flips_per_sec=0.420 samples=71
+  71-73 friction=1.1772 duration=0.066s flips=0 flips_per_sec=0.000 samples=3
+  74-92 friction=2.3544 duration=0.597s flips=0 flips_per_sec=0.000 samples=19
+  93-2588 friction=1.1772 duration=83.391s flips=95 flips_per_sec=1.139 samples=2496
+ratio min=0.0000 max=5.7724

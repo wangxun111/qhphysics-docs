@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鱼速度优化</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="doc-link">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="doc-link">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="active">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="doc-link">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="doc-link">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="doc-link">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="doc-link">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1>鱼速度优化</h1>
+<ul>
+<li>为什么fp的鱼能做到立刻转弯？没有惯性？  Force和speed的比例</li>
+<li>轨迹和发力方式</li>
+<li>降维</li>
+<li>基础设定：鱼体基础的结构已经固定，即输出端已经固定，重点在于输入端。关注四面体的mass。  判断很正确</li>
+<li>测试场景：</li>
+<li>固定行为，修改目标点</li>
+<li>相同行为的数据对比</li>
+<li>fp有个转头系统</li>
+<li>看起来力在哪里就立刻朝向哪里，并直接运动过去，完全没有惯性  Force和speed比例</li>
+<li>四面体大致朝向合力方向</li>
+<li>stain并没有影响  --- 切分不同的部件，进行测试没问题</li>
+<li>参数呢？</li>
+<li>WaveDeviationAmp：好像不是   -----  没有成熟的思路，直接测试数据，效果很难达到</li>
+<li>fishai:</li>
+<li>目标点的高度变化？不是</li>
+<li>确定了同样的行为，同样的力，还是会滑步</li>
+<li>从结构出发，独立观测不同的数据</li>
+<li>鱼的数据保持完全一致试试？</li>
+<li>四面体中，尾部质点会被甩出去？</li>
+<li>fp中四面体的结构保持的很好，并没有出现尾部的节点会被惯性甩出去。而是按照一个整体变化的。</li>
+<li>目前聚焦于spring，确定首点是不是受到力的快速变化</li>
+<li>没有找到明确可能导致鱼速度变化的原因</li>
+<li>实践效果：占用时间太多，没有达到效果</li>
+<li>建议：规定时间执行计划，到时间立刻复盘，总结，重新判断</li>
+<li>目标：搜集数据，和表现变化</li>
+<li>数据</li>
+<li>提示：</li>
+<li>射线：鱼的朝向，运动朝向</li>
+<li>归纳</li>
+<li>1.鱼体会快速朝着力的方向   apex也一样</li>
+<li>结构</li>
+<li>spring</li>
+<li>12.18</li>
+<li>先分析spring，判断hook对整个流程的影响。再截取转弯时首mass点的位移的所有数据，分析这个截取片段</li>
+<li>执行</li>
+<li>分析spring，确定了基础的冲量计算公式。但是摩擦阻尼没有确定，3小时</li>
+<li>截取片段数据</li>
+<li>FP：       复盘：短时间快速尝试，类似路亚的搜索</li>
+<li>1.绘制更上面的mass，即hookmass的轨迹  ，效果不大  20分钟</li>
+<li>2.固定行为为float并且，选择点为左右   10分钟</li>
+<li>3.调整鱼的大小和长度，避免鱼太大飞起来   10分钟</li>
+<li>4.查找鱼总是做跳起的问题  20分钟</li>
+<li>5.转弯时的数据对比</li>
+<li>velocity         position         此时力相同吗</li>
+<li>Fp              0.x                 0.0008</li>
+<li>apex         0.0x               0.0005</li>
+<li>思考</li>
+<li>速度变化相差较大</li>
+<li>在切换方向时，apex速度过高</li>
+<li>如果力的大小不变，而方向变化很多可能，那么很可能是位置变化导致的原有速度变化最快</li>
+<li>查看位置</li>
+<li>pos                   velocity              force     速度才分更细点</li>
+<li>fp：         0.000x                    2                         8</li>
+<li>apex          0.000000x            2                         1</li>
+<li>fp没有发现明显的速度降低处理</li>
+<li>但是力的速度偏大。可以在几帧之内直接降低速度</li>
+<li>检查水平数据</li>
+<li>没有发现明显的思路和需要调整的点</li>
+<li>观察行进的方向变化</li>
+<li>设置完目的地：</li>
+<li>速度：  3.2-2.5  位置变化：0.0011-0.0009</li>
+<li>速度下降到1.7后就不断上升到4，然后又下降到1.2</li>
+<li>行进方向变更    在正确的点上，正常的方式都能做出正确的效果。如果找到鱼，并且开口了，随便钓</li>
+<li>快速上升到2.88</li>
+<li>整个过程进行了427次运算，如果按照每帧0.054计算，包含132个物理帧，一共经历3.2帧就执行完毕</li>
+<li>Apex：整个过程进行了1696次运算，每帧=0.019，包含52个物理帧。一共经过30帧渲染。</li>
+<li>整个运算效率相差4倍。</li>
+<li>针对fp的数据剧变，查找可能的方向</li>
+<li>转向之后，原有的运动速度和力速度是相反的，立刻会降低整体速度。运动速度=力速度*10.</li>
+<li>apex数据对比：如果速度相等，apex的力=1.   fp的力=8.  导致力的速度部分占据总速度部分的比重降低。</li>
+<li>核心问题是最高速度相差较大</li>
+<li>即力驱动速度的变化率</li>
+<li>方案1：当鱼需要转头时需要快速的调整方向，能够完成及时掉头</li>
+<li>问题：鱼会出现后续脱力后无法按照原有路径继续到达目标点。因为开始的力太大，路径偏移。  采用阶梯方式，开始猛掉头，后面一段时间降低力buff，最后才进行常规的力。</li>
+<li>动态的添加模拟力，提高力对速度的影响。但是后续还是会出现惯性的问题。</li>
+<li>改进：极大提升开始的转向力，让转向瞬间完成</li>
+<li>优化点：</li>
+<li>到达目标点要缓动</li>
+<li>设计一套表现流程</li>
+<li>70帧，切换目标点后，前20帧按照原有方向发力0.1f，45-50猛回头18倍,45-0是5倍力。</li>
+<li>总结：</li>
+<li>模型不够精准，调试数据会很困难，同时效果也差？</li>
+<li>跟进</li>
+<li>1.分解惯性速度和力速度   。测试模型：单个质点和单个行为的固定轨迹。</li>
+<li>力速度：</li>
+<li>力的参数没有问题</li>
+<li>惯性速度</li>
+<li>位置变化</li>
+<li>verletMass：</li>
+<li>TetrahedronWithBall：</li>
+<li>TetrahedronRollStabilizer:</li>
+<li>测试顺序：</li>
+<li>1.只测试verletMass,屏蔽TetrahedronWithBall和TetrahedronRollStabilizer还有verletmass</li>
+<li>问题：</li>
+<li>1.单个质点导致速度太快</li>
+<li>调整单个质点的质量？对，位移全部关联这个mass</li>
+<li>2.FP力会变化，还需要确定是哪部分影响的</li>
+<li>2.暂时只是测试开始部分，即力没有产生变化时，整体速度的变动</li>
+<li>问题</li>
+<li>apex会倒退，为什么，变化应该从头传递才对吧</li>
+<li>没有明确的思路，将fp的行为条件缩小，如固定行为</li>
+<li>鱼很容易向上，有专门的机制切换行为时进行上下跳跃处理？</li>
+<li>惯性速度不一致的数据</li>
+<li>Weight         CompoundWaterResistance       ScaledBuoyancySpeedMultiplier             Buoyancy              AirDragConstant         WaterMotor4f        Motor4f</li>
+<li>FP               1.96                     0.8                                                                        0                                                                  0.5                                 0.002                           0.1                             0</li>
+<li>apex           1.96                 0.0391                                                                    0                                                                  0                                     0                                    0.1                             0</li>
+<li>CompoundWaterResistance       是因为  WaterDragConstant</li>
+<li>WaterDragConstant是因为computeDrag 即：Force  +  Speed</li>
+<li>对齐CompoundWaterResistance</li>
+<li>Weight         CompoundWaterResistance       ScaledBuoyancySpeedMultiplier             Buoyancy              AirDragConstant         WaterMotor4f        Motor4f</li>
+<li>FP               1.96                     0.8                                                                        0                                                                  0.5                                 0.002                           0.1                             0</li>
+<li>apex           1.96                     0.8                                                                        0                                                                  0                                     0                                    0.1                             0</li>
+<li>对齐buoyan</li>
+<li>整体的速度数据基本一致</li>
+<li>恢复结构</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                           0.14                                                    0.0055</li>
+<li>Apex                                                      0.048                                                  0.0055</li>
+<li>verletspring参数没有问题：lengthsqr = 0.002398    friction=0.1</li>
+<li>测试保留前四个质点结构，去掉四面体和稳定器</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                           0.015                                                  0.0055</li>
+<li>Apex                                                      0.03                                                     0.0055</li>
+<li>总结：惯性速度有差距</li>
+<li>测试保留前第一个spring</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                           1.2                                                    0.0055</li>
+<li>Apex                                                      0.036                                               0.0055</li>
+<li>总结：惯性速度差距很大</li>
+<li>测试简化模型</li>
+<li>只有水阻和动力，并且屏蔽spring（勾饵）</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                           0.1245747                                      9.41798E-07</li>
+<li>Apex                                                      0.1245742                                      5.050152E-07</li>
+<li>问题</li>
+<li>1.fp开始运动很乱，后面会静止</li>
+<li>2.Fp每两个物理帧会出现重置一次pos</li>
+<li>3.fp会出现静止不动</li>
+<li>测试前四个mass的模型</li>
+<li>只有水阻和动力，并且屏蔽spring，增加前四个mass的verletspring</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                           0.1245741                                     0.0005990245</li>
+<li>Apex                                                      0.1245794                                      0.0006000256</li>
+<li>测试所有mass+ball</li>
+<li>所有verletmass+ball</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                          0.1267409                                     0.003789148</li>
+<li>Apex                                                      0.1252245                                     0.003791077</li>
+<li>测试所有mass+ball+Stab</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                          0.1252915                                   0.003794799</li>
+<li>Apex                                                     0.1249268                                    0.003799949</li>
+<li>测试所有mass+ball+Stab+重力和浮力</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                         0.1209034                                   0.003807563</li>
+<li>Apex                                                    0.1258788                                    0.003790126</li>
+<li>测试所有mass+ball+Stab+重力和浮力+stain</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                         0.1311926                                   0.003779703</li>
+<li>Apex                                                    0.1318038                                   0.003786399</li>
+<li>测试所有mass+ball+Stab+重力和浮力+stain+转弯+力=1</li>
+<li>数据对比                                        惯性速度                                           力速度</li>
+<li>FP                                                         1.262396                                      0.0373434</li>
+<li>Apex                                                    1.122441                                      0.03784842</li>
+<li>总结：惯性速度相差10%</li>
+<li>测试所有mass+ball+Stab+重力和浮力+stain+转弯+力=1+spring</li>
+<li>表现：鱼会被下压到地面</li>
+<li>查看spring对质点的具体影响</li>
+<li>每次位移带来的速度变化</li>
+<li>暂时不细化</li>
+<li>测试所有力都添加的情况下</li>
+<li>fish.speed,fish.force,和action.Force之间的关系</li>
+<li>问题</li>
+<li>当前项目action.force过小</li>
+<li>fish.speed,fish.force之间的比例有点问题</li>
+<li>什么时候确定了问题</li>
+<li>统一了测试模型，单个质点，单个行为，固定轨迹。</li>
+<li>不断测试对比数据后发现的</li>
+<li>总结</li>
+<li>1.第一步分析正确，聚焦在输入端</li>
+<li>2.后面太快进入细节部分，没有聚焦由初步输入到次级数据，尤其关联到核心计算流程</li>
+<li>外围的差距一定要控制，不要影响到后面的关键流程</li>
+<li>第一步正确，但是没有走到正确方向原因</li>
+<li>没有专注开始的Force差异</li>
+<li>被工期压力影响了决策</li>
+<li>前期一定要抢时间，节奏更密。为后续的决策流出充足的空间</li>
+</ul>
+        </div>
+    </div>
+</body>
+</html>

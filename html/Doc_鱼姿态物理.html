@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鱼姿态物理</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="doc-link">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="active">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="doc-link">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="doc-link">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="doc-link">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="doc-link">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="doc-link">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1>鱼姿态物理</h1>
+<ul>
+<li>核心：鱼姿态</li>
+<li>模块</li>
+<li>物理鱼结构</li>
+<li>5个四面体串接，四面体内部是弹簧</li>
+<li>姿态变化规则</li>
+<li>位移</li>
+<li>1.1四面体的底部mass和2四面体的首mass相互位置关联，比例为0.5</li>
+<li>2.1，2四面体对应index的mass会相互之间通过摩擦力关联0.03？</li>
+<li>旋转</li>
+<li>机制</li>
+<li>1四面体首mass和2四面体的首mass，通过1四面体的首mass的帧位移，进行位移通过弦公式转换为弧度/角度，角度以右向轴转换为旋转</li>
+<li>角度作用于1，2四面体的局部坐标系，即</li>
+<li>1四面体旋转*=2四面体旋转-弦角度旋转</li>
+<li>2四面体旋转*=1四面体旋转+弦角度旋转</li>
+<li>鱼体左右幅度，amp</li>
+<li>力影响鱼姿态</li>
+<li>力在鱼内部的传导</li>
+<li>四面体球体关节</li>
+<li>姿态的变化方式</li>
+<li>脊椎:四面体的扭曲旋转，位移为主</li>
+<li>鱼嘴：暂不处理</li>
+<li>鱼鳍：动画处理</li>
+<li>物理部件</li>
+<li>verletfishbody:</li>
+<li>四面体</li>
+<li>四个点位置</li>
+<li>顶点位置，从鱼嘴开始，按照长度不断向后计算</li>
+<li>第二个点，前+右</li>
+<li>第三个点，前+左上</li>
+<li>第四个点，前+左下</li>
+<li>例：</li>
+<li>顶点0: (0, 0, 0)              // 鱼头方向顶点</li>
+<li>顶点1: (0.5774, 0, 0.8165)    // 右前，在XZ平面 ，右边</li>
+<li>顶点2: (-0.2886, 0.5, 0.8165) // 左前，有Y分量   ，左上</li>
+<li>顶点3: (-0.2886, -0.5, 0.8165)// 右后，负Y分量，左下</li>
+</ul>
+<ul>
+<li>弹簧</li>
+<li>点</li>
+<li>力的施加</li>
+<li>变化节奏:</li>
+<li>方向: 1.行进方向  2.力的方向  3.当前四面体的方向</li>
+<li>MVP</li>
+<li>规划</li>
+<li>1.鱼在博鱼期间执行物理动画</li>
+<li>2.鱼的旋转跟随力的方向</li>
+<li>问题：</li>
+<li>1.整个鱼处于扭曲状态</li>
+<li>调整了朝向整体好转，1.0 Done</li>
+<li>2.姿态僵硬</li>
+<li>可能行为力和频率</li>
+<li>可能鱼本身的姿态机制</li>
+<li>后续方向点</li>
+<li>比较当前鱼的朝向和当前行为力的关联，暂时按照鱼的朝向朝着行为力方向，即四面体的力</li>
+<li>但是不够稳定，加上鱼的当前行进方向作为稳定</li>
+<li>mass点的关联，尤其是第一个mass和第一个四面体</li>
+<li>第一个mass点受到当前行为力</li>
+<li>第一个mass点受到钩子的力</li>
+<li>问题：</li>
+<li>四面体间有几个spring    6个：两两之间相互都有</li>
+<li>四面体间的相互影响和四面体内spring计算的顺序？</li>
+<li>先spring再ball</li>
+<li>mass[0]的位置是鱼的位置</li>
+<li>3.鱼会上下变动</li>
+<li>因为鱼的pos.y在频繁移动，导致质点在移动过程中有一定的滞后性。四面体会进行上下的漂移，进而带动方向的朝向不稳定</li>
+<li>4.鱼在快速变动角度时，会出现质点快速堆积造成的躯体扭曲</li>
+<li>5.鱼体长度，质点对应的长度不太符合实际鱼的长度</li>
+<li>找到scale和鱼长度的关联度</li>
+<li>scale=length/modelSize</li>
+<li>modelSize没有维护，后续用表格数据</li>
+<li>6.核心：四面体的球型铰链，如何运用</li>
+<li>延申：克服四面体的使用规则，是不是可以限制四面体太过灵活导致鱼体异常</li>
+<li>经过测试四面体之间的关联很可能造成问题，位移变化超出模型承载的表现极限</li>
+<li>铰链导致整体模型变形问题</li>
+<li>流程</li>
+<li>更新旋转</li>
+<li>跟随质点指向（第一个四面体的）变化</li>
+<li>设想</li>
+<li>1.如果第一个mass点位置的拖拽导致其他的鱼体就像链条一样，甩动</li>
+<li>第一个mass甩动首四面体，首四面体之间串接，实现甩动效果</li>
+<li>总结：目前就是这样，只是位移控制不住，导致形变严重</li>
+<li>2.四面体之间是球型，是不是能够换成铰链，或者限制上下方向的位移</li>
+<li>不知道</li>
+<li>3.鱼的基础受力方式</li>
+<li>自身驱动力=mouth*行为力+root*反行为力</li>
+<li>4.鱼的游动数据，暂时是没有鱼的基础游动状态，纯靠力驱动</li>
+<li>力形成鱼的右向弦变化游动</li>
+<li>产出</li>
+<li>跟随力的方向变化鱼姿态</li>
+<li>力的方向变化频繁</li>
+<li>问题预想：</li>
+<li>可能出现力干扰鱼，力的方向可能突变，此时以位移为主，动态调控朝向</li>
+<li>问题</li>
+<li>鱼甩尾时会出现对应折叠，是鱼头和鱼身不协调</li>
+<li>方案1：调整了鱼尾的波动幅度，稍好，但是还是有点问题 ，目前最有效的方式</li>
+<li>方案2：调整鱼头，待定</li>
+<li>方案3：直接限制最终的位移数据变化，四面体间的变化参数inv3，有效</li>
+<li>可以限制各个节点间前后左右变化的幅度</li>
+<li>方案4：3的参数往大调整增加相互间的紧密度</li>
+<li>物理鱼姿态</li>
+<li>现在的表现：</li>
+<li>1.根据力的反馈调整鱼的方向</li>
+<li>2.脊椎完全按照物理的模拟，表现当前鱼的游动姿态</li>
+<li>3.摆动频率和幅度可参数调控</li>
+<li>4.融合鱼鳍，鱼嘴动画</li>
+<li>5.根据博鱼的力做出动态变化</li>
+<li>待优化点：</li>
+<li>1.增加鱼的摆动幅度，增强激烈感 0.5d</li>
+<li>2.增加鱼的游动频率，体现鱼速度变化 0.5d</li>
+<li>3.实现鱼的不同行为间角度的突变，平滑表现，避免角度巨变穿模 1d</li>
+<li>方案：降低行为间的角度变化度，平滑角度变化流程</li>
+<li>4.鱼的游动扭曲优化，尤其是尾部  3d</li>
+<li>方案：进行数据的打磨</li>
+<li>5.鱼头方向可能出现摆动  1d</li>
+<li>方案：优化变动频率</li>
+<li>6.行为力的链条顺滑</li>
+<li>7.拆解FP数据</li>
+<li>8.动画位移控制</li>
+<li>延申</li>
+<li>建立鱼的姿态-行为-鱼种数据库，量变</li>
+<li>建立调试自动化-人工调试工具</li>
+<li>总结：</li>
+<li>当前完成基础功能，测试鱼的物理姿态变化。后续姿态的整体调优，需要转入到数值的调试阶段</li>
+<li>下个阶段实现：幅度更大，频率更快捷，不再出现明显穿模。实现搏斗激烈的鱼姿态</li>
+<li>目标</li>
+<li>1.行为激烈，且不会穿模的鱼</li>
+<li>2.大规模覆盖到所有鱼</li>
+<li>3.建立数据调教</li>
+<li>核心成本</li>
+<li>1.吃透FP的数据 => 调教数据</li>
+<li>Fp的位置和apx差不多</li>
+<li>现在需要针对旋转</li>
+<li>2.打磨表现</li>
+<li>方案5：融合动画表现</li>
+<li>流程</li>
+<li>鱼姿态变动</li>
+<li>游动波动效果</li>
+<li>波动传播：从头部向尾部传播的正弦波</li>
+<li>转向弯曲：通过 BendStrain 系统控制ball的身体弯曲幅度参数</li>
+<li>姿态稳定：RollStabilizer 防止鱼翻滚</li>
+<li>关联力变化</li>
+<li>修复异常</li>
+<li>身体扭曲</li>
+<li>游动方向不稳定</li>
+<li>重点：</li>
+<li>找到影响的部位，并筛选出影响的参数，获得调试效果</li>
+<li>部位</li>
+<li>ball：构成整个四面体之间关联度的核心</li>
+<li>stain：控制ball的部分参数变化：stinessMul+bendAngle</li>
+<li>调试效果</li>
+<li>关闭了ball的旋转和部分位置，并没有很好效果</li>
+<li>暂时直接通过最终的position的限制调整鱼的姿态</li>
+<li>问题</li>
+<li>1.四面体的首Mass点之间会出现较大的旋转差值</li>
+<li>控制了amp但是效果会显得非常僵硬</li>
+<li>2.mass点到position之间的转换</li>
+<li>3.尾部很容易摆动</li>
+<li>暂时没有排查出来，最后一个被前一个拉扯，但是并没有被后面的四面体拉扯，所以总是被拉的到处跑？</li>
+<li>方案Try:将最后一个节点和前一个节点组成的向量进行长度和方向的约束</li>
+<li>方案效果并不好，搁置</li>
+<li>4.鱼的头部摆动频繁</li>
+<li>增加鱼的第一个四面体朝向和力的方向的综合方向，引起的问题是强行改变方向，TIPS：会导致鱼的身体朝向和质点的朝向不一样</li>
+<li>方案try:进行力方向和行进方向的动态权重变化</li>
+<li>5.即使将ball的旋转都屏蔽还是会出现扭曲</li>
+<li>应该是位置变化的太多，暂时调试了四面体之间的变动幅度，有一定效果</li>
+<li>其他</li>
+<li>优势</li>
+<li>1.拖拽力反馈</li>
+<li>2.行为可以体现很微弱的变化</li>
+<li>效果调试</li>
+<li>挣扎度</li>
+<li>1.调整近岸的角度范围</li>
+<li>2.调整近岸的力</li>
+<li>3.调整近岸的行为时间</li>
+<li>鱼嘴朝向</li>
+<li>跟着四面体的朝向</li>
+<li>转弯</li>
+<li>速度调试方式，转向Force</li>
+<li>为什么fp的鱼能做到立刻转弯？没有惯性？  Force和speed的比例</li>
+<li>FP数据</li>
+<li>位移Mass数据</li>
+<li>本身很容易出现非线性，多个mass并非一条线</li>
+<li>apex一样</li>
+<li>位移bezierSpline数据</li>
+<li>大部分情况下，会是线性的</li>
+<li>apex也是一样</li>
+<li>旋转数据</li>
+<li>骨骼旋转= 曲线旋转*鱼的世界旋转</li>
+<li>曲线旋转：</li>
+<li>切线：曲线的一阶导数</li>
+<li>右轴：四面体的右向曲线，并且相邻的点有个权重融合右轴</li>
+<li>向上：切线 * 右轴</li>
+<li>FP-Apex</li>
+<li>当前的朝向一致</li>
+<li>动画：</li>
+<li>fp好像没用动画资源</li>
+<li>跟进记录</li>
+<li>注意查看下鱼的位置设置</li>
+<li>FP中即使位置被改变，但是总体mass的渲染还是不影响：因为最外层的transform计算和里面蒙皮节点的位置计算是分开的</li>
+<li>问题</li>
+<li>什么地方影响了整个模型的扭曲</li>
+<li>transform的方向是默认的（0，0，0）</li>
+<li>能不能拆分整个流程为几步：一步步测试？</li>
+<li>流程：</li>
+<li>1.apex进行位置屏蔽，只测试旋转，姿态好不穿模</li>
+<li>2.apex屏蔽旋转，只测试位置，微穿模</li>
+<li>3.结论</li>
+<li>root的自带角度，导致旋转和位置数据不匹配。尤其是位置数据</li>
+<li>4.旋转的方向和位置的方向不匹配</li>
+<li>旋转的前向，指向了位置的后面，类似前面的点转过来看后面</li>
+<li>FP也是这样，但是运行时prefab会出现所有节点的指向会倒转</li>
+<li>方案：将前向方向取反，适配整个鱼模型</li>
+<li>5.鱼模型不断翻滚</li>
+<li>1.稳定器？稳定器的targetdirection不对。因为信息传递问题。</li>
+<li>模型对比：</li>
+<li>root点有旋转</li>
+<li>12.10-11</li>
+<li>先看了模型transform的pos和rot的影响，发现fp没有影响</li>
+<li>再看了apex的位置和旋转单独的影响，发现旋转独立可以，但是位置独立会穿模</li>
+<li>为什么FP的鱼的子节点方向相反的也没问题？</li>
+<li>影响旋转的因素</li>
+<li>1.位置</li>
+<li>通过位置构建坐标系，最终产生影响:如四面体的局部坐标系</li>
+<li>可以屏蔽不同阶段的位置变化，找到真正造成旋转的地方</li>
+<li>主要是ball中的扭曲相关的位移</li>
+<li>如果关闭ball的扭曲，但是整体右侧还是以最后一个mass点，最终鱼还是会倒向那个右侧</li>
+<li>2.局部坐标系</li>
+<li>选定的坐标轴相关</li>
+<li>3.游动幅度</li>
+<li>目前低幅度的确会有助于鱼保持稳定，但是整体还是会有翻肚皮 。</li>
+<li>排查FP</li>
+<li>四面体的位置，没问题</li>
+<li>动态的变化</li>
+<li>稳定器的目标方向都是指向身体的右侧</li>
+<li>问题：</li>
+<li>但是四面体第四个mass点会朝下</li>
+<li>思路：对比稳定器的参数。apex的targetdirection参数的值一直都是（-1，0，0），追查原因:稳定器组件的创建没有加入到connectionList中</li>
+<li>解决思路</li>
+<li>还是对比fp后，发现关键数据targetDirection还是不一样</li>
+<li>对于物理系统数据的赋值，结算，传递还是比较模糊。导致log发现数据不对，还是需要整体排查之后才发现是流程的什么地方的问题，定位问题花费了不少时间</li>
+<li>12.13</li>
+<li>阶段总结：</li>
+<li>总结整体的算法  ===>熟练使用，快速调整效果。</li>
+<li>总结整个物理流程和关键组成部分 ===>便于找到整体流程上可能出错的点 .</li>
+<li>解决问题</li>
+<li>1.鱼的骨骼朝向   身体扭曲</li>
+<li>2.主线程和模拟线程通信  身体翻转</li>
+<li>12.14</li>
+<li>今日计划：</li>
+<li>1.鱼身体参数的控制</li>
+<li>稳定身形的</li>
+<li>扭曲幅度</li>
+<li>2.线程之间的通信流程</li>
+<li>如何让两个线程的组件保持一致</li>
+<li>组件之间的数据传递</li>
+<li>sourceSim和Sim之间的组件生产关联</li>
+<li>之前的问题就是sourcesim没有添加，导致sim也没添加。source的组件数据根本没有传递过去</li>
+<li>思考</li>
+<li>问题的破局点</li>
+<li>1.四面体之间的位移关系，必要时控制整体位移幅度</li>
+<li>调整了四面体之间，第一个四面体底部三个点和第二四面体首点之间的变动比例</li>
+<li>2.上鱼时重置下所有mass点位置</li>
+<li>mass点如何重置，按照控鱼器的点往下计算？</li>
+<li>3.最终曲线的旋转是还有问题</li>
+<li>4.调试FP数据</li>
+<li>1.fp也会一定的穿模</li>
+<li>2.尝试相同的代码流程测试，对比数据</li>
+<li>现状:扭曲无法还原</li>
+<li>追查流程</li>
+<li>1.比对基础的数据</li>
+<li>鱼的骨骼：</li>
+<li>物理参数：</li>
+<li>ball：</li>
+<li>stain：</li>
+<li>后半段</li>
+<li>FP：</li>
+<li>去掉旋转，身体扭曲严重</li>
+<li>AP：</li>
+<li>去和不去都会扭曲严重</li>
+<li>结论</li>
+<li>比对之后发现，mass链条和bezeilcurve的点都很相似。还是数据使用上的问题，即模型问题</li>
+<li>5. FP 的鱼也有穿模但是可控，当前是不是聚焦旋转</li>
+<li>包括局部坐标系，前向坐标：第四个mass指向底部中心点，为何这么设置</li>
+<li>6.右侧方向向量</li>
+<li>up*四面体的首mass连线，鱼体的左侧？</li>
+<li>7.只有第一个四面体需要进行稳定器</li>
+<li>每个稳定器的作用可以通过ball继续施加影响。如果是更长的四面体链条，可以通过每隔一段距离就设置一个稳定器</li>
+<li>8.一个流程的各个点大致理解，并能使用，下一步的流程，拆解-重组？</li>
+<li>提炼</li>
+<li>目标：形成新的，更干练，更高效的模型</li>
+<li>阶段总结：</li>
+<li>旋转部分的理解消耗很大，收获不高</li>
+<li>从流程上初步理解：弦波动旋转，位移变化。开放的参数调试其实效果并不突出</li>
+<li>从最终结果的使用上做了插值处理</li>
+<li>位移可能是影响更大的点</li>
+<li>尤其尾部变动过大</li>
+<li>方式：</li>
+<li>1.阶段目标有无差错</li>
+<li>方向接入</li>
+<li>投入最早，同时反馈最好</li>
+<li>旋转：</li>
+<li>投入最大，效果没那么好</li>
+<li>位移：</li>
+<li>投入最后，效果也好</li>
+<li>总结：投资方向：投入点，投入资源量，开始时间，产出，退出时间</li>
+<li>即：最小阻力路线</li>
+<li>策略：</li>
+<li>初步策略：快速投入每个点，搜集信息，评估每个点的投入方式，形成整个执行策略</li>
+<li>深度策略：在单个点上进行攻坚，打通整条链路。攻坚策略：升维，降维，开阔思维</li>
+<li>杠杆</li>
+<li>找到对标物</li>
+<li>逐个流程，逐个细节对标</li>
+<li>心法</li>
+<li>分阶段-分流程-抓细节-对标目标效果</li>
+<li>2.执行难度有无估错</li>
+<li>旋转：理解偏少，导致后续很多时间在这里被卡住</li>
+<li>反思：建立基础的执行时间和产出，如果超出这个值就进行攻坚点重新预估，并调整各事务权重</li>
+<li>好处：可以集中更多力量在有效的点上，更容易产生成果，避免产生流程阻塞</li>
+<li>难点：评估未必准确，多次尝试也可能白白浪费时间</li>
+<li>位移：直接在最后的数据应用上进行，效果很好</li>
+<li>反思：主要方向应该开始的时候都适当投入，看下产出</li>
+<li>3.哪些可以干掉，哪些需要更加聚焦？</li>
+<li>干掉：力的变化，受到哪些力的影响</li>
+<li>聚焦：旋转机制+最终的位移插值</li>
+<li>4.核心卡点</li>
+<li>模块是什么，模块怎么用（fp对比才发现模块其实是怎么用的）</li>
+<li>5.深化点</li>
+<li>1.直接从摆动幅度设置到最终效果，为什么尾部效果更大</li>
+<li>ball中的波动传递，会从前往后，后面会叠加前面的部分波动。最后的四面体旋转还不会受到后面的旋转抵消</li>
+<li>6.关键模式</li>
+<li>线条的方向模拟模式</li>
+<li>局部坐标系</li>
+<li>局部坐标系之间的旋转影响</li>
+<li>局部坐标系按照角度旋转</li>
+<li>旋转</li>
+</ul>
+        </div>
+    </div>
+</body>
+</html>

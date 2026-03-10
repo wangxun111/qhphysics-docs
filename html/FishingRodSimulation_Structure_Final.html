@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FishingRodSimulation 结构与流程分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            overflow: hidden; /* 全屏应用模式，禁止body滚动 */
+        }
+        
+        /* 悬浮面板样式 */
+        .info-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 350px;
+            max-height: 90vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .info-panel.collapsed {
+            transform: translateX(-120%);
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none; /* 默认隐藏，在折叠时显示 */
+        }
+
+        .helper-text {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 5px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: left;
+            font-size: 1.4em;
+            margin-top: 0;
+        }
+        
+        .description {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border-left: 5px solid #3498db;
+            font-size: 0.9em;
+        }
+
+        /* 全屏图表容器 */
+        .mermaid-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #fff;
+            cursor: grab;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+        
+        .mermaid-wrapper:active {
+            cursor: grabbing;
+        }
+        
+        .mermaid {
+            text-align: center;
+            user-select: none;
+            transform-origin: center center;
+        }
+        
+        .usage-note {
+            color: #d9534f;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .close-panel-btn {
+            float: right;
+            cursor: pointer;
+            color: #999;
+            font-weight: bold;
+        }
+        .close-panel-btn:hover {
+            color: #333;
+        }
+    </style>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</head>
+<body>
+    <button class="toggle-btn" id="showPanelBtn">显示信息</button>
+
+    <div class="info-panel" id="infoPanel">
+        <span class="close-panel-btn" id="hidePanelBtn">×</span>
+        <h1>FishingRodSimulation<br>核心逻辑流程</h1>
+        
+        <div class="usage-note">注意: 此图表需连接互联网以加载Mermaid渲染库。</div>
+
+        <div class="description">
+            <p><strong>文件路径：</strong> .../FishingRodSimulation.cs</p>
+            <p><strong>生成时间：</strong> <script>document.write(new Date().toLocaleString());</script></p>
+            <p><strong>说明：</strong> 本图详细展示了 FishingRodSimulation 类的初始化、物理模拟循环（Simulate/Solve）、线长LOD动态调整以及力学交互的完整流程。</p>
+            <div class="helper-text">
+                <strong>操作指南：</strong><br>
+                • 左键按住拖拽画布<br>
+                • 滚轮缩放视图
+            </div>
+        </div>
+    </div>
+
+    <!-- 全屏拖拽控制容器 -->
+    <div class="mermaid-wrapper" id="mermaidContainer">
+        <div class="mermaid">
+graph TD
+    classDef main fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef sub fill:#ccf,stroke:#333,stroke-width:1px;
+    classDef loops fill:#cfc,stroke:#333,stroke-width:2px;
+    classDef param fill:#eee,stroke:#999,stroke-dasharray: 5 5;
+
+    Start((开始 / Start)) --> Init["初始化 / Condition: Awake/Start"]
+    
+    subgraph Parameters ["关键物理参数 / Key Parameters"]
+        direction TB
+        P1["RodSpringConstant: 5000f<br/>(杆硬度系数)"]
+        P2["LineSpringConstant: 500f<br/>(线弹性)"]
+        P3["LineFriction: 0.002f<br/>(线与导环摩擦)"]
+        P4["WaterDrag: 10f<br/>(水阻力系数)"]
+        class P1,P2,P3,P4 param
+    end
+
+    subgraph InitPhase ["初始化阶段 / Init Phase (Setup)"]
+        direction TB
+        Init --> AddRod["AddRod:<br/>将Unity骨骼转换为<br/>Verlet质点(RodObjectInHands)"]
+        AddRod --> AddLine["AddLine / BuildNonUniformLine:<br/>生成初始非均匀线段<br/>(LOD: 近密远疏)"]
+        AddLine --> AddTackle{"AddTackle:<br/>选择渔具类型"}
+        AddTackle -- Lure --> T1["AddLure:<br/>路亚拟饵"]
+        AddTackle -- Wobbler --> T2["AddWobbler:<br/>摇摆假饵"]
+        AddTackle -- TopWater --> T3["AddTopWater:<br/>水面系假饵"]
+        AddTackle -- Bobber --> T4["AddBobber:<br/>浮漂/浮标"]
+        AddTackle -- Magnet --> T5["AddMagnet:<br/>磁铁道具"]
+        
+        T1 & T2 & T3 & T4 & T5 --> BuildSprings["构建质点弹簧系统<br/>Objects.Add / MassList.Add/Connect"]
+    end
+
+    InitPhase --> RuntimeLoop
+    
+    subgraph RuntimeLoop ["运行时模拟循环 / Runtime Simulation Loop"]
+        direction TB
+        SimulateEntry("Simulate:<br/>每帧物理模拟入口<br/>Update/FixedUpdate")
+        
+        SimulateEntry --> FishAttack["SimulateFishAttackForceImpulse:<br/>(若有)处理鱼攻击时的<br/>额外冲力计算"]
+        FishAttack --> TopWaterSignal["UpdateTopWaterStrikeSignal:<br/>检测水面系<br/>撞击信号"]
+        TopWaterSignal --> BaseSimulate["base.Simulate:<br/>调用基类物理步进"]
+        
+        BaseSimulate -- 调用 --> SolveLoop{"Solve:<br/>约束求解核心<br/>Core Constraint Solver"}
+        
+        subgraph SolvePhase ["物理求解阶段 / Solve Phase"]
+            direction TB
+            SolveLoop --> Constraint1["RodTip - LineTip 距离约束:<br/>修正线头与杆尖脱节"]
+            Constraint1 -- "距离 > 线长" --> ImpulseCalc["SatisfyImpulseConstraint:<br/>计算脉冲补偿"]
+            ImpulseCalc --> LineTipVel["直接修正<br/>LineTip速度 Vector3"]
+            
+            LineTipVel --> Friction["计算线与导环摩擦力"]
+            Friction --> Trapped["处理Trapped状态:<br/>如挂底/缠绕阻力"]
+            Trapped --> BaseSolve["base.Solve:<br/>执行Verlet积分<br/>更新位置/速度"]
+        end
+        
+        BaseSimulate --> UpdateSync["UpdateBeforeSync:<br/>同步前状态更新/LOD"]
+             
+        subgraph LineManagement ["线长与LOD管理 / Line LOD Management"]
+            direction TB
+            UpdateSync --> CheckLen{"CurrentLineLength != FinalLineLength?"}
+            CheckLen -- "是: 线长改变" --> LOD["UpdateNonUniformLine:<br/>动态LOD算法"]
+            LOD -- "增加/删除节点" --> RebuildSeg["AddSegment / RemoveSegment:<br/>调整物理节点数量"]
+            RebuildSeg --> Realign["RealignLineHorizontalMasses:<br/>必要时重排水平质点"]
+            
+            CheckLen -- "否: 线长稳定" --> UpdateImpulse["UpdateTackleSpringMaxImpulse:<br/>根据轮子摩擦力<br/>限制鱼的拉力"]
+        end
+        
+        UpdateSync --> UpdateForces["UpdateForces:<br/>计算最终受力统计<br/>RodAppliedForce / TackleApliedForce"]
+        UpdateForces --> SyncFunc["Sync:<br/>同步状态给其他线程<br/>(如用于渲染或其它物理计算)"]
+    end
+
+    SyncFunc --> End((下一帧 / Next Frame))
+
+    %% 样式应用
+    class InitPhase main
+    class RuntimeLoop loops
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('mermaidContainer');
+            const content = container.querySelector('.mermaid');
+            const infoPanel = document.getElementById('infoPanel');
+            const showPanelBtn = document.getElementById('showPanelBtn');
+            const hidePanelBtn = document.getElementById('hidePanelBtn');
+
+            // 面板折叠逻辑
+            hidePanelBtn.addEventListener('click', () => {
+                infoPanel.style.transform = 'translateX(-120%)';
+                showPanelBtn.style.display = 'block';
+            });
+
+            showPanelBtn.addEventListener('click', () => {
+                infoPanel.style.transform = 'translateX(0)';
+                showPanelBtn.style.display = 'none';
+            });
+
+            // 拖拽逻辑保持不变
+            let isDragging = false;
+            let startX, startY;
+            let currentX = 0, currentY = 0;
+            let scale = 1;
+            
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - currentX;
+                startY = e.clientY - currentY;
+                container.style.cursor = 'grabbing';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                currentX = e.clientX - startX;
+                currentY = e.clientY - startY;
+                updateTransform();
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                container.style.cursor = 'grab';
+            });
+
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const zoomIntensity = 0.1;
+                const delta = e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
+                const newScale = scale + delta;
+                if (newScale >= 0.2 && newScale <= 10) { // 扩大缩放范围适应全屏
+                    scale = newScale;
+                    updateTransform();
+                }
+            });
+
+            function updateTransform() {
+                content.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
+            }
+        });
+    </script>
+</body>
+</html>

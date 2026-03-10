@@ -1,0 +1,5 @@
+friction=1.1772 rows=4599 duration=155.612s window=2.0s bins=78
+flip_rate_mean=5.6987/s flip_rate_std=1.8140
+out_len_mean=1.341873 out_len_std=0.934641
+corr_outLen_vs_flipRate=-0.1701
+quantile_split=20% low_flip_rate_mean=4.7000/s high_flip_rate_mean=4.8000/s

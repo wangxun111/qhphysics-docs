@@ -1,0 +1,29 @@
+[Reel1stBehaviour.cs 物理修复技术总结]
+时间: 2026-03-10
+目标: 解决1档（低摩擦）下线长和竿尖的高频震荡（Jitter）问题，同时保持大鱼的物理响应。
+
+[核心修改点]
+1. 收线侧 - 强制死区 (Reeling Deadzone)
+   - 逻辑: if (currentFrictionSection <= 1)
+   - 机制: 
+     a. 死区: 当负载(Load) > 摩擦力(Friction)的 80% 时，强制收线速度为 0。
+     b. 限速: 当负载 < 80% 时，收线速度限制为基础值的 20%。
+   - 目的: 物理隔绝震荡回路，模拟卸力全松时的打滑效果。
+
+2. 出线侧 - 动态增益 (Drag Out Dynamic Gain)
+   - 逻辑: if (currentFrictionSection <= 1)
+   - 机制:
+     a. 计算超载力 excessForce = Load - Friction。
+     b. 小超载 (<0.5N): 增益极低 (~0.05)，过滤微小抖动。
+     c. 大超载 (>2.0N): 增益恢复 (1.0)，允许快速出线防止断线。
+   - 目的: 既要稳（防抖），又要准（大鱼响应）。
+
+3. 平滑与解耦 (Smoothing & Decoupling)
+   - 移除了 AppliedForceEqualizer 外部依赖，改用本地 Mathf.Lerp。
+   - 1档平滑系数设为 10f (高阻尼)，其他档位 25f。
+   - 修复了 targetSpeed 计算后未应用到 FinalLineLength 的 Bug。
+
+[文件状态]
+- Assets\FishingFramework\Module\Reel\Reel1stBehaviour.cs (已修复，可独立运行)
+- FishingRodSimulation.cs (建议还原，不再需要调试日志)
+

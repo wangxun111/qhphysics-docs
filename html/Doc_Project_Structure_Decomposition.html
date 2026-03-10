@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project_Structure_Decomposition</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; }
+        
+        /* Sidebar Styles */
+        #sidebar { width: 280px; background-color: #2c3e50; color: white; padding: 20px; overflow-y: auto; flex-shrink: 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        #sidebar h2 { color: #ecf0f1; font-size: 1.4em; border-bottom: 1px solid #34495e; padding-bottom: 15px; margin-top: 0; }
+        #sidebar ul { list-style: none; padding: 0; }
+        #sidebar li { margin: 8px 0; }
+        #sidebar a { color: #bdc3c7; text-decoration: none; transition: 0.2s; display: block; padding: 10px; border-radius: 6px; font-size: 0.95em; }
+        #sidebar a:hover { color: white; background-color: #34495e; transform: translateX(5px); }
+        #sidebar a.active { color: white; background-color: #3498db; font-weight: bold; }
+        
+        /* Content Styles */
+        #content-wrapper { flex-grow: 1; overflow-y: auto; position: relative; }
+        #content { max-width: 960px; margin: 40px auto; padding: 40px; background-color: white; box-shadow: 0 0 20px rgba(0,0,0,0.05); border-radius: 8px; min-height: 80vh; }
+        
+        /* Typography */
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; font-size: 2.4em; margin-top: 30px; margin-bottom: 20px; font-weight: 700; }
+        h2 { color: #34495e; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 1.8em; font-weight: 600; }
+        h3 { color: #2980b9; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        h4 { color: #7f8c8d; margin-top: 25px; margin-bottom: 10px; font-size: 1.1em; font-weight: 600; }
+        p { line-height: 1.8; color: #333; margin-bottom: 15px; font-size: 1.05em; }
+        strong { color: #c0392b; font-weight: 700; }
+        ul, ol { margin-bottom: 15px; }
+        li { margin-bottom: 8px; line-height: 1.6; }
+        
+        /* Elements */
+        pre { background-color: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+        a { color: #3498db; text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 15px 20px; color: #555; background-color: #f8fbff; border-radius: 0 4px 4px 0; }
+        ul, ol { padding-left: 25px; line-height: 1.6; }
+        li { margin-bottom: 5px; }
+        
+        /* Asset Cards */
+        .asset-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Markdown specific */
+        .md-h1 { border-bottom: 3px solid #e74c3c; }
+        .md-h2 { border-bottom: 1px solid #ddd; }
+        .md-code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c7254e; }
+        .md-pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #95a5a6; }
+    </style>
+</head>
+<body>
+    
+    <div id="sidebar">
+        <h2>文档中心</h2>
+        <ul id="sidebar-links">
+            <!-- Links will be injected here -->
+            <li><a href="Index.html" class="nav-link">🏠 文档首页</a></li>
+<hr style="border: 0; border-top: 1px solid #455a64; margin: 15px 0;">
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 10px; padding-left: 10px;">文档列表</li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📄 Word 文档</li>
+<li><a href="Doc_动态行为力.html" class="doc-link">动态行为力</a></li>
+<li><a href="Doc_地形.html" class="doc-link">地形</a></li>
+<li><a href="Doc_基础.html" class="doc-link">基础</a></li>
+<li><a href="Doc_数据调教.html" class="doc-link">数据调教</a></li>
+<li><a href="Doc_物理.html" class="doc-link">物理</a></li>
+<li><a href="Doc_行为姿态优化总结.html" class="doc-link">行为姿态优化总结</a></li>
+<li><a href="Doc_鱼姿态物理.html" class="doc-link">鱼姿态物理</a></li>
+<li><a href="Doc_鱼的速度和力量.html" class="doc-link">鱼的速度和力量</a></li>
+<li><a href="Doc_鱼速度优化.html" class="doc-link">鱼速度优化</a></li>
+<li style="color: #90a4ae; font-size: 0.85em; margin-bottom: 5px; margin-top: 15px; padding-left: 10px; font-weight:bold;">📝 分析报告 (Markdown)</li>
+<li><a href="Doc_AI_Collaboration_Workflow.html" class="doc-link">AI_Collaboration_Workflow</a></li>
+<li><a href="Doc_Core_Gameplay_DeepDive.html" class="doc-link">Core_Gameplay_DeepDive</a></li>
+<li><a href="Doc_DeepDive_PhysicsKernel.html" class="doc-link">DeepDive_PhysicsKernel</a></li>
+<li><a href="Doc_Index.html" class="doc-link">Index</a></li>
+<li><a href="Doc_Project_Structure_Decomposition.html" class="active">Project_Structure_Decomposition</a></li>
+        </ul>
+        <div style="margin-top: 50px; font-size: 0.8em; color: #95a5a6;">
+            <p>Generated by Auto-Doc Tool</p>
+        </div>
+    </div>
+    
+    <div id="content-wrapper">
+        <div id="content">
+            <h1 class='md-h1'>钓鱼项目架构分层拆解 (Project Taxonomy)</h1>
+<br>
+<p>基于项目使用的中间件（HybridCLR, OxGFrame, Lunaris）与核心玩法代码（RodBehaviour），我们将项目分解为以下五大领域。这种分类方式有助于团队分工和 AI 辅助开发的上下文隔离。</p>
+<br>
+<h2 class='md-h2'>1. 核心玩法层 (Core Gameplay Domain)</h2>
+<p>*这是项目的灵魂，也是目前我们调试的重点。*</p>
+<li>  **物理模拟 (Physics Simulation)**</li>
+<li>  **模块**: `RodPhysics`, `LineController`, `ReelMechanics`</li>
+<li>  **功能**: 鱼竿弯曲计算、鱼线张力物理（Mathf.SmoothDamp）、水面阻力模拟。</li>
+<li>  **鱼类 AI (Fish AI)**</li>
+<li>  **模块**: `FishBehaviorTree`, `StaminaSystem`</li>
+<li>  **功能**: 鱼的游动状态机（闲置、咬钩、挣扎、疲劳）、鱼的体力消耗与恢复逻辑。</li>
+<li>  **玩家交互 (Player Control)**</li>
+<li>  **模块**: `InputHandler`, `TouchGestures`</li>
+<li>  **功能**: 抛竿手势识别、收线力度控制（刺鱼、溜鱼）、震动反馈 (`MoreMountains.NiceVibrations`)。</li>
+<br>
+<h2 class='md-h2'>2. 表现与渲染层 (Visuals & Rendering Domain)</h2>
+<p>*利用 URP 和专业插件实现的视觉表现。*</p>
+<li>  **环境渲染 (Environment)**</li>
+<li>  **依赖**: `Lunaris.Terrain`, `Lunaris.Rendering`, `MightyTerrain`</li>
+<li>  **功能**: 高性能水体渲染（反射/折射）、动态天气系统、体积雾 (`urpvolumetricfog`)。</li>
+<li>  **视觉特效 (VFX)**</li>
+<li>  **依赖**: `Coffee.UIParticle`, `AVProVideo`</li>
+<li>  **功能**: 水花飞溅粒子、全屏视频特效（中鱼大招）、SSR (屏幕空间反射)。</li>
+<li>  **UI 动效 (UI Motion)**</li>
+<li>  **依赖**: `DOTween`, `Coffee.SoftMask`</li>
+<li>  **功能**: 张力条的动态伸缩、获得物品的弹窗动画。</li>
+<br>
+<h2 class='md-h2'>3. 系统架构层 (Infrastructure Domain)</h2>
+<p>*项目的底层骨架，决定了稳定性和扩展性。*</p>
+<li>  **热更新与代码执行 (Hot Update)**</li>
+<li>  **依赖**: `HybridCLR` (华山版)</li>
+<li>  **功能**: C# 代码热修复、DLL 补充元数据管理（AOT/Interpreter）。</li>
+<li>  **框架核心 (Framework Core)**</li>
+<li>  **依赖**: `OxGFrame`</li>
+<li>  **功能**: 消息中心 (EventCenter)、资源加载 (AssetLoader)、UI 栈管理。</li>
+<li>  **网络通信 (Networking)**</li>
+<li>  **依赖**: `BestHTTP`</li>
+<li>  **功能**: HTTP/WebSocket 通信、断线重连、Protobuf 协议处理。</li>
+<br>
+<h2 class='md-h2'>4. 外围系统层 (Meta Game Domain)</h2>
+<p>*玩家成长的数值循环。*</p>
+<li>  **经济与库存 (Economy & Inventory)**</li>
+<li>  **模块**: `InventorySystem`, `EquipmentManager`</li>
+<li>  **功能**: 鱼竿/鱼饵/鱼线的属性数值管理、背包系统、商店逻辑。</li>
+<li>  **数据持久化 (Persistence)**</li>
+<li>  **依赖**: `Gilzoide.SqliteNet`</li>
+<li>  **功能**: 本地数据库存储（玩家存档、图鉴记录）。</li>
+<br>
+<h2 class='md-h2'>5. 平台与安全层 (Platform & Ops Domain)</h2>
+<p>*上线运营的保障。*</p>
+<li>  **发布支持 (Distribution)**</li>
+<li>  **依赖**: `Google.Play`, `AppleAuth`</li>
+<li>  **功能**: 渠道登录、内购 (IAP)、Android App Bundle (AAB) 分包。</li>
+<li>  **安全与监控 (Security & Monitor)**</li>
+<li>  **依赖**: `OPS.Obfuscator`, `BuglyPlugins`, `SRDebugger`</li>
+<li>  **功能**: 代码混淆（防止反编译）、崩溃日志上报、真机运行时控制台。</li>
+<br>
+<p>---</p>
+<br>
+<h2 class='md-h2'>AI 协作建议 (AI Collaboration Strategy)</h2>
+<br>
+<p>在后续开发中，请根据修改涉及的层级，调整给 AI 的 Prompt：</p>
+<br>
+<p>1.  <strong>修改物理手感时</strong>:</p>
+<li>  **关键词**: "Core Gameplay", "RodPhysics", "Hysteresis"</li>
+<li>  **关注点**: 数值平滑、帧率独立性、手感反馈。</li>
+<br>
+<p>2.  <strong>修改界面相关时</strong>:</p>
+<li>  **关键词**: "UI", "DOTween", "OxGFrame"</li>
+<li>  **关注点**: 异步加载、内存泄漏、动画流畅度。</li>
+<br>
+<p>3.  <strong>修改底层配置时</strong>:</p>
+<li>  **关键词**: "HybridCLR", "Obfuscator", "Build Pipeline"</li>
+<li>  **关注点**: 编译错误、AOT 泛型问题、包体大小。</li>
+<br>
+<br>
+        </div>
+    </div>
+</body>
+</html>

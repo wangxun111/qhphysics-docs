@@ -1,0 +1,1 @@
+rows=1 duration=0.000s\nsmoothedForce mean=4.0423 min=4.0423 max=4.0423 p2p=0.0000 rms=0.0000\nratio flips @1.0=0 flips_per_sec=0.000\nsegments:\n  0-0 friction=1.1772 duration=0.000s flips=0 flips_per_sec=0.000 samples=1\nratio min=16.3215 max=16.3215
