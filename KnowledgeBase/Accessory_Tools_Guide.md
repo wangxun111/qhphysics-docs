@@ -11,6 +11,7 @@
 | 2 | **文档可视化查看器** | `ConvertMdToHtml.ps1` | `HTML` | **文档阅读**：将 Markdown 变为好看的网页。 |
 | 3 | **类结构透视 (Structure)** | `CSharpToMermaid.ps1` | `Class Diagram` | **静态蓝图**：查看类的继承关系、接口实现和成员变量。*(关注“是什么”)* |
 | 4 | **业务逻辑复盘 (Logic)** | **AI Assisted** | `Interactive Flowchart` | **深度导航**：AI 分析生成的复杂业务逻辑、算法流和状态跳转。*(关注“怎么运行”)* |
+| 5 | **文档双向同步** | `SyncDocs.ps1` | `Git Ops` | **云端备份**：一键执行 `Commit -> Pull Rebase -> Push` 同步到 GitHub Pages。 |
 
 ## 🛠️ 当前可用工具
 
@@ -56,6 +57,20 @@
 - **用途**: 关注“**核心逻辑怎么运行**”——AI 会理解代码意图，画出完整的物理计算公式、状态机跳转、LOD 切换条件等。
 - **优势**: 包含详细的决策分支和数据流向，支持全屏拖拽缩放，适合复杂算法分析。
 - **产物**: `G:\Copilot_OutPut\FishingGame\html\*.html`
+
+### 5. 文档双向同步 (Sync Docs to GitHub)
+- **文件路径**: `G:\Copilot_OutPut\FishingGame\SyncDocs.bat` (快捷方式)
+- **脚本路径**: `G:\Copilot_OutPut\FishingGame\Scripts\SyncDocs.ps1`
+- **功能**:
+  - 自动暂存 (`git add .`) 并提交本地更改。
+  - 从远程仓库拉取更新 (`git pull --rebase`)。
+  - 将最新文档推送到 GitHub (`git push`)。
+- **配置**:
+  - 远程仓库: `https://github.com/wangxun111/qhphysics-docs`
+  - 部署地址: `https://wangxun111.github.io/qhphysics-docs/`
+- **使用方法**:
+  - 双击运行 `G:\Copilot_OutPut\FishingGame\SyncDocs.bat` 即可。
+  - 首次运行可能需要输入 GitHub 账号密码或 Token。
 
 ## 📚 外部参考资料 (References)
 - **代码可视化工具思想库**: [Code_Visualization_Ideas.md](G:\Copilot_OutPut\FishingGame\KnowledgeBase\Code_Visualization_Ideas.md)

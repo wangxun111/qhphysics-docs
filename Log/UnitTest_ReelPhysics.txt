@@ -1,0 +1,6 @@
+[ReelTest] Test Run Started at 2026/3/10 15:20:53
+--------------------------------------------------
+[PASS] Deadzone Test
+[PASS] SafeZone Test
+--------------------------------------------------
+Result: 2 Passed, 0 Failed.
