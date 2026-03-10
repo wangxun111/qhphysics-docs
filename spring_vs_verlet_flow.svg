@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1500" height="1500" viewBox="0 0 1500 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spring vs VerletSpring flow">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <style>
+    .node { fill: #f9f9f9; stroke: #333; stroke-width: 1; }
+    .edge { stroke: #333; stroke-width: 1.2; fill: none; }
+    .label { font-family: Arial, sans-serif; font-size: 14px; fill: #111; }
+    .title { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #111; }
+    .small { font-family: Arial, sans-serif; font-size: 12px; fill: #111; }
+    .lane { fill: #ffffff; stroke: #bbb; stroke-width: 1; }
+  </style>
+
+  <!-- Lanes -->
+  <rect class="lane" x="60" y="80" width="620" height="1320" rx="8" />
+  <rect class="lane" x="820" y="80" width="620" height="1320" rx="8" />
+
+  <text class="title" x="370" y="60" text-anchor="middle">Spring (Impulse)</text>
+  <text class="title" x="1130" y="60" text-anchor="middle">VerletSpring (Position)</text>
+
+  <!-- Shared entry -->
+  <rect class="node" x="610" y="20" width="280" height="44" rx="6" />
+  <text class="label" x="750" y="48" text-anchor="middle">Frame start</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M750 64 L750 90" />
+  <path class="edge" marker-end="url(#arrow)" d="M750 134 L750 160" />
+  <path class="edge" marker-end="url(#arrow)" d="M750 204 L750 230" />
+
+  <rect class="node" x="610" y="90" width="280" height="44" rx="6" />
+  <text class="label" x="750" y="118" text-anchor="middle">Collect active masses</text>
+
+  <rect class="node" x="610" y="160" width="280" height="44" rx="6" />
+  <text class="label" x="750" y="188" text-anchor="middle">Integrate masses</text>
+
+  <rect class="node" x="610" y="230" width="280" height="44" rx="6" />
+  <text class="label" x="750" y="258" text-anchor="middle">Build constraints</text>
+
+  <!-- Split to lanes -->
+  <path class="edge" marker-end="url(#arrow)" d="M750 274 L370 310" />
+  <path class="edge" marker-end="url(#arrow)" d="M750 274 L1130 310" />
+
+  <!-- Spring lane nodes -->
+  <rect class="node" x="200" y="310" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="338" text-anchor="middle">Spring Solve</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 354 L370 390" />
+  <rect class="node" x="200" y="390" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="418" text-anchor="middle">Cache old spring length</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 434 L370 470" />
+  <rect class="node" x="200" y="470" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="498" text-anchor="middle">Lerp spring length by progress</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 514 L370 550" />
+  <polygon class="node" points="370,550 460,590 370,630 280,590" />
+  <text class="label" x="370" y="595" text-anchor="middle">Both masses kinematic</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M280 590 L120 590" />
+  <text class="small" x="200" y="580" text-anchor="middle">Yes</text>
+  <rect class="node" x="40" y="568" width="200" height="44" rx="6" />
+  <text class="label" x="140" y="596" text-anchor="middle">Log error and exit</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M460 590 L540 590" />
+  <text class="small" x="500" y="580" text-anchor="middle">No</text>
+
+  <polygon class="node" points="370,660 460,700 370,740 280,700" />
+  <text class="label" x="370" y="705" text-anchor="middle">Hook or fish special case</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M460 700 L640 700" />
+  <text class="small" x="550" y="690" text-anchor="middle">Yes</text>
+  <polygon class="node" points="720,660 800,700 720,740 640,700" />
+  <text class="label" x="720" y="705" text-anchor="middle">Mass1 kinematic</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M800 700 L800 760" />
+  <text class="small" x="812" y="730" text-anchor="start">Yes</text>
+  <rect class="node" x="720" y="760" width="200" height="44" rx="6" />
+  <text class="label" x="820" y="788" text-anchor="middle">Return</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M640 700 L540 740" />
+  <text class="small" x="600" y="720" text-anchor="middle">No</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 740 L370 780" />
+  <rect class="node" x="200" y="780" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="808" text-anchor="middle">SatisfyImpulseConstraintMass</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 824 L370 860" />
+  <rect class="node" x="200" y="860" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="888" text-anchor="middle">Compute velocity and position offset</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 904 L370 940" />
+  <polygon class="node" points="370,940 460,980 370,1020 280,980" />
+  <text class="label" x="370" y="985" text-anchor="middle">Position offset length ok</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M280 980 L120 980" />
+  <text class="small" x="200" y="970" text-anchor="middle">No</text>
+  <rect class="node" x="40" y="958" width="200" height="44" rx="6" />
+  <text class="label" x="140" y="986" text-anchor="middle">Return zero</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M460 980 L540 980" />
+  <text class="small" x="500" y="970" text-anchor="middle">Yes</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 1020 L370 1060" />
+  <rect class="node" x="200" y="1060" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="1088" text-anchor="middle">Compute num and velocity deltas</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 1104 L370 1140" />
+  <rect class="node" x="200" y="1140" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="1168" text-anchor="middle">Apply friction when needed</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M370 1184 L370 1220" />
+  <rect class="node" x="200" y="1220" width="340" height="44" rx="6" />
+  <text class="label" x="370" y="1248" text-anchor="middle">Apply to velocities or impulses</text>
+
+  <!-- Verlet lane nodes -->
+  <rect class="node" x="960" y="310" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="338" text-anchor="middle">Satisfy (position constraint)</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 354 L1130 390" />
+  <polygon class="node" points="1130,390 1220,430 1130,470 1040,430" />
+  <text class="label" x="1130" y="435" text-anchor="middle">Open Verlet satisfy</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1040 430 L900 430" />
+  <text class="small" x="970" y="420" text-anchor="middle">No</text>
+  <rect class="node" x="820" y="408" width="200" height="44" rx="6" />
+  <text class="label" x="920" y="436" text-anchor="middle">Return</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1220 430 L1300 430" />
+  <text class="small" x="1260" y="420" text-anchor="middle">Yes</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 470 L1130 510" />
+  <rect class="node" x="960" y="510" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="538" text-anchor="middle">Compute position delta</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 554 L1130 590" />
+  <rect class="node" x="960" y="590" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="618" text-anchor="middle">Override length if FishData</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 634 L1130 670" />
+  <rect class="node" x="960" y="670" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="698" text-anchor="middle">Apply position correction</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 714 L1130 750" />
+  <rect class="node" x="960" y="750" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="778" text-anchor="middle">Solve (position damping)</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 794 L1130 830" />
+  <polygon class="node" points="1130,830 1220,870 1130,910 1040,870" />
+  <text class="label" x="1130" y="875" text-anchor="middle">Open Verlet spring</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1040 870 L900 870" />
+  <text class="small" x="970" y="860" text-anchor="middle">No</text>
+  <rect class="node" x="820" y="848" width="200" height="44" rx="6" />
+  <text class="label" x="920" y="876" text-anchor="middle">Return</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1220 870 L1300 870" />
+  <text class="small" x="1260" y="860" text-anchor="middle">Yes</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 910 L1130 950" />
+  <rect class="node" x="960" y="950" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="978" text-anchor="middle">Compute spring axis and friction</text>
+
+  <path class="edge" marker-end="url(#arrow)" d="M1130 994 L1130 1030" />
+  <rect class="node" x="960" y="1030" width="340" height="44" rx="6" />
+  <text class="label" x="1130" y="1058" text-anchor="middle">Apply position damping</text>
+</svg>
+

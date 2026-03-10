@@ -1,0 +1,289 @@
+# 📖 GitHub Pages 部署可视化指南
+
+## 准备工作：查找你的 GitHub 用户名
+
+### ① 登录 GitHub
+```
+打开浏览器 → https://github.com → 登录
+```
+
+### ② 找到设置
+```
+点击右上角头像
+    ↓
+选择 Settings
+```
+
+### ③ 查看用户名
+```
+在 Account 页面左侧找到 "Public profile"
+或在顶部看到：Your profile
+    ↓
+你的用户名就在这里
+（通常格式：username、user-name 等，不是邮箱）
+```
+
+---
+
+## 部署步骤
+
+### 📍 找到你的文档目录
+
+```
+F:\new\fishinggame\QHPlugins\QHForUnity\
+└── 在这个目录中有：
+    ├── Documentation_Hub.html
+    ├── deploy_to_github.bat ← 我们要用这个
+    ├── XunPhysics_Architecture.html
+    ├── 其他文档...
+    └── ...
+```
+
+### 🔧 运行部署脚本
+
+**Windows 用户**：
+
+1. 打开命令行（Windows 快捷键）
+```
+按 Win + R → 输入 cmd → 回车
+```
+
+2. 进入文档目录
+```
+cd F:\new\fishinggame\QHPlugins\QHForUnity
+```
+
+3. 运行脚本
+```
+deploy_to_github.bat your_github_username
+```
+
+**完整示例**：
+```
+Microsoft Windows [版本 10.0.19045]
+(c) Microsoft Corporation. 保留所有权利。
+
+C:\Users\YourName>cd F:\new\fishinggame\QHPlugins\QHForUnity
+
+F:\new\fishinggame\QHPlugins\QHForUnity>deploy_to_github.bat john123
+
+========================================
+  XunPhysics 文档 GitHub Pages 部署脚本
+========================================
+
+✓ GitHub 用户名：john123
+✓ 仓库名称：qhphysics-docs
+
+【Step 1】检查 Git 安装
+✓ Git 已安装
+
+【Step 2】初始化 Git 仓库
+✓ Git 仓库已存在
+
+【Step 3】配置 Git
+✓ Git 配置完成
+
+【Step 4】添加 GitHub 远程仓库
+远程仓库 URL：https://github.com/john123/qhphysics-docs.git
+✓ 远程仓库已配置
+
+【Step 5】创建 .gitignore
+✓ .gitignore 已创建
+
+【Step 6】添加文件到 Git
+添加所有文件...
+✓ 文件已添加
+
+【Step 7】创建初始提交
+✓ 提交已创建
+
+【Step 8】推送到 GitHub
+Username for 'https://github.com': john123
+Password for 'https://john123@github.com': [输入你的密码或token]
+
+✓ 文件已推送到 GitHub
+
+========================================
+✓ 部署步骤完成！
+========================================
+
+【下一步】启用 GitHub Pages：
+
+1. 打开浏览器，访问：
+   https://github.com/john123/qhphysics-docs/settings/pages
+
+2. 在 'Source' 中选择：'Deploy from a branch'
+
+3. 选择分支：'main' 和 '/ (root)'
+
+4. 点击 'Save'
+
+【预期的网址】：
+主页：
+  https://john123.github.io/qhphysics-docs/
+
+文档中心：
+  https://john123.github.io/qhphysics-docs/Documentation_Hub.html
+
+✓ 大约 1-2 分钟后就能访问你的网站！
+```
+
+### 🔐 处理密码提示
+
+脚本运行时可能会要求输入密码：
+
+```
+Username for 'https://github.com': your_github_username
+Password for 'https://your_github_username@github.com': _
+```
+
+**输入什么？**
+
+选项 1：直接输入你的 GitHub 密码（密码不会显示，这是正常的）
+
+选项 2：使用 Personal Access Token（推荐）
+- 访问 https://github.com/settings/tokens
+- 新建 Token（勾选 repo 权限）
+- 复制 Token 并粘贴（Ctrl+V）
+
+### 🎯 启用 GitHub Pages
+
+脚本完成后，按照提示打开这个链接：
+```
+https://github.com/your_username/qhphysics-docs/settings/pages
+```
+
+在这个页面你会看到：
+
+```
+┌─────────────────────────────────────┐
+│ GitHub Pages                        │
+├─────────────────────────────────────┤
+│                                     │
+│ Source                              │
+│ ┌─────────────────────────────────┐ │
+│ │ Deploy from a branch      ▼     │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ Branch                              │
+│ ┌─────────────────────────────────┐ │
+│ │ main    ▼   / (root)      ▼     │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ ┌─────────────────────────────────┐ │
+│ │      [ Save ]                   │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+**按这样操作**：
+1. Source：选择 "Deploy from a branch"（应该已选）
+2. Branch：选择 "main"（应该已选）
+3. 文件夹：选择 "/ (root)"（应该已选）
+4. 点击 "Save"
+
+### ⏳ 等待部署完成
+
+页面可能会显示：
+```
+Your site is ready to be published at
+https://your_username.github.io/qhphysics-docs/
+
+Your site is being built from the main branch
+```
+
+等待 1-2 分钟...
+
+然后变成：
+```
+✓ Your site is published at
+  https://your_username.github.io/qhphysics-docs/
+```
+
+---
+
+## 🎉 完成！
+
+现在你可以访问：
+
+```
+主页：
+https://your_username.github.io/qhphysics-docs/
+
+文档中心：
+https://your_username.github.io/qhphysics-docs/Documentation_Hub.html
+
+所有文档都可以通过这个网址访问！
+```
+
+---
+
+## 📤 更新网站
+
+以后要更新文档，只需：
+
+```bash
+cd F:\new\fishinggame\QHPlugins\QHForUnity
+
+REM 修改文件后
+git add .
+git commit -m "docs: Update - [你的更改描述]"
+git push
+```
+
+1-2 分钟后网站会自动更新！
+
+---
+
+## 🔗 分享你的网站
+
+现在可以分享这个链接给任何人：
+
+```
+https://your_username.github.io/qhphysics-docs/Documentation_Hub.html
+```
+
+他们可以在任何地方、任何设备上访问你的完整文档！
+
+---
+
+## 🆘 常见问题
+
+### Q: 脚本说 "git not found"
+
+**A**: 需要安装 Git
+- 下载：https://git-scm.com/download/win
+- 安装完成后重新运行脚本
+
+### Q: 密码错误
+
+**A**: GitHub 不再支持密码验证
+- 使用 Personal Access Token 代替
+- 访问 https://github.com/settings/tokens 创建新 Token
+
+### Q: 网站仍然 404
+
+**A**: 检查这些
+- GitHub Pages 已启用（Settings → Pages）
+- 分支选择为 main
+- 文件夹选择为 / (root)
+- 等待 3-5 分钟
+- 浏览器硬刷新（Ctrl+Shift+R）
+
+### Q: 不小心把密码输错了
+
+**A**: 重新运行脚本即可
+```bash
+deploy_to_github.bat your_username
+```
+
+### Q: 我想用自己的域名
+
+**A**: 在 GitHub Pages 设置中
+1. Custom domain：输入你的域名
+2. 在域名服务商添加 CNAME 记录指向 `your_username.github.io`
+
+---
+
+**准备好了？告诉我你的 GitHub 用户名，我可以帮你验证！**

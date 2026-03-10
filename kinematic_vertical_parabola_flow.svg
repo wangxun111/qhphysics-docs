@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1200" viewBox="0 0 1400 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KinematicVerticalParabola flow">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <style>
+    .node { fill: #f9f9f9; stroke: #333; stroke-width: 1; }
+    .edge { stroke: #333; stroke-width: 1.2; fill: none; }
+    .label { font-family: Arial, sans-serif; font-size: 13px; fill: #111; }
+    .title { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #111; }
+  </style>
+
+  <text class="title" x="700" y="30" text-anchor="middle">KinematicVerticalParabola Solve Flow</text>
+
+  <!-- Nodes -->
+  <rect class="node" x="520" y="60" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="88" text-anchor="middle">Start Solve()</text>
+
+  <rect class="node" x="520" y="130" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="158" text-anchor="middle">If Mass1 not kinematic, return</text>
+
+  <rect class="node" x="520" y="200" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="228" text-anchor="middle">Init startTime if zero</text>
+
+  <rect class="node" x="520" y="270" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="298" text-anchor="middle">If time > start + duration, return</text>
+
+  <rect class="node" x="520" y="340" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="368" text-anchor="middle">progress = pow((t-start)/duration, timePower)</text>
+
+  <rect class="node" x="520" y="410" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="438" text-anchor="middle">Compensation vector from Mass2, clamp max</text>
+
+  <rect class="node" x="520" y="480" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="508" text-anchor="middle">point = verticalParabola.GetPoint(progress)</text>
+
+  <rect class="node" x="520" y="550" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="578" text-anchor="middle">b = Lerp(lastPosition, EndPosition, FrameIterationProgress)</text>
+
+  <rect class="node" x="520" y="620" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="648" text-anchor="middle">vector3 = Lerp(point + compensation, b, progress^4)</text>
+
+  <rect class="node" x="520" y="690" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="718" text-anchor="middle">If progress &lt; 0.5 or above ground, apply position</text>
+
+  <rect class="node" x="520" y="760" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="788" text-anchor="middle">Velocity = (vector3 - prev) / dt, clamp if needed</text>
+
+  <rect class="node" x="520" y="830" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="858" text-anchor="middle">lastPosition = vector3</text>
+
+  <rect class="node" x="520" y="900" width="360" height="44" rx="6" />
+  <text class="label" x="700" y="928" text-anchor="middle">End Solve()</text>
+
+  <!-- Edges -->
+  <path class="edge" marker-end="url(#arrow)" d="M700 104 L700 130" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 174 L700 200" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 244 L700 270" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 314 L700 340" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 384 L700 410" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 454 L700 480" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 524 L700 550" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 594 L700 620" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 664 L700 690" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 734 L700 760" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 804 L700 830" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 874 L700 900" />
+</svg>
+

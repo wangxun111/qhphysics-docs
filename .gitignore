@@ -1,4 +1,3 @@
-Log/
-*.tmp
-*.log
-.DS_Store
+.vs/
+*/bin/
+*/obj/

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1700" viewBox="0 0 1400 1700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spring flow">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <style>
+    .node { fill: #f9f9f9; stroke: #333; stroke-width: 1; }
+    .edge { stroke: #333; stroke-width: 1.2; fill: none; }
+    .label { font-family: Arial, sans-serif; font-size: 14px; fill: #111; }
+    .small { font-size: 12px; fill: #111; }
+  </style>
+
+  <!-- Edges: main vertical flow -->
+  <path class="edge" marker-end="url(#arrow)" d="M700 88 L700 120" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 168 L700 200" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 248 L700 280" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 328 L700 360" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 408 L700 440" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 488 L700 520" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 568 L700 600" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 648 L700 660" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 740 L700 760" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 840 L700 900" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 948 L700 980" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1028 L700 1060" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1108 L700 1120" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1200 L700 1240" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1288 L700 1320" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1368 L700 1400" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1448 L700 1480" />
+  <path class="edge" marker-end="url(#arrow)" d="M700 1528 L700 1560" />
+
+  <!-- Branch: both masses kinematic -->
+  <path class="edge" marker-end="url(#arrow)" d="M600 700 L380 684" />
+  <text class="small" x="500" y="680" text-anchor="middle">Yes</text>
+  <text class="small" x="720" y="760" text-anchor="start">No</text>
+
+  <!-- Branch: hook or fish special case -->
+  <path class="edge" marker-end="url(#arrow)" d="M800 800 L990 800" />
+  <text class="small" x="900" y="790" text-anchor="middle">Yes</text>
+  <text class="small" x="720" y="860" text-anchor="start">No</text>
+
+  <!-- Branch: mass1 kinematic decision -->
+  <path class="edge" marker-end="url(#arrow)" d="M1080 835 L1080 880" />
+  <text class="small" x="1090" y="865" text-anchor="start">Yes</text>
+  <path class="edge" marker-end="url(#arrow)" d="M990 800 L760 900" />
+  <text class="small" x="880" y="830" text-anchor="middle">No</text>
+
+  <!-- Branch: position offset length check -->
+  <path class="edge" marker-end="url(#arrow)" d="M600 1160 L380 1144" />
+  <text class="small" x="500" y="1140" text-anchor="middle">No</text>
+  <text class="small" x="720" y="1210" text-anchor="start">Yes</text>
+
+  <!-- Nodes: main column -->
+  <rect class="node" x="520" y="40" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="70" text-anchor="middle">Frame start</text>
+
+  <rect class="node" x="520" y="120" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="150" text-anchor="middle">Collect active masses</text>
+
+  <rect class="node" x="520" y="200" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="230" text-anchor="middle">Integrate masses Verlet</text>
+
+  <rect class="node" x="520" y="280" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="310" text-anchor="middle">Build constraints</text>
+
+  <rect class="node" x="520" y="360" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="390" text-anchor="middle">Spring constraints</text>
+
+  <rect class="node" x="520" y="440" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="470" text-anchor="middle">Spring Solve</text>
+
+  <rect class="node" x="520" y="520" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="550" text-anchor="middle">Cache old spring length</text>
+
+  <rect class="node" x="520" y="600" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="630" text-anchor="middle">Lerp spring length by progress</text>
+
+  <polygon class="node" points="700,660 800,700 700,740 600,700" />
+  <text class="label" x="700" y="705" text-anchor="middle">Both masses kinematic</text>
+
+  <polygon class="node" points="700,760 800,800 700,840 600,800" />
+  <text class="label" x="700" y="805" text-anchor="middle">Hook or fish special case</text>
+
+  <rect class="node" x="520" y="900" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="930" text-anchor="middle">Call SatisfyImpulseConstraintMass</text>
+
+  <rect class="node" x="520" y="980" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1010" text-anchor="middle">Compute velocity offset</text>
+
+  <rect class="node" x="520" y="1060" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1090" text-anchor="middle">Compute position offset</text>
+
+  <polygon class="node" points="700,1120 800,1160 700,1200 600,1160" />
+  <text class="label" x="700" y="1165" text-anchor="middle">Position offset length ok</text>
+
+  <rect class="node" x="520" y="1240" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1270" text-anchor="middle">Normalize position offset when needed</text>
+
+  <rect class="node" x="520" y="1320" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1350" text-anchor="middle">Compute num and apply impulses</text>
+
+  <rect class="node" x="520" y="1400" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1430" text-anchor="middle">Other constraints</text>
+
+  <rect class="node" x="520" y="1480" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1510" text-anchor="middle">Finalize positions</text>
+
+  <rect class="node" x="520" y="1560" width="360" height="48" rx="6" />
+  <text class="label" x="700" y="1590" text-anchor="middle">Render</text>
+
+  <!-- Side nodes -->
+  <rect class="node" x="80" y="660" width="300" height="48" rx="6" />
+  <text class="label" x="230" y="690" text-anchor="middle">Log error and exit</text>
+
+  <polygon class="node" points="1080,760 1170,800 1080,840 990,800" />
+  <text class="label" x="1080" y="805" text-anchor="middle">Mass1 kinematic</text>
+
+  <rect class="node" x="930" y="880" width="300" height="48" rx="6" />
+  <text class="label" x="1080" y="910" text-anchor="middle">Return without solving</text>
+
+  <rect class="node" x="80" y="1120" width="300" height="48" rx="6" />
+  <text class="label" x="230" y="1150" text-anchor="middle">Return zero</text>
+</svg>
+

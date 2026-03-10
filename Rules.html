@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目维护规则 - XunPhysics 文档</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .note-editor { display: none; }
+        .note-overlay { display: none; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #30363d;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #8b949e;
+            font-size: 1.1em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .rules {
+            margin: 30px 0;
+        }
+        .rule-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .rule-card:hover {
+            border-color: #58a6ff;
+            box-shadow: 0 8px 16px rgba(88, 166, 255, 0.1);
+        }
+        .rule-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #58a6ff;
+            color: #0d1117;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        .rule-title {
+            font-size: 1.3em;
+            color: #58a6ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .rule-description {
+            color: #e6edf3;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .rule-consequence {
+            background: rgba(248, 81, 73, 0.1);
+            border-left: 3px solid #f85149;
+            padding: 10px 12px;
+            font-size: 0.95em;
+            color: #f85149;
+            margin-top: 10px;
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #79c0ff;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+        }
+        .quick-checklist {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .checklist-item {
+            padding: 8px 0;
+            color: #e6edf3;
+        }
+        .checklist-item input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .quick-commands {
+            background: #1c2128;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        .command {
+            color: #79c0ff;
+            padding: 8px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(88, 166, 255, 0.2);
+            color: #58a6ff;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        .success { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
+        .warning { background: rgba(255, 166, 87, 0.2); color: #ffa657; }
+        .important { background: rgba(248, 81, 73, 0.2); color: #f85149; }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 0.9em;
+        }
+        a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="Documentation_Hub.html" class="back-link">← 返回文档中心</a>
+
+    <header>
+        <h1>📋 项目维护规则</h1>
+        <p class="subtitle">所有贡献者必读 - 5 分钟快速了解</p>
+    </header>
+
+    <section class="rules">
+        <h2 class="section-title">🔑 5 条核心规则（必记！）</h2>
+
+        <div class="rule-card">
+            <div>
+                <span class="rule-number">1</span>
+                <span class="rule-title">修改后必须检查</span>
+                <span class="badge important">必做</span>
+            </div>
+            <div class="rule-description">
+                每次修改文档后，运行自动检查脚本 <code>bash validate_docs.sh</code>，必须通过才能提交。
+            </div>
+            <div class="rule-consequence">
+                ❌ 违反后果：网站崩溃、链接失效、内容丢失
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <div>
+                <span class="rule-number">2</span>
+                <span class="rule-title">文件名规范：XunPhysics</span>
+                <span class="badge warning">重要</span>
+            </div>
+            <div class="rule-description">
+                所有文件必须使用 <code>XunPhysics</code> 命名，禁止使用过时的 <code>QHPhysics</code> 名称。
+            </div>
+            <div class="rule-consequence">
+                ❌ 违反后果：链接失效、网页无法找到
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <div>
+                <span class="rule-number">3</span>
+                <span class="rule-title">Modal 必须隐藏</span>
+                <span class="badge important">必做</span>
+            </div>
+            <div class="rule-description">
+                所有 HTML 文件的 <code>.note-editor</code> 和 <code>.note-overlay</code> 必须包含 <code>display: none</code> 样式。
+            </div>
+            <div class="rule-consequence">
+                ❌ 违反后果：UI 对话框挡住页面内容，无法使用
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <div>
+                <span class="rule-number">4</span>
+                <span class="rule-title">Markdown 文件必须存在</span>
+                <span class="badge important">必做</span>
+            </div>
+            <div class="rule-description">
+                HTML 中的所有 <code>fetch()</code> 调用必须指向存在的 markdown 文件，路径必须完全匹配。
+            </div>
+            <div class="rule-consequence">
+                ❌ 违反后果：页面内容无法加载，显示空白
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <div>
+                <span class="rule-number">5</span>
+                <span class="rule-title">新文件要更新导航</span>
+                <span class="badge warning">重要</span>
+            </div>
+            <div class="rule-description">
+                创建新文档后，必须在 <code>Documentation_Hub.html</code> 中添加链接，否则用户无法找到。
+            </div>
+            <div class="rule-consequence">
+                ❌ 违反后果：新文档无人知晓、文档孤立
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">⚡ 快速工作流</h2>
+        <div class="quick-commands">
+            <div class="command"># 修改文档后的标准流程</div>
+            <div class="command">$ bash validate_docs.sh          # 检查（必做！）</div>
+            <div class="command">$ git add . && git commit -m "docs: ..." && git push</div>
+            <br/>
+            <div class="command"># 常见命令</div>
+            <div class="command">$ bash -x validate_docs.sh       # 查看详细检查过程</div>
+            <div class="command">$ grep "错误词" TESTING_GUIDE.md  # 查找错误解决方案</div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">✅ 修改前检查清单</h2>
+        <div class="quick-checklist">
+            <div class="checklist-item">
+                <input type="checkbox"> 了解 5 条核心规则吗？
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox"> 修改后会运行 <code>bash validate_docs.sh</code> 吗？
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox"> 新建文件会更新链接吗？
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox"> 文件名用 XunPhysics 吗？
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox"> Modal 有 <code>display: none</code> 吗？
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox"> fetch() 的文件存在吗？
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">📚 完整文档</h2>
+        <p style="margin: 20px 0; color: #8b949e;">
+            详细的规则、常见问题和优化方案已保存在项目文件中：
+        </p>
+        <div class="quick-checklist">
+            <div class="checklist-item" style="padding: 12px 0;">
+                <strong>START_HERE.md</strong> - 新手 5 分钟快速入门
+            </div>
+            <div class="checklist-item" style="padding: 12px 0;">
+                <strong>QUICK_REFERENCE.md</strong> - 日常快速参考
+            </div>
+            <div class="checklist-item" style="padding: 12px 0;">
+                <strong>TESTING_GUIDE.md</strong> - 完整使用说明
+            </div>
+            <div class="checklist-item" style="padding: 12px 0;">
+                <strong>TOKEN_OPTIMIZATION.md</strong> - 如何优化成本
+            </div>
+            <div class="checklist-item" style="padding: 12px 0;">
+                <strong>README.md</strong> - 项目总览
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🚨 常见错误速查</h2>
+
+        <div class="rule-card">
+            <strong style="color: #f85149;">❌ 错误：链接指向不存在的文件</strong>
+            <div class="rule-consequence" style="margin-top: 12px; background: rgba(248, 81, 73, 0.15);">
+                [AI_Tuning_Getting_Started.html] 链接指向不存在的文件: missing.html<br/>
+                <br/>
+                ✅ 修复：创建文件或修正链接路径
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <strong style="color: #f85149;">❌ 错误：Modal 没有隐藏</strong>
+            <div class="rule-consequence" style="margin-top: 12px; background: rgba(248, 81, 73, 0.15);">
+                .note-editor 缺少 display: none<br/>
+                <br/>
+                ✅ 修复：在 CSS 中添加 <code>display: none;</code>
+            </div>
+        </div>
+
+        <div class="rule-card">
+            <strong style="color: #f85149;">❌ 错误：Fetch 指向不存在的文件</strong>
+            <div class="rule-consequence" style="margin-top: 12px; background: rgba(248, 81, 73, 0.15);">
+                fetch('architecture.md') 但实际文件是 complete_doc.md<br/>
+                <br/>
+                ✅ 修复：确保路径和文件名完全匹配
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">💡 记住最重要的一条</h2>
+        <div class="quick-checklist" style="background: rgba(88, 166, 255, 0.1); border-left: 4px solid #58a6ff;">
+            <div style="font-size: 1.2em; color: #58a6ff; font-weight: bold; padding: 20px 0;">
+                修改文件 → 运行 bash validate_docs.sh → 通过 → 才能提交
+            </div>
+            <div style="color: #8b949e;">
+                就这么简单！脚本会自动检查所有规则。
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            <strong>项目维护规则</strong> | 最后更新：2026年2月26日<br/>
+            <a href="Documentation_Hub.html">← 返回文档中心</a>
+        </p>
+    </footer>
+</div>
+
+<!-- 隐藏的 note 元素（用于兼容检查脚本）-->
+<div class="note-overlay"></div>
+<div class="note-editor"></div>
+
+</body>
+</html>
