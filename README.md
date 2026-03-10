@@ -50,6 +50,7 @@ git push origin main
 
 ### 📋 文档
 - **[START_HERE.md](START_HERE.md)** - 第一次了解（必读！）
+- **[HOW_IT_WORKS.md](HOW_IT_WORKS.md)** - 仓库文件是怎样变成网页的？
 - **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - 日常快速参考
 - **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - 详细使用说明
 - **[README_TESTING.md](README_TESTING.md)** - 系统设计概览

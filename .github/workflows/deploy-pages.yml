@@ -1,0 +1,61 @@
+# GitHub Pages 自定义部署工作流
+#
+# 目的：用此工作流替代 GitHub 自动触发的 "pages build and deployment" 工作流，
+# 从而彻底消除每次推送后自动发送的工作流邮件提醒。
+#
+# 如何生效（一次性设置，在 GitHub 仓库页面完成）：
+#   仓库 → Settings → Pages → Build and deployment → Source
+#   选择 "GitHub Actions" 而非 "Deploy from a branch"
+#
+# 完成上述设置后，自动的 "pages build and deployment" 工作流将停止运行，
+# 部署完全由本文件控制，不再产生多余的邮件通知。
+#
+# 触发方式（二选一，取消注释你需要的那个）：
+#   A) 仅手动触发（完全消除自动邮件）→ 目前默认启用
+#   B) 每次推送到 main 分支时自动触发 → 与原来行为相同
+
+on:
+  # ── A) 仅手动触发 ─────────────────────────────────────────────────────────
+  # 在仓库的 Actions 标签页手动点击 "Run workflow" 即可部署。
+  # 推荐：完全消除自动邮件通知。
+  workflow_dispatch:
+
+  # ── B) 自动触发（如需自动部署请取消下面三行的注释）────────────────────────
+  # push:
+  #   branches:
+  #     - main
+
+# 允许工作流向 GitHub Pages 写入内容
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只允许一次部署，避免并发冲突
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: 部署到 GitHub Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 打包静态文件
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # 上传整个仓库根目录的静态文件
+          path: '.'
+
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
