@@ -158,14 +158,14 @@
     <script>
         var SESSION_KEY = 'xunphysics_auth';
 
-        // Credentials stored client-side for a lightweight documentation gate only.
-        // This does NOT provide real security — anyone can view the page source.
-        // For genuine access control, replace this with server-side authentication.
+        // 凭据仅存于客户端，仅用于轻量级文档访问门控。
+        // 这并不提供真正的安全保障——任何人均可查看页面源码。
+        // 如需真正的访问控制，请替换为服务端身份验证。
         var USERS = {
             'admin': 'xunphysics'
         };
 
-        // If already logged in, skip the login page
+        // 若已登录，跳过登录页面
         if (sessionStorage.getItem(SESSION_KEY)) {
             redirectAfterLogin();
         }
@@ -186,7 +186,7 @@
         function redirectAfterLogin() {
             var params = new URLSearchParams(window.location.search);
             var redirect = params.get('redirect');
-            // Validate redirect using URL constructor to prevent open-redirect attacks
+            // 使用 URL 构造函数验证重定向地址，以防止开放重定向攻击
             if (redirect) {
                 try {
                     var url = new URL(redirect);
@@ -195,7 +195,7 @@
                         return;
                     }
                 } catch (_) {
-                    // Invalid URL — fall through to default
+                    // 无效 URL——回退到默认页面
                 }
             }
             window.location.replace('Documentation_Hub.html');

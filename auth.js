@@ -1,23 +1,23 @@
 /**
- * XunPhysics Documentation - Client-side authentication guard
+ * XunPhysics 文档 - 客户端身份验证守卫
  *
- * Checks whether the current session is authenticated.
- * If not, redirects to the login page.
+ * 检查当前会话是否已通过身份验证。
+ * 若未登录，则跳转到登录页面。
  *
- * NOTE: This is a lightweight documentation gate, not a security mechanism.
- * The session flag can be set via browser dev-tools. For genuine access control
- * replace this with server-side session validation.
+ * 注意：这是一个轻量级文档访问门控，并非安全机制。
+ * 会话标志可通过浏览器开发工具手动设置。如需真正的访问控制，
+ * 请替换为服务端会话验证。
  *
- * Usage: add  <script src="auth.js"></script>  as the FIRST script in <head>.
+ * 用法：将 <script src="auth.js"></script> 作为 <head> 中的第一个脚本引入。
  */
 (function () {
     var SESSION_KEY = 'xunphysics_auth';
     var LOGIN_PAGE  = 'login.html';
 
-    // Determine the root-relative path to login.html (works in any sub-directory)
+    // 计算 login.html 的根相对路径（适用于任意子目录）
     function loginUrl() {
         var path = window.location.pathname;
-        // Replace the current filename with login.html, keeping the same directory
+        // 将当前文件名替换为 login.html，保持同一目录
         var dir = path.substring(0, path.lastIndexOf('/') + 1);
         return dir + LOGIN_PAGE + '?redirect=' + encodeURIComponent(window.location.href);
     }
