@@ -1,74 +1,58 @@
-﻿# 文档同步工具
+# 文档同步工具 (Docsify 版)
 # 文件: G:\Copilot_OutPut\FishingGame\Scripts\SyncDocs.ps1
 $rootDir = "G:\Copilot_OutPut\FishingGame"
 Set-Location $rootDir
-Write-Host ">>> 开始文档同步..." -ForegroundColor Cyan
-# 新增：构建步骤
-Write-Host ">>> [Build] 正在转换 Markdown 文档..." -ForegroundColor Cyan
-$mdFiles = @(Get-ChildItem -Path "$rootDir\KnowledgeBase" -Filter "*.md")
-$mdFiles += Get-ChildItem -Path "$rootDir" -Filter "*.md"
-foreach ($file in $mdFiles) {
-    if ($file.Name -match "README") { continue }
-    & "$rootDir\Scripts\ConvertMdToHtml.ps1" -InputPath $file.FullName
+Write-Host ">>> Docsify Sync Tool Started..." -ForegroundColor Cyan
+
+# 1. 自动生成侧边栏
+Write-Host ">>> Generating _sidebar.md..." -ForegroundColor Cyan
+& "$rootDir\Scripts\GenerateSidebar.ps1"
+
+# 2. 确保 README.md 存在 (用于首页)
+if (-not (Test-Path "README.md")) {
+    if (Test-Path "START_HERE.md") {
+        Copy-Item "START_HERE.md" "README.md"
+        Write-Host ">>> Copied START_HERE.md to README.md as homepage." -ForegroundColor Yellow
+    }
 }
-Write-Host ">>> [Build] 正在生成站点数据..." -ForegroundColor Cyan
-& "$rootDir\Scripts\GenerateSiteData.ps1"
-# 0. 保护现场 (Stash)
-$stashOutput = git stash push -u -m "AutoSync_Temp_Stash" 2>&1
+
+# 3. 保护现场 (Stash)
+$stashOutput = git stash push -u -m "Docsify_AutoSync" 2>&1
 $hasStashed = $stashOutput -match "Saved working directory"
-# 1. 从远程拉取 (变基)
-Write-Host ">>> 正在从远程拉取最新更改 (Rebase)..." -ForegroundColor Cyan
+
+# 4. 从远程拉取
+Write-Host ">>> Pulling from remote..." -ForegroundColor Cyan
 git pull --rebase origin main 2>&1 | Write-Host -ForegroundColor Cyan
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "!!! 拉取失败 !!!" -ForegroundColor Red
-    Write-Host "错误信息：" -ForegroundColor Yellow
-    # 再次尝试一次 fetch 以获取具体的错误并显示
-    git fetch origin main 2>&1 | Write-Host -ForegroundColor Gray
-    # 询问用户是否强制推送
-    $choice = Read-Host "可能是因为网络问题或冲突。是否忽略拉取错误并尝试强制推送 (Y/N)"
-    if ($choice -ne 'Y') { 
-        if ($hasStashed) { git stash pop | Out-Null }
-        exit 1 
-    }
-} else {
-    Write-Host "    拉取成功。" -ForegroundColor Green
+    Write-Host "!!! Pull Failed !!!" -ForegroundColor Red
+    if ($hasStashed) { git stash pop | Out-Null }
+    $choice = Read-Host "Ignore pull errors and push anyway? (Y/N)"
+    if ($choice -ne 'Y') { exit 1 }
 }
-# 恢复现场
+
+# 5. 恢复现场
 if ($hasStashed) {
-    Write-Host ">>> 正在恢复本地更改..." -ForegroundColor Gray
+    Write-Host ">>> Restoring local changes..." -ForegroundColor Gray
     git stash pop | Out-Null
 }
-# 2. 检查 Git 状态并提交
-Write-Host ">>> 正在检查 Git 状态..." -ForegroundColor Gray
+
+# 6. 提交更改
+Write-Host ">>> Committing changes..." -ForegroundColor Cyan
 $status = git status --porcelain
 if ($status) {
-    Write-Host "    检测到更改。正在暂存文件..." -ForegroundColor Yellow
     git add .
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    git commit -m "文档更新: $timestamp (自动同步)"
-    Write-Host "    本地更改已提交。" -ForegroundColor Green
-} else {
-    Write-Host "    没有需要提交的本地更改。" -ForegroundColor Green
+    git commit -m "Docs Update: $timestamp (Docsify Refactor)"
 }
-# 3. 推送到远程
-Write-Host ">>> 正在推送到远程仓库..." -ForegroundColor Cyan
-$retryCount = 0
-$maxRetries = 3
-$success = $false
-do {
-    git push origin main
-    if ($LASTEXITCODE -eq 0) {
-        $success = $true
-        Write-Host "    推送成功！您的文档已上线: https://wangxun111.github.io/qhphysics-docs/" -ForegroundColor Green
-    } else {
-        $retryCount++
-        if ($retryCount -lt $maxRetries) {
-            Write-Host "!!! 推送失败，正在重试 ($retryCount/$maxRetries)..." -ForegroundColor Yellow
-            Start-Sleep -Seconds 2
-        } else {
-             Write-Host "推送最终失败。请检查网络连接。" -ForegroundColor Red
-             git push origin main 2>&1 | Write-Host -ForegroundColor Red
-        }
-    }
-} until ($success -or $retryCount -ge $maxRetries)
-Read-Host "按回车键退出..."
+
+# 7. 推送
+Write-Host ">>> Pushing to GitHub..." -ForegroundColor Cyan
+git push origin main
+if ($LASTEXITCODE -eq 0) {
+    Write-Host ">>> SUCCESS! Site is live at: https://wangxun111.github.io/qhphysics-docs/" -ForegroundColor Green
+} else {
+    Write-Host "!!! Push Failed !!! Check network/auth." -ForegroundColor Red
+    git push origin main 2>&1 
+}
+
+Read-Host "Press Enter to exit..."

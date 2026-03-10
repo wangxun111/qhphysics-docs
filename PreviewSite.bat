@@ -1,0 +1,11 @@
+# Docsify Local Preview Server
+# File: G:\Copilot_OutPut\FishingGame\PreviewSite.bat
+@echo off
+echo Starting local documentation server...
+echo Please ensure Python is installed.
+echo.
+echo Access URL: http://localhost:8000
+echo.
+python -m http.server 8000
+pause
+
