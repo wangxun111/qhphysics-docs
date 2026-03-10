@@ -1,8 +1,18 @@
-﻿# 文档同步工具 (拉取 & 推送)
+﻿# 文档同步工具
 # 文件: G:\Copilot_OutPut\FishingGame\Scripts\SyncDocs.ps1
 $rootDir = "G:\Copilot_OutPut\FishingGame"
 Set-Location $rootDir
 Write-Host ">>> 开始文档同步..." -ForegroundColor Cyan
+# 新增：构建步骤
+Write-Host ">>> [Build] 正在转换 Markdown 文档..." -ForegroundColor Cyan
+$mdFiles = @(Get-ChildItem -Path "$rootDir\KnowledgeBase" -Filter "*.md")
+$mdFiles += Get-ChildItem -Path "$rootDir" -Filter "*.md"
+foreach ($file in $mdFiles) {
+    if ($file.Name -match "README") { continue }
+    & "$rootDir\Scripts\ConvertMdToHtml.ps1" -InputPath $file.FullName
+}
+Write-Host ">>> [Build] 正在生成站点数据..." -ForegroundColor Cyan
+& "$rootDir\Scripts\GenerateSiteData.ps1"
 # 0. 保护现场 (Stash)
 $stashOutput = git stash push -u -m "AutoSync_Temp_Stash" 2>&1
 $hasStashed = $stashOutput -match "Saved working directory"
@@ -15,7 +25,7 @@ if ($LASTEXITCODE -ne 0) {
     # 再次尝试一次 fetch 以获取具体的错误并显示
     git fetch origin main 2>&1 | Write-Host -ForegroundColor Gray
     # 询问用户是否强制推送
-    $choice = Read-Host "可能是因为网络问题或冲突。是否忽略拉取错误并尝试强制推送��(Y/N)"
+    $choice = Read-Host "可能是因为网络问题或冲突。是否忽略拉取错误并尝试强制推送 (Y/N)"
     if ($choice -ne 'Y') { 
         if ($hasStashed) { git stash pop | Out-Null }
         exit 1 

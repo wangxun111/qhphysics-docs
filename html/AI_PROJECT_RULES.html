@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>01_Fishing_Mechanics_DeepDive - Fishing Game Docs</title>
+    <title>AI_PROJECT_RULES - Fishing Game Docs</title>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Highlight.js Theme -->
@@ -65,16 +65,67 @@
     </div>
 
     <!-- 鍘熷 Markdown 鏁版嵁 (闅愯棌) -->
-    <textarea id="md-source" style="display:none;">// ...existing code...
-### Why this works?
-It introduces **Hysteresis (滞回)** in both *Time* (Lock) and *Magnitude* (Integral), filtering out the rapid `1.1772` friction noise.
+    <textarea id="md-source" style="display:none;"># AI Agent Project Rules
 
-## Root Cause Analysis (2026-03-05)
-**Diagnosis**: &quot;The bouncing of the fishing line on the surface (封层/Water/Ice) affects the reeling force fluctuation.&quot;
-- **Physics Origin**: When the line's physics nodes interact with the surface boundary (Collision or Drag change), it creates high-frequency force spikes.
-- **Symptom**: This correlates with the `friction=1.1772` 2.5Hz jitter observed in logs.
-- **Solution Validation**: Scheme A is effective here because &quot;bounces&quot; are transient. They generate force spikes but fail to accumulate enough **Integral Score** to trigger a state flip, thus stabilizing the UI.
+ATTENTION AI: Please read this file immediately and strictly follow the project rules defined herein.
 
+## 1. Output Directory for Artifacts
+**CRITICAL RULE**: Do not save temporary analysis files, logs, summaries, or non-code artifacts into the project directory.
+
+**TARGET PATHS**:
+- **Knowledge Base (Summaries/Docs):** `G:\Copilot_OutPut\FishingGame\KnowledgeBase`
+- **Web/HTML Reports:** `G:\Copilot_OutPut\FishingGame\html`
+- **Logs &amp; Analysis:** `G:\Copilot_OutPut\FishingGame\Log`
+
+**DYNAMIC FOLDER CREATION**:
+- If a generated file does not belong to the categories above, determine a new specific category folder name (e.g., `Scripts`, `Data`) or ask the user for clarification.
+- Create the new directory at `G:\Copilot_OutPut\FishingGame\&lt;NewCategory&gt;`.
+- Save the file in the new directory.
+
+- All generated summary reports must be saved to the Knowledge Base.
+- All log analysis files must be saved to the Log folder.
+- Do not clutter the `F:\new\fishinggame` source tree.
+
+## 2. Physics Tuning Context (Reel1stBehaviour)
+- **Gear 1 (Low Friction)**:
+  - Strict Deadzone logic is applied: If Load &gt; 80% Friction, Reeling Speed = 0.
+  - Dynamic Gain for Drag Out: Low gain for small forces (anti-jitter), high gain for large forces (anti-disconnect).
+
+## 3. Language Requirements
+**CRITICAL RULE**: All responses and explanations must be provided in **Chinese** (Simplified).
+
+## 4. Project Knowledge Base &amp; History
+The repository of technical decisions, problem analysis, and thought processes is stored externally to keep the source clean.
+**LOCATION**: `G:\Copilot_OutPut\FishingGame\KnowledgeBase`
+
+**ACTIVE CONTEXT SNAPSHOT**:
+- Before starting work, check `G:\Copilot_OutPut\FishingGame\KnowledgeBase\Active_Context_Snapshot.md`.
+- This file contains the live status of the previous session and pending tasks.
+- If you complete significant work, update this file to reflect the new state.
+
+Before modifying complex systems, check this folder for existing context.
+
+### Key Index:
+- **Session History (2026-03-10)**: See `G:\Copilot_OutPut\FishingGame\KnowledgeBase\Session_History_Summary_20260310.md`
+  - *Content*: Comprehensive summary of the &quot;Gear 1 Jitter&quot; fix, failed attempts, final solution reasoning, and infrastructure setup.
+  - *Action*: Read this first to understand the current state of reel physics.
+
+- **Reel Physics Jitter Fix (Gear 1)**: See `G:\Copilot_OutPut\FishingGame\KnowledgeBase\Reel_Physics_Fix_Summary.txt`
+  - *Context*: Solved the high-frequency oscillation of rod tip and line length in low friction settings.
+  - *Solution*: Implemented strict Deadzone for reeling and Dynamic Gain for drag out.
+  - *Status*: Stable. Do not revert without reading this summary.
+
+- **Accessory Tools Guide**: See `G:\Copilot_OutPut\FishingGame\KnowledgeBase\Accessory_Tools_Guide.md`
+  - *Content*: Documentation for utility scripts like `AnalyzeJitter.ps1`.
+  - *Action*: Consult this guide when needing to perform log analysis or debugging tasks.
+
+- **AI Workflow Best Practices**: See `G:\Copilot_OutPut\FishingGame\KnowledgeBase\AI_Workflow_Best_Practices.md`
+  - *Content*: Recommended workflows for AI-assisted development, including testing strategies and documentation.
+  - *Action*: Review for guidance on efficient collaboration with AI.
+
+## 5. Debugging Standards
+**CRITICAL RULE**: The path/location for debug options is considered to be in **&quot;medium 的 AI&quot;** (Medium's AI).
+- When looking for or documenting debug options, refer to this location.
 </textarea>
 
     <!-- 渚濊禆搴?-->
