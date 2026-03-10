@@ -504,12 +504,27 @@
             transform: translateY(-5px);
         }
     </style>
+    <script src="auth.js"></script>
 </head>
 <body>
 
 <header>
     <h1>📚 XunPhysics 文档中心</h1>
     <p>完整的物理引擎 + AI参数调优知识库 | 一站式文档导航</p>
+    <button id="logoutBtn" onclick="logout()" style="
+        margin-top: 16px;
+        padding: 7px 18px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text-dim);
+        font-size: 0.85em;
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s;
+    " onmouseover="this.style.borderColor='var(--danger)';this.style.color='var(--danger)'"
+       onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">
+        退出登录
+    </button>
 </header>
 
 <div class="container">
@@ -800,6 +815,12 @@ Day 2: 深度学习<br/>
 <div class="return-top" id="returnTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆</div>
 
 <script>
+    // 退出登录
+    function logout() {
+        sessionStorage.removeItem('xunphysics_auth');
+        window.location.replace('login.html');
+    }
+
     // 滚动时显示返回顶部按钮
     window.addEventListener('scroll', () => {
         const returnTop = document.getElementById('returnTop');
