@@ -47,12 +47,25 @@ if ($status) {
 
 # 7. 推送
 Write-Host ">>> Pushing to GitHub..." -ForegroundColor Cyan
-git push origin main
-if ($LASTEXITCODE -eq 0) {
-    Write-Host ">>> SUCCESS! Site is live at: https://wangxun111.github.io/qhphysics-docs/" -ForegroundColor Green
-} else {
-    Write-Host "!!! Push Failed !!! Check network/auth." -ForegroundColor Red
-    git push origin main 2>&1 
-}
+$retryCount = 0
+$maxRetries = 3
+$success = $false
+
+do {
+    git push origin main
+    if ($LASTEXITCODE -eq 0) {
+        $success = $true
+        Write-Host ">>> SUCCESS! Site is live at: https://wangxun111.github.io/qhphysics-docs/" -ForegroundColor Green
+    } else {
+        $retryCount++
+        if ($retryCount -lt $maxRetries) {
+            Write-Host "!!! Push Failed. Retrying ($retryCount/$maxRetries)..." -ForegroundColor Yellow
+            Start-Sleep -Seconds 3
+        } else {
+            Write-Host "!!! Push Failed !!! Check network/auth." -ForegroundColor Red
+            git push origin main 2>&1 
+        }
+    }
+} until ($success -or $retryCount -ge $maxRetries)
 
 Read-Host "Press Enter to exit..."
