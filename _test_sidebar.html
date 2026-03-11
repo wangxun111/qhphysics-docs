@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>spring_flow</title>
+    <title>_test_sidebar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
     <style>
@@ -20,7 +20,7 @@
     <script>
         // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
-        const rawMd = "# Spring Flow (Line-Hook-Rod)\r\n\r\nThis flow focuses on the spring module and how it links the line, hook, and rod in the physics update.\r\n\r\n```mermaid\r\nflowchart TD\r\n    A[Frame start] --\u003e B[Collect active masses]\r\n    B --\u003e C[Integrate masses (Verlet)]\r\n    C --\u003e D[Build constraints]\r\n\r\n    D --\u003e S0[Spring constraints]\r\n    S0 --\u003e S1[Resolve line segments as springs]\r\n    S1 --\u003e S2[Hook spring constraint]\r\n    S2 --\u003e S3[Rod tip spring constraint]\r\n\r\n    S1 --\u003e S1a[Fetch line mass pairs]\r\n    S1a --\u003e S1b[Delta = p2 - p1]\r\n    S1b --\u003e S1c[Length = |Delta|]\r\n    S1c --\u003e S1d[Stretch = Length - RestLength]\r\n    S1d --\u003e S1e[EffectiveMass = invMass1 + invMass2]\r\n    S1e --\u003e S1f[ImpulseScalar = -Stretch * Stiffness / EffectiveMass]\r\n    S1f --\u003e S1g[Apply position correction]\r\n\r\n    S2 --\u003e S2a[Hook attached to line end mass]\r\n    S2a --\u003e S2b[Delta = hookPos - endMassPos]\r\n    S2b --\u003e S2c[Compute stretch vs rest]\r\n    S2c --\u003e S2d[Apply correction to hook and end mass]\r\n\r\n    S3 --\u003e S3a[Rod tip mass anchors line start]\r\n    S3a --\u003e S3b[Delta = tipPos - startMassPos]\r\n    S3b --\u003e S3c[Compute stretch vs rest]\r\n    S3c --\u003e S3d[Apply correction to tip and start mass]\r\n\r\n    S1g --\u003e SD1[Damping along spring axis]\r\n    S2d --\u003e SD1\r\n    S3d --\u003e SD1\r\n\r\n    SD1 --\u003e E[Other constraints]\r\n    E --\u003e F[Finalize positions]\r\n    F --\u003e G[Render]\r\n```\r\n\r\nNotes:\r\n- Springs are resolved as position-based constraints; damping reduces oscillation along the spring axis.\r\n- Line is modeled as a chain of spring-connected masses; hook and rod tip add terminal constraints.\r\n";
+        const rawMd = "# Sidebar\r\n";
         // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();

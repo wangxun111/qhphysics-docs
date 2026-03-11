@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Core_Gameplay_DeepDive</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 核心玩法层深度拆解 (Deep Dive: Core Gameplay Domain)\r\n\r\n基于 `FishingFramework` 的代码结构与物理实现机制，我们将“核心玩法层”进一步细分为以下四个子系统。在针对手感、物理表现或钓鱼流程进行修改时，请精准定位到对应的子系统。\r\n\r\n## 1. 物理仿真内核 (Physics Simulation Kernel)\r\n*这是整个钓鱼体验的“物理引擎”，负责底层的纯数学与其力学计算。并不直接处理 Unity 的 GameObject，而是处理纯数据。*\r\n\r\n*   **位置**: `FishingFramework/Physics`\r\n*   **深度解析文档**: **[Deep Dive: Physics Kernel](./DeepDive_PhysicsKernel.md)**\r\n*   **核心类**:\r\n    *   `VerletFishBody.cs`, `VerletFishBendStrain.cs`: 使用 Verlet 算法模拟鱼的柔性身体摆动与受力形变。\r\n    *   `SimulationThread.cs`: 物理计算似乎在独立线程或高频循环中运行，以保证计算精度。\r\n*   **关键职责**: 模拟鱼体的真实摆动物理，而非简单的动画播放。\r\n\r\n*   **柔性体与弹簧系统 (Soft Body \u0026 Spring System)**\r\n    *   **核心类**:\r\n        *   `FishingRodSimulation.cs`: 鱼竿弯曲的数学模型核心。\r\n        *   `MassToRigidBodySpring.cs`: 模拟鱼线/鱼竿连接处的弹性阻尼关系（Hooke\u0027s Law + Damping）。\r\n    *   **关键职责**: 计算竿梢的弯曲程度、鱼线的张力传递。这是解决“抖动”问题的源头。\r\n\r\n## 2. 钓鱼逻辑实体 (Fishing Entities)\r\n*将物理内核的计算结果映射到 Unity 世界的游戏对象 (GameObject) 上，处理具体的游戏行为。*\r\n\r\n*   **竿组系统 (Rod Assembly)**\r\n    *   **位置**: `FishingFramework/Module/Rod`\r\n    *   **核心类**:\r\n        *   `RodBehaviour.cs`: 鱼竿的主控逻辑。\r\n        *   `BendingSegment.cs`: 鱼竿分节弯曲的表现控制。\r\n        *   `RodPodController.cs`: 竿架系统（支架钓法支持）。\r\n    *   **关键职责**: 根据 `FishingRodSimulation` 的数据更新鱼竿模型的骨骼/Mesh 形变。\r\n\r\n*   **线轮系统 (Line \u0026 Reel System)**\r\n    *   **位置**: `FishingFramework/Module/{Line, Reel}`\r\n    *   **核心类**:\r\n        *   `LineController.cs`: 鱼线渲染与物理节点同步。\r\n        *   `ReelController.cs`: 卷线器逻辑（收线速度、卸力刹车 Friction）。\r\n    *   **关键职责**: 处理玩家收线操作 (`ReelIn`)，计算当前的线长与张力反馈到物理内核。\r\n\r\n*   **鱼类行为系统 (Fish Entity System)**\r\n    *   **位置**: `FishingFramework/Module/Fish`\r\n    *   **核心类**:\r\n        *   `FishController.cs`: 鱼的实体控制。\r\n        *   `FishAi.cs`: 鱼的 AI 决策（游动方向、挣扎力度）。\r\n        *   `FishBite...*.cs`: 复杂的咬钩判定逻辑（吸入、吞食、吐钩）。\r\n    *   **关键职责**: 决定鱼在水下的具体位置和状态，驱动物理模型移动。\r\n\r\n## 3. 流程状态机 (State Management / FSM)\r\n*管理钓鱼过程的生命周期，决定当前能不能操作，以及处于什么阶段。*\r\n\r\n*   **位置**: `FishingFramework/Module/FSM`\r\n*   **核心模块**:\r\n    *   **PlayerState**: `Idle` -\u003e `Casting` (抛竿) -\u003e `Waiting` (等鱼) -\u003e `Fighting` (搏鱼) -\u003e `Landing` (提鱼)。\r\n    *   **FishState**: `Roaming` (巡游) -\u003e `Approaching` (靠近) -\u003e `Biting` (咬钩) -\u003e `Struggling` (挣扎)。\r\n    *   **HookState**: 钩子的状态（在水下、在鱼嘴里、挂底）。\r\n*   **关键职责**: 作为一个总控中心，协调 Input 和 Entity。例如：只有在 `Fighting` 状态下，`ReelController` 的刹车逻辑才生效。\r\n\r\n## 4. 环境交互 (Environmental Interaction)\r\n*处理实体与水体、地面的物理交互。*\r\n\r\n*   **位置**: `FishingFramework/Module/{Water, Hit, Float}`\r\n*   **核心类**:\r\n    *   `WaterFXManager.cs`: 水花、波纹特效生成。\r\n    *   `RigidBodyController.cs`: 刚体碰撞处理。\r\n*   **关键职责**: 检测鱼饵入水、鱼跳出水面、鱼线切割水面的物理反馈。\r\n\r\n---\r\n\r\n### 开发指导 (Development Guidelines)\r\n\r\n当您想解决类似“拉力抖动”的问题时：\r\n\r\n1.  **第一步 (FSM Check)**: 检查 `PlayerState` 是否在 `Fighting` 状态正确切换，没有在 `Waiting` 和 `Fighting` 之间反复横跳。\r\n2.  **第二步 (Entity Check)**: 检查 `ReelController` 的收线速度与 `RodBehaviour` 的弯曲更新是否同步。\r\n3.  **第三步 (Physics Core)**: 如果表现层没问题，直接深入 `FishingFramework/Physics/MassToRigidBodySpring.cs`，调整阻尼系数 (Damping) 或弹簧系数 (Stiffness)。这是最根本的解决之道。\r\n4.  **第四步 (Environment)**: 检查是否如之前所说，是因为 `Water` 表面的碰撞检测 (`Hit`) 导致了物理计算的突变。\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

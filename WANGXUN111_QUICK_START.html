@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>WANGXUN111_QUICK_START</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 🎯 wangxun111 部署执行清单\r\n\r\n## 📍 一句话总结\r\n\r\n```bash\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity \u0026\u0026 deploy_to_github.bat wangxun111\r\n```\r\n\r\n运行这条命令，然后按照提示配置 GitHub Pages，完成！\r\n\r\n---\r\n\r\n## ✅ 执行步骤（5分钟）\r\n\r\n### 【准备】1分钟\r\n\r\n```\r\n✓ 打开命令行（Win + R → cmd → 回车）\r\n✓ 你的用户名：wangxun111\r\n✓ 准备好了吗？继续\r\n```\r\n\r\n### 【部署】3分钟\r\n\r\n```\r\n✓ 复制这条命令：\r\n  cd F:\\new\\fishinggame\\QHPlugins\\QHForUnity \u0026\u0026 deploy_to_github.bat wangxun111\r\n\r\n✓ 粘贴到命令行\r\n✓ 按回车\r\n✓ 当要求输入密码时，输入你的 GitHub 密码或 Token\r\n✓ 等待脚本完成（显示\"✓ 部署步骤完成\"）\r\n```\r\n\r\n### 【配置】1分钟\r\n\r\n脚本会显示这样的提示：\r\n```\r\n【下一步】启用 GitHub Pages：\r\n1. 打开浏览器，访问：\r\n   https://github.com/wangxun111/qhphysics-docs/settings/pages\r\n```\r\n\r\n```\r\n✓ 复制这个链接到浏览器\r\n✓ Source 选择 \"Deploy from a branch\"\r\n✓ Branch 选择 \"main\"\r\n✓ Folder 选择 \"/ (root)\"\r\n✓ 点击 Save\r\n✓ 完成！等待 5-10 分钟\r\n```\r\n\r\n---\r\n\r\n## 🌐 你的网站链接\r\n\r\n### 主页\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/\r\n```\r\n\r\n### 文档中心（推荐）\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n### 其他文档\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/AI_Tuning_Getting_Started.html\r\nhttps://wangxun111.github.io/qhphysics-docs/AI_Parameter_Optimization.html\r\nhttps://wangxun111.github.io/qhphysics-docs/XunPhysics_Architecture.html\r\nhttps://wangxun111.github.io/qhphysics-docs/PhysX_Analysis.html\r\n```\r\n\r\n---\r\n\r\n## ⏳ 预期时间表\r\n\r\n| 时间 | 操作 |\r\n|------|------|\r\n| 0分钟 | 在命令行运行脚本 |\r\n| 1-3分钟 | 脚本完成，文件上传到 GitHub |\r\n| 3-5分钟 | 配置 GitHub Pages |\r\n| 5-10分钟 | 网站部署完成，可以访问 ✓ |\r\n\r\n---\r\n\r\n## 🔍 如何验证成功\r\n\r\n### ✓ 验证 1: 仓库创建\r\n```\r\n打开：https://github.com/wangxun111/qhphysics-docs\r\n看到：所有文档文件都在这里\r\n```\r\n\r\n### ✓ 验证 2: GitHub Pages 启用\r\n```\r\n打开：https://github.com/wangxun111/qhphysics-docs/settings/pages\r\n看到：✓ Your site is published at https://wangxun111.github.io/qhphysics-docs/\r\n```\r\n\r\n### ✓ 验证 3: 网站可访问\r\n```\r\n打开：https://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n看到：文档中心页面正常显示，蓝色主题，所有链接可点击\r\n```\r\n\r\n---\r\n\r\n## ❌ 常见问题速查\r\n\r\n| 问题 | 解决方案 |\r\n|------|----------|\r\n| \"git not found\" | 下载安装 Git: https://git-scm.com/download/win |\r\n| 密码错误 | 使用 Personal Access Token: https://github.com/settings/tokens |\r\n| 网站 404 | 等待 10 分钟，然后 Ctrl+Shift+R 硬刷新 |\r\n| 仓库已存在 | 正常，脚本会自动处理 |\r\n| 不确定用户名 | GitHub Settings 页面左上角可以看到 |\r\n\r\n---\r\n\r\n## 📤 部署完成后\r\n\r\n### 如何更新网站\r\n\r\n修改任何文档后：\r\n```bash\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\ngit add .\r\ngit commit -m \"docs: Update\"\r\ngit push\r\n```\r\n\r\n1-2 分钟后网站自动更新！\r\n\r\n### 如何分享\r\n\r\n分享这个链接给任何人：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n他们可以在任何地方用任何设备访问你的完整文档！\r\n\r\n---\r\n\r\n## 🚀 立即开始！\r\n\r\n### 现在就做这个：\r\n\r\n1. **打开命令行**\r\n   ```\r\n   Win + R → cmd → 回车\r\n   ```\r\n\r\n2. **复制粘贴这条命令**\r\n   ```\r\n   cd F:\\new\\fishinggame\\QHPlugins\\QHForUnity \u0026\u0026 deploy_to_github.bat wangxun111\r\n   ```\r\n\r\n3. **按回车，输入密码，等待完成**\r\n\r\n4. **点击脚本给出的 GitHub Pages 链接**\r\n\r\n5. **配置 GitHub Pages（3个下拉菜单）**\r\n\r\n6. **完成！访问你的网站**\r\n\r\n---\r\n\r\n**预计总耗时：5-15 分钟（包括等待 GitHub 部署）**\r\n\r\n**任何问题？告诉我错误信息，我来帮你解决！** 🛠️\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

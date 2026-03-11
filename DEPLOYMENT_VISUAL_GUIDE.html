@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>DEPLOYMENT_VISUAL_GUIDE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 📖 GitHub Pages 部署可视化指南\r\n\r\n## 准备工作：查找你的 GitHub 用户名\r\n\r\n### ① 登录 GitHub\r\n```\r\n打开浏览器 → https://github.com → 登录\r\n```\r\n\r\n### ② 找到设置\r\n```\r\n点击右上角头像\r\n    ↓\r\n选择 Settings\r\n```\r\n\r\n### ③ 查看用户名\r\n```\r\n在 Account 页面左侧找到 \"Public profile\"\r\n或在顶部看到：Your profile\r\n    ↓\r\n你的用户名就在这里\r\n（通常格式：username、user-name 等，不是邮箱）\r\n```\r\n\r\n---\r\n\r\n## 部署步骤\r\n\r\n### 📍 找到你的文档目录\r\n\r\n```\r\nF:\\new\\fishinggame\\QHPlugins\\QHForUnity\\\r\n└── 在这个目录中有：\r\n    ├── Documentation_Hub.html\r\n    ├── deploy_to_github.bat ← 我们要用这个\r\n    ├── XunPhysics_Architecture.html\r\n    ├── 其他文档...\r\n    └── ...\r\n```\r\n\r\n### 🔧 运行部署脚本\r\n\r\n**Windows 用户**：\r\n\r\n1. 打开命令行（Windows 快捷键）\r\n```\r\n按 Win + R → 输入 cmd → 回车\r\n```\r\n\r\n2. 进入文档目录\r\n```\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\n```\r\n\r\n3. 运行脚本\r\n```\r\ndeploy_to_github.bat your_github_username\r\n```\r\n\r\n**完整示例**：\r\n```\r\nMicrosoft Windows [版本 10.0.19045]\r\n(c) Microsoft Corporation. 保留所有权利。\r\n\r\nC:\\Users\\YourName\u003ecd F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\n\r\nF:\\new\\fishinggame\\QHPlugins\\QHForUnity\u003edeploy_to_github.bat john123\r\n\r\n========================================\r\n  XunPhysics 文档 GitHub Pages 部署脚本\r\n========================================\r\n\r\n✓ GitHub 用户名：john123\r\n✓ 仓库名称：qhphysics-docs\r\n\r\n【Step 1】检查 Git 安装\r\n✓ Git 已安装\r\n\r\n【Step 2】初始化 Git 仓库\r\n✓ Git 仓库已存在\r\n\r\n【Step 3】配置 Git\r\n✓ Git 配置完成\r\n\r\n【Step 4】添加 GitHub 远程仓库\r\n远程仓库 URL：https://github.com/john123/qhphysics-docs.git\r\n✓ 远程仓库已配置\r\n\r\n【Step 5】创建 .gitignore\r\n✓ .gitignore 已创建\r\n\r\n【Step 6】添加文件到 Git\r\n添加所有文件...\r\n✓ 文件已添加\r\n\r\n【Step 7】创建初始提交\r\n✓ 提交已创建\r\n\r\n【Step 8】推送到 GitHub\r\nUsername for \u0027https://github.com\u0027: john123\r\nPassword for \u0027https://john123@github.com\u0027: [输入你的密码或token]\r\n\r\n✓ 文件已推送到 GitHub\r\n\r\n========================================\r\n✓ 部署步骤完成！\r\n========================================\r\n\r\n【下一步】启用 GitHub Pages：\r\n\r\n1. 打开浏览器，访问：\r\n   https://github.com/john123/qhphysics-docs/settings/pages\r\n\r\n2. 在 \u0027Source\u0027 中选择：\u0027Deploy from a branch\u0027\r\n\r\n3. 选择分支：\u0027main\u0027 和 \u0027/ (root)\u0027\r\n\r\n4. 点击 \u0027Save\u0027\r\n\r\n【预期的网址】：\r\n主页：\r\n  https://john123.github.io/qhphysics-docs/\r\n\r\n文档中心：\r\n  https://john123.github.io/qhphysics-docs/Documentation_Hub.html\r\n\r\n✓ 大约 1-2 分钟后就能访问你的网站！\r\n```\r\n\r\n### 🔐 处理密码提示\r\n\r\n脚本运行时可能会要求输入密码：\r\n\r\n```\r\nUsername for \u0027https://github.com\u0027: your_github_username\r\nPassword for \u0027https://your_github_username@github.com\u0027: _\r\n```\r\n\r\n**输入什么？**\r\n\r\n选项 1：直接输入你的 GitHub 密码（密码不会显示，这是正常的）\r\n\r\n选项 2：使用 Personal Access Token（推荐）\r\n- 访问 https://github.com/settings/tokens\r\n- 新建 Token（勾选 repo 权限）\r\n- 复制 Token 并粘贴（Ctrl+V）\r\n\r\n### 🎯 启用 GitHub Pages\r\n\r\n脚本完成后，按照提示打开这个链接：\r\n```\r\nhttps://github.com/your_username/qhphysics-docs/settings/pages\r\n```\r\n\r\n在这个页面你会看到：\r\n\r\n```\r\n┌─────────────────────────────────────┐\r\n│ GitHub Pages                        │\r\n├─────────────────────────────────────┤\r\n│                                     │\r\n│ Source                              │\r\n│ ┌─────────────────────────────────┐ │\r\n│ │ Deploy from a branch      ▼     │ │\r\n│ └─────────────────────────────────┘ │\r\n│                                     │\r\n│ Branch                              │\r\n│ ┌─────────────────────────────────┐ │\r\n│ │ main    ▼   / (root)      ▼     │ │\r\n│ └─────────────────────────────────┘ │\r\n│                                     │\r\n│ ┌─────────────────────────────────┐ │\r\n│ │      [ Save ]                   │ │\r\n│ └─────────────────────────────────┘ │\r\n│                                     │\r\n└─────────────────────────────────────┘\r\n```\r\n\r\n**按这样操作**：\r\n1. Source：选择 \"Deploy from a branch\"（应该已选）\r\n2. Branch：选择 \"main\"（应该已选）\r\n3. 文件夹：选择 \"/ (root)\"（应该已选）\r\n4. 点击 \"Save\"\r\n\r\n### ⏳ 等待部署完成\r\n\r\n页面可能会显示：\r\n```\r\nYour site is ready to be published at\r\nhttps://your_username.github.io/qhphysics-docs/\r\n\r\nYour site is being built from the main branch\r\n```\r\n\r\n等待 1-2 分钟...\r\n\r\n然后变成：\r\n```\r\n✓ Your site is published at\r\n  https://your_username.github.io/qhphysics-docs/\r\n```\r\n\r\n---\r\n\r\n## 🎉 完成！\r\n\r\n现在你可以访问：\r\n\r\n```\r\n主页：\r\nhttps://your_username.github.io/qhphysics-docs/\r\n\r\n文档中心：\r\nhttps://your_username.github.io/qhphysics-docs/Documentation_Hub.html\r\n\r\n所有文档都可以通过这个网址访问！\r\n```\r\n\r\n---\r\n\r\n## 📤 更新网站\r\n\r\n以后要更新文档，只需：\r\n\r\n```bash\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\n\r\nREM 修改文件后\r\ngit add .\r\ngit commit -m \"docs: Update - [你的更改描述]\"\r\ngit push\r\n```\r\n\r\n1-2 分钟后网站会自动更新！\r\n\r\n---\r\n\r\n## 🔗 分享你的网站\r\n\r\n现在可以分享这个链接给任何人：\r\n\r\n```\r\nhttps://your_username.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n他们可以在任何地方、任何设备上访问你的完整文档！\r\n\r\n---\r\n\r\n## 🆘 常见问题\r\n\r\n### Q: 脚本说 \"git not found\"\r\n\r\n**A**: 需要安装 Git\r\n- 下载：https://git-scm.com/download/win\r\n- 安装完成后重新运行脚本\r\n\r\n### Q: 密码错误\r\n\r\n**A**: GitHub 不再支持密码验证\r\n- 使用 Personal Access Token 代替\r\n- 访问 https://github.com/settings/tokens 创建新 Token\r\n\r\n### Q: 网站仍然 404\r\n\r\n**A**: 检查这些\r\n- GitHub Pages 已启用（Settings → Pages）\r\n- 分支选择为 main\r\n- 文件夹选择为 / (root)\r\n- 等待 3-5 分钟\r\n- 浏览器硬刷新（Ctrl+Shift+R）\r\n\r\n### Q: 不小心把密码输错了\r\n\r\n**A**: 重新运行脚本即可\r\n```bash\r\ndeploy_to_github.bat your_username\r\n```\r\n\r\n### Q: 我想用自己的域名\r\n\r\n**A**: 在 GitHub Pages 设置中\r\n1. Custom domain：输入你的域名\r\n2. 在域名服务商添加 CNAME 记录指向 `your_username.github.io`\r\n\r\n---\r\n\r\n**准备好了？告诉我你的 GitHub 用户名，我可以帮你验证！**\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

@@ -1,62 +1,193 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Fishing Game Docs</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Fishing Game Physics Documentation">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  
-  <!-- Theme: Dark by default -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
-  
-  <style>
-    :root {
-      --theme-color: #58a6ff;
-    }
-    .sidebar { background-color: #0d1117; border-right: 1px solid #30363d; }
-    .content { background-color: #0d1117; color: #c9d1d9; }
-    .sidebar-nav li a { color: #8b949e; }
-    .sidebar-nav li.active > a { color: #58a6ff; border-right: 2px solid #58a6ff; font-weight: bold; }
-    
-    /* 适配大屏幕 */
-    .markdown-section { max-width: 1000px; margin: 0 auto; }
-  </style>
+    <meta charset="UTF-8">
+    <title>FishingGame Knowledge Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Modern Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; height: 100vh; overflow: hidden; background-color: #f8f9fa; }
+        /* Sidebar (Left) */
+        #sidebar {
+            width: 280px;
+            background-color: #fff;
+            border-right: 1px solid #e1e4e8;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: width 0.2s;
+        }
+        /* Sidebar Header */
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e1e4e8;
+            background: #2b3a42;
+            color: white;
+        }
+        .sidebar-header h1 { font-size: 1.2rem; margin-bottom: 10px; }
+        /* Search Box */
+        #search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #4a5a63;
+            background: #3a4a53;
+            color: white;
+            outline: none;
+        }
+        #search-input::placeholder { color: #8a9a9f; }
+        #search-input:focus { border-color: #42b983; background: #fff; color: #333; }
+        /* Navigation List */
+        #nav-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        .nav-section-title {
+            padding: 15px 20px 5px 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6a737d;
+            font-weight: 600;
+        }
+        /* Nav Item - Flex Layout for Icon+Text Alignment */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 20px;
+            font-size: 0.95rem;
+            color: #24292e;
+            text-decoration: none;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .nav-item:hover { background-color: #f1f8ff; color: #0366d6; }
+        .nav-item.active { background-color: #f1f8ff; border-left-color: #42b983; color: #0366d6; font-weight: 500; }
+        .nav-icon {
+            margin-right: 8px;
+            flex-shrink: 0;
+            font-size: 1.1em;
+            line-height: 1;
+        }
+        /* Empty State */
+        .empty-state { padding: 20px; color: #6a737d; font-size: 0.9rem; text-align: center; }
+        /* Content Area (Right) */
+        #content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-  <div id="app">Loading Documentation...</div>
-  
-  <script>
-    window.docsify = {
-      name: '🎣 <b>Fishing Game</b> <br><small>Physics & AI</small>',
-      repo: 'https://github.com/wangxun111/qhphysics-docs',
-      loadSidebar: true,
-      subMaxLevel: 3,
-      auto2top: true,
-      search: {
-        maxAge: 86400000, 
-        paths: 'auto',
-        placeholder: '🔍 Search...',
-        noData: 'No Results!',
-        depth: 6
-      },
-      copyCode: {
-        buttonText: 'Copy',
-        errorText: 'Error',
-        successText: 'Copied'
-      }
-    }
-  </script>
-  
-  <!-- Docsify Core -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
-  
-  <!-- Plugins -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h1>📚 Doc Hub</h1>
+            <input type="text" id="search-input" placeholder="Search docs..." autocomplete="off">
+        </div>
+        <div id="nav-list">
+            <!-- Navigation items injected here -->
+            <div class="empty-state">Loading navigation...</div>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div id="content-area">
+        <iframe name="content-frame" id="content-frame"></iframe>
+    </div>
+    <!-- Data Source -->
+    <script src="site_nav.js"></script>
+    <!-- Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navList = document.getElementById('nav-list');
+            const searchInput = document.getElementById('search-input');
+            const iframe = document.getElementById('content-frame');
+            if (typeof window.SITE_NAV === 'undefined') {
+                navList.innerHTML = '<div class="empty-state" style="color:red">Error: site_nav.js missing.<br>Run BuildSite.ps1</div>';
+                return;
+            }
+            // 1. Flatten Data for easier searching
+            let allLinks = [];
+            const cats = ["0_Root", "1_KB", "3_Reviews", "2_Reports"];
+            // 2. Render Function
+            function renderNav(filterText = '') {
+                filterText = filterText.toLowerCase();
+                let html = '';
+                let hasMatches = false;
+                cats.forEach(key => {
+                    const cat = window.SITE_NAV[key];
+                    if (!cat || !cat.items) return;
+                    // Filter items
+                    const matchedItems = cat.items.filter(item => 
+                        item.title.toLowerCase().includes(filterText)
+                    );
+                    if (matchedItems.length > 0) {
+                        hasMatches = true;
+                        html += `<div class="nav-section-title">${cat.title}</div>`;
+                        matchedItems.forEach(item => {
+                            // Determine icon
+                            let iconChar = '📄';
+                            if(item.type === 'report') iconChar = '📊';
+                            if(item.type === 'review') iconChar = '🩺';
+                            
+                            html += `<a class="nav-item" href="${item.path}" target="content-frame" onclick="setActive(this)">
+                                <span class="nav-icon">${iconChar}</span>
+                                <span class="nav-text">${item.title}</span>
+                            </a>`;
+                            // Collect for auto-load
+                            if(filterText === '') allLinks.push(item);
+                        });
+                    }
+                });
+                if (!hasMatches) {
+                    html = '<div class="empty-state">No matching documents found.</div>';
+                }
+                navList.innerHTML = html;
+            }
+            // 3. Initial Render
+            renderNav();
+            // 4. Auto-load Logic
+            // Priority: Home.html -> README.html -> First Link
+            if (allLinks.length > 0) {
+                let target = allLinks.find(x => x.title.toLowerCase() === 'home') 
+                          || allLinks.find(x => x.title.toLowerCase().includes('readme')) 
+                          || allLinks[0];
+                if (target) {
+                    iframe.src = target.path;
+                    // Find DOM element to set active
+                    setTimeout(() => {
+                        const links = document.querySelectorAll('.nav-item');
+                        for(let link of links) {
+                            if(link.getAttribute('href') === target.path) {
+                                link.classList.add('active');
+                                break;
+                            }
+                        }
+                    }, 100);
+                }
+            }
+            // 5. Search Listener
+            searchInput.addEventListener('input', (e) => {
+                renderNav(e.target.value);
+            });
+            // 6. Active State Helper
+            window.setActive = function(el) {
+                document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+                el.classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Active_Context_Snapshot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 项目活跃上下文快照 (Project Active Context Snapshot)\r\n**更新时间**: 2026-03-10\r\n**当前状态**: 1档卷线器物理震荡修复完成，等待长期观察。\r\n**AI 助手**: GitHub Copilot (Current Session)\r\n\r\n## 📌 当前进行中的任务 (Active Tasks)\r\n1. **Reel Physics (Gear 1 Jitter)**: \r\n   - [x] 分析日志，确认震荡源于低摩擦阈值下的正反馈回路。\r\n   - [x] 实施 Deadzone (死区) 逻辑阻止收线震荡。\r\n   - [x] 实施 Dynamic Gain (动态增益) 优化大鱼出线。\r\n   - [x] 清理代码，移除外部依赖。\r\n   - [x] 重构代码，将物理参数提取为常量 (Configurable Constants in Reel1stBehaviour.cs)。\r\n   - [x] 建立单元测试 `ReelPhysicsTests.cs` 并验证通过 (2/2 Passed)。\r\n   - [x] 清理测试代码 (Cleaned up unit tests after verification)。\r\n   - [ ] 长期观察是否存在新的边界情况 (Edge Cases)。\r\n\r\n2. **Project Infrastructure**:\r\n   - [x] 建立 `AI_PROJECT_RULES.md`。\r\n   - [x] 建立外部输出目录 `G:\\Copilot_OutPut\\FishingGame`。\r\n   - [x] 建立知识库 `KnowledgeBase`。\r\n   - [x] 建立工具脚本库 `Scripts` (AnalyzeJitter.ps1)。\r\n   - [x] 创建工具链说明文档 `Accessory_Tools_Guide.md`。\r\n   - [x] 实现并记录高级逻辑流可视化工具 (LogicFlow Visualizer, HTML+Mermaid Interaction)。\r\n\r\n## 🔑 关键文件状态 (Key File States)\r\n- `Assets\\FishingFramework\\Module\\Reel\\Reel1stBehaviour.cs`: \r\n  - **核心逻辑**: 包含死区控制和动态增益的所有改动，且已重构为常量配置。\r\n  - **状态**: 稳定 (Stable)且易于维护。\r\n- `Assets\\FishingFramework\\Physics\\FishingRodSimulation.cs`: \r\n  - **建议**: 应还原至原始状态（移除调试日志）。已检查似乎无残留。\r\n  - **可视化**: 现有详细流程图 `G:\\Copilot_OutPut\\FishingGame\\html\\FishingRodSimulation_Structure_Final.html`。\r\n- `Assets\\FishingFramework\\Module\\FSM\\PlayerState\\PlayerSimpleThrow.cs`:\r\n  - **修复**: 解决了按键释放时状态死锁的 Bug。\r\n\r\n## 📝 下一步建议 (Next Steps Suggestion)\r\n- 如果开启新会话，**请直接阅读** `G:\\Copilot_OutPut\\FishingGame\\KnowledgeBase\\Session_History_Summary_20260310.md` 以获取详细的技术背景。\r\n- 检查 `FishingRodSimulation.cs` 是否还可以进一步清理。\r\n\r\n## 📚 历史档案索引 (Project History Index)\r\n*这里记录了过往重要会话的详细总结，按时间倒序排列。*\r\n\r\n- **工具链手册**: [辅助工具使用指南](Accessory_Tools_Guide.md)\r\n  - *关键词*: Scripts, AnalyzeJitter, PowerShell, Log Analysis, StructureViewer, DocViewer\r\n\r\n- **AI辅助开发流程**: [AI最佳实践与工作流建议](AI_Workflow_Best_Practices.md)\r\n  - *关键词*: AI Workflow, Coding Standards, TDD, Documentation\r\n\r\n- **2026-03-10**: [1档卷线器物理震荡修复总结](Session_History_Summary_20260310.md)\r\n  - *关键词*: Reel Physics, Gear 1 Jitter, Deadzone, Dynamic Gain\r\n\r\n---\r\n*此文件应由 AI 在每次重要修改后自动更新，作为会话意外中断的保险。*\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

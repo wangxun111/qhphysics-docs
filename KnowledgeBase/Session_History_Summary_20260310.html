@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Session_History_Summary_20260310</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 会话沟通摘要 (Session History Summary)\r\n**日期**: 2026-03-10\r\n**主题**: 1档卷线器物理震荡修复 \u0026 项目基础设施建设\r\n\r\n## 1. 核心问题回顾\r\n**现象**: 当卷线器摩擦力处于 1档 (Low Friction, ~0.5N) 时，竿尖和线长出现剧烈的高频抖动 (Jitter)。\r\n**原因分析**:\r\n1. **信噪比崩塌**: 1档阈值极低，环境微小力变动占比过大，导致系统在“收线”和“出线”状态间频繁切换。\r\n2. **正反馈回路**: 收线 -\u003e 线变短 -\u003e 拉力暴涨 -\u003e 超过摩擦力 -\u003e 判定出线 -\u003e 线变长 -\u003e 拉力骤降 -\u003e 判定收线。此循环导致震荡。\r\n3. **物理模型缺陷**: 缺乏机械迟滞 (Hysteresis) 和阻尼 (Damping)。\r\n\r\n## 2. 解决方案演进 (Reel1stBehaviour.cs)\r\n### v1.0 (失败)\r\n- 仅添加 `Mathf.Lerp` 平滑。\r\n- **结果**: 震荡依旧，只是频率变低，变成大幅度“抽搐”。\r\n\r\n### v2.0 (部分有效)\r\n- 区分收线和出线逻辑，降低出线增益。\r\n- **结果**: 出线稳定了，但收线时依然因为拉力突变导致反弹。\r\n\r\n### v3.0 (最终稳定版)\r\n**设计理念**: 能量压制与死区控制 (Energy Suppression \u0026 Deadzone)。\r\n1. **收线侧 (Reeling In)**:\r\n   - **强制死区 (Deadzone)**: 当负载 \u003e 80% 摩擦力时，强制 `Speed = 0`。彻底切断震荡回路，模拟卸力松脱时的打滑。\r\n   - **安全区限速**: 负载 \u003c 80% 时，速度限制为 20%，防止起步冲击。\r\n2. **出线侧 (Drag Out)**:\r\n   - **动态增益 (Dynamic Gain)**: \r\n     - 小超载 (\u003c0.5N): `Gain = 0.05` (极粘滞，防抖)。\r\n     - 大超载 (\u003e2.0N): `Gain = 1.0` (全开，防断线)。\r\n3. **代码解耦**:\r\n   - 移除 `AppliedForceEqualizer` 依赖，使用本地 `Mathf.Lerp`。\r\n\r\n## 3. 其他修复\r\n- **FSM 死锁**: 修复 `PlayerSimpleThrow.cs` 中按住时间刚好超过阈值但立即松手导致返回 `null` 状态的问题（添加了 fallback 到 `PlayerIdle`）。\r\n\r\n## 4. 基础设施建设\r\n- **AI 规则文件**: 创建 `F:\\new\\fishinggame\\AI_PROJECT_RULES.md`。\r\n- **外部存储**: 建立 `G:\\Copilot_OutPut\\FishingGame` 目录结构。\r\n  - `KnowledgeBase`: 存放技术文档。\r\n  - `html`: 存放网页报告。\r\n  - `Log`: 存放日志分析。\r\n\r\n## 5. 待办/注意事项 (Next Steps)\r\n- **FishingRodSimulation.cs**: 建议还原该文件（移除了调试日志），保持代码库清洁。\r\n- **后续优化**: 观察动态增益在大鱼快速变向时的表现。\r\n\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

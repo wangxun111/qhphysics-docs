@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>QUICK_DEPLOYMENT_CHECKLIST</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 🚀 快速部署清单\r\n\r\n## 你的部署信息\r\n\r\n请你先完成这一步，然后告诉我你的GitHub用户名：\r\n\r\n**查找你的GitHub用户名的方法**：\r\n1. 登录 GitHub：https://github.com\r\n2. 点击右上角头像\r\n3. 选择 \"Settings\"\r\n4. 在页面左侧或顶部找到你的用户名\r\n   - 格式通常是：`username`（不是邮箱）\r\n   - 示例：`octocat`、`john-doe` 等\r\n\r\n---\r\n\r\n## 部署步骤（3步搞定）\r\n\r\n### 🟢 Step 1: 获取你的GitHub用户名\r\n\r\n告诉我你的GitHub用户名（格式：字母+数字+连字符，不是邮箱）\r\n\r\n### 🟡 Step 2: 运行部署脚本\r\n\r\n在你的电脑上：\r\n1. 打开命令行（Win + R → 输入 cmd）\r\n2. 输入命令：\r\n```bash\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\ndeploy_to_github.bat YOUR_GITHUB_USERNAME\r\n```\r\n\r\n例如：\r\n```bash\r\ndeploy_to_github.bat john-doe\r\n```\r\n\r\n3. 按回车，脚本会自动做以下事情：\r\n   ✓ 初始化 Git 仓库\r\n   ✓ 配置 GitHub\r\n   ✓ 上传所有文件\r\n   ✓ 推送到 GitHub\r\n\r\n### 🔴 Step 3: 启用 GitHub Pages\r\n\r\n脚本完成后会给你一个链接，打开它：\r\n```\r\nhttps://github.com/YOUR_USERNAME/qhphysics-docs/settings/pages\r\n```\r\n\r\n然后：\r\n1. Source 选择 \"Deploy from a branch\"\r\n2. 选择分支：**main**\r\n3. 选择文件夹：**/ (root)**\r\n4. 点击 Save\r\n\r\n---\r\n\r\n## ✅ 完成！\r\n\r\n等待 1-2 分钟，你的网站就可以在这里访问：\r\n\r\n```\r\nhttps://YOUR_USERNAME.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n---\r\n\r\n## 📋 故障排除\r\n\r\n### 问题：提示\"认证失败\"\r\n\r\n**解决**：使用 Personal Access Token\r\n1. 访问：https://github.com/settings/tokens\r\n2. 点击 \"Generate new token\"\r\n3. 勾选 \"repo\" 权限\r\n4. 复制 token\r\n5. 当脚本要求密码时，粘贴这个 token\r\n\r\n### 问题：网站仍然不能访问\r\n\r\n**检查清单**：\r\n- [ ] GitHub Pages 已启用\r\n- [ ] 分支选择为 main\r\n- [ ] 文件夹选择为 / (root)\r\n- [ ] 已等待 1-2 分钟\r\n- [ ] 浏览器已刷新（Ctrl+F5）\r\n\r\n---\r\n\r\n## 📱 分享你的网站\r\n\r\n部署完成后，你可以：\r\n\r\n✅ 分享这个链接给任何人：\r\n```\r\nhttps://YOUR_USERNAME.github.io/qhphysics-docs/\r\n```\r\n\r\n✅ 所有人都能访问你的完整文档\r\n\r\n✅ 随时可以更新（git push 即可）\r\n\r\n---\r\n\r\n**现在，请告诉我你的 GitHub 用户名，我可以帮你验证部署是否成功！**\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

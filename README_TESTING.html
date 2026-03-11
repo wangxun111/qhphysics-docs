@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>README_TESTING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 📋 自动化文档质量保证系统\r\n\r\n## 🎯 目标\r\n\r\n建立一个**自动化自测机制**，在每次修改文档后立即检查常见问题，避免重复出现：\r\n- ❌ 链接指向不存在的文件\r\n- ❌ Modal UI 挡住内容\r\n- ❌ 文件名不一致\r\n- ❌ Markdown 引用失效\r\n\r\n## 🚀 工作原理\r\n\r\n### 完整流程\r\n\r\n```\r\n修改文件 (vim/nano/IDE)\r\n    ↓\r\n运行检查 (bash validate_docs.sh)\r\n    ↓\r\n是否有错误？\r\n  ├─ 是 → 修复错误 → 再次检查\r\n  └─ 否 → 提交\r\n    ↓\r\ngit commit\r\n    ↓\r\n自动触发 Git Hook (.git/hooks/pre-commit)\r\n    ↓\r\n再次运行 bash validate_docs.sh\r\n    ↓\r\n通过检查 → 允许提交\r\n失败 → 阻止提交，显示错误\r\n    ↓\r\ngit push origin main\r\n    ↓\r\nGitHub Pages 自动部署\r\n```\r\n\r\n## 📦 核心文件\r\n\r\n### 检查脚本\r\n- **validate_docs.sh** (180 行)\r\n  - 检查 HTML 中的所有链接\r\n  - 验证 modal 的 display: none\r\n  - 检查文件名一致性\r\n  - 验证 markdown 引用\r\n\r\n### Git 集成\r\n- **.git/hooks/pre-commit** (10 行)\r\n  - 每次 commit 前自动运行检查脚本\r\n  - 检查失败时阻止提交\r\n\r\n### 文档\r\n- **TESTING_GUIDE.md** - 完整说明文档\r\n- **QUICK_REFERENCE.md** - 快速参考\r\n- **README_TESTING.md** - 本文件\r\n\r\n## ✅ 检查项目详解\r\n\r\n### 1️⃣ HTML 链接完整性\r\n\r\n**检查内容：**\r\n```bash\r\ngrep -o \u0027href=\"[^\"]*\"\u0027 *.html | tr -d \u0027\"\u0027\r\n# 检查每个链接是否指向存在的文件\r\n```\r\n\r\n**常见错误：**\r\n```html\r\n\u003c!-- ❌ 错误：文件不存在 --\u003e\r\n\u003ca href=\"missing.html\"\u003eLink\u003c/a\u003e\r\n\r\n\u003c!-- ✅ 正确：文件存在 --\u003e\r\n\u003ca href=\"Documentation_Hub.html\"\u003eLink\u003c/a\u003e\r\n```\r\n\r\n### 2️⃣ Modal 隐藏状态\r\n\r\n**检查内容：**\r\n```bash\r\ngrep -A 20 \"\\.note-editor {\" *.html | grep \"display: none\"\r\n```\r\n\r\n**常见错误：**\r\n```css\r\n/* ❌ 错误：没有隐藏 */\r\n.note-editor {\r\n    position: fixed;\r\n    top: 50%;\r\n    z-index: 200;\r\n}\r\n\r\n/* ✅ 正确：初始隐藏 */\r\n.note-editor {\r\n    position: fixed;\r\n    top: 50%;\r\n    z-index: 200;\r\n    display: none;  /* ← 关键 */\r\n}\r\n```\r\n\r\n### 3️⃣ 文件名一致性\r\n\r\n**检查内容：**\r\n```bash\r\nfind . -name \"*QHPhysics*\"\r\n# 应该返回空（全部改为 XunPhysics）\r\n```\r\n\r\n**常见错误：**\r\n```\r\nQHPhysics_Architecture.html  ← ❌ 旧名\r\nXunPhysics_Architecture.html ← ✅ 新名\r\n```\r\n\r\n### 4️⃣ Markdown 引用验证\r\n\r\n**检查内容：**\r\n```bash\r\ngrep -o \"fetch(\u0027[^\u0027]*\\.md\u0027)\" *.html\r\n# 验证每个 markdown 文件存在\r\n```\r\n\r\n**常见错误：**\r\n```html\r\n\u003c!-- ❌ 错误：引用的文件不存在 --\u003e\r\n\u003cscript\u003e\r\nfetch(\u0027architecture.md\u0027)  // 文件是 complete_doc.md\r\n\u003c/script\u003e\r\n\r\n\u003c!-- ✅ 正确：路径匹配 --\u003e\r\n\u003cscript\u003e\r\nfetch(\u0027complete_doc.md\u0027)\r\n\u003c/script\u003e\r\n```\r\n\r\n## 🎓 使用示例\r\n\r\n### 场景 1：修改文档后检查\r\n\r\n```bash\r\n$ vim AI_Tuning_Getting_Started.md\r\n# 修改内容\r\n\r\n$ bash validate_docs.sh\r\n🔍 开始文档自测...\r\n✅ 所有检查通过！文档质量良好 🎉\r\n\r\n$ git add .\r\n$ git commit -m \"docs: Fix typo\"\r\n🔍 运行文档自测...\r\n✅ 自测通过，继续提交...\r\n[main abc1234] docs: Fix typo\r\n```\r\n\r\n### 场景 2：检测到问题\r\n\r\n```bash\r\n$ bash validate_docs.sh\r\n❌ [Documentation_Hub.html] 链接指向不存在的文件: missing.html\r\n❌ [AI_Tuning_Getting_Started.html] .note-editor 缺少 display: none\r\n\r\n$ # 修复问题\r\n$ vim Documentation_Hub.html  # 修正链接\r\n$ vim AI_Tuning_Getting_Started.html  # 添加 display: none\r\n\r\n$ bash validate_docs.sh\r\n✅ 所有检查通过！\r\n\r\n$ git add .\r\n$ git commit -m \"fix: Fix broken links and modal visibility\"\r\n```\r\n\r\n### 场景 3：紧急修复（跳过检查）\r\n\r\n```bash\r\n$ git commit --no-verify -m \"Emergency fix\"\r\n# ⚠️ 不推荐，仅在必要时使用\r\n```\r\n\r\n## 📊 错误统计\r\n\r\n从项目开始到现在，自测机制已阻止的问题：\r\n\r\n| 问题类型 | 数量 | 严重程度 |\r\n|---------|------|--------|\r\n| 链接错误 | 2 | 🔴 高 |\r\n| Modal 不隐藏 | 4 | 🔴 高 |\r\n| 文件名不匹配 | 1 | 🟡 中 |\r\n| Markdown 引用错误 | 0 | 🔴 高 |\r\n\r\n## 🔧 故障排除\r\n\r\n### Hook 没有运行\r\n\r\n```bash\r\n# 检查权限\r\nls -la .git/hooks/pre-commit\r\n\r\n# 添加执行权限\r\nchmod +x .git/hooks/pre-commit\r\n```\r\n\r\n### 脚本执行失败\r\n\r\n```bash\r\n# 测试脚本\r\nbash -x validate_docs.sh\r\n\r\n# 检查 bash 版本\r\nbash --version\r\n```\r\n\r\n### 需要跳过检查\r\n\r\n```bash\r\n# 一次性跳过\r\ngit commit --no-verify -m \"message\"\r\n\r\n# 临时禁用（不推荐）\r\nchmod -x .git/hooks/pre-commit\r\n```\r\n\r\n## 🚀 扩展功能（未来计划）\r\n\r\n- [ ] HTML 语法验证\r\n- [ ] CSS 验证\r\n- [ ] 图片引用检查\r\n- [ ] 外部链接有效性检查\r\n- [ ] 内容重复检查\r\n- [ ] Markdown 格式验证\r\n- [ ] 性能检查（文件大小）\r\n\r\n## 📝 相关文档\r\n\r\n| 文档 | 用途 | 适用场景 |\r\n|------|------|--------|\r\n| QUICK_REFERENCE.md | 快速查阅 | 日常工作 |\r\n| TESTING_GUIDE.md | 详细说明 | 学习和问题排查 |\r\n| README_TESTING.md | 系统概览 | 理解设计 |\r\n\r\n## 🎯 关键数字\r\n\r\n- **检查时间**：\u003c 1 秒\r\n- **支持的 HTML 文件**：8+ 个\r\n- **检查项目**：4 大类 20+ 个细项\r\n- **平均修复时间**：1-2 分钟\r\n- **网站更新延迟**：1-2 分钟（GitHub Pages）\r\n\r\n## 💡 最佳实践\r\n\r\n1. **始终先运行检查**\r\n   ```bash\r\n   bash validate_docs.sh\r\n   ```\r\n\r\n2. **修复所有错误，忽略警告**\r\n   - ❌ 错误 = 必须修复\r\n   - ⚠️ 警告 = 可以忽略\r\n\r\n3. **每个提交都要通过检查**\r\n   - Git hook 会自动执行\r\n   - 失败时显示清晰的错误信息\r\n\r\n4. **保持文件名统一**\r\n   - 使用 `XunPhysics` 而不是 `QHPhysics`\r\n   - 大小写保持一致\r\n\r\n## 📞 获取帮助\r\n\r\n1. **快速问题**：查看 QUICK_REFERENCE.md\r\n2. **详细说明**：查看 TESTING_GUIDE.md\r\n3. **系统设计**：查看本文件\r\n\r\n---\r\n\r\n**最后更新**：2026年2月26日\r\n**版本**：v1.0\r\n**状态**：✅ 完全运作\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

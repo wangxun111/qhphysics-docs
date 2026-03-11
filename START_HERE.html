@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>START_HERE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 🚀 开始修改文档之前必读\r\n\r\n**⚠️ 重要：请务必阅读本文件！**\r\n\r\n本项目有**严格的质量规则**，违反规则会导致网站崩溃或功能破坏。\r\n下次打开命令行时，请先看这个文件！\r\n\r\n---\r\n\r\n## 📋 5 分钟快速规则\r\n\r\n### ✅ 修改前检查\r\n\r\n```bash\r\n# 1. 进入项目目录\r\ncd F:/new/fishinggame/QHPlugins/QHForUnity\r\n\r\n# 2. 修改任何文件\r\nvim some_file.html\r\n\r\n# 3. 立即检查（必做！）\r\nbash validate_docs.sh\r\n\r\n# 4. 如果有错，修复后再检查\r\nbash validate_docs.sh\r\n\r\n# 5. 确认通过后才能提交\r\ngit add .\r\ngit commit -m \"docs: Your message\"\r\ngit push origin main\r\n```\r\n\r\n### ❌ 绝对不要做这些事\r\n\r\n| ❌ 禁止 | 原因 | 后果 |\r\n|--------|------|------|\r\n| 创建文件后不更新链接 | 链接失效 | 网站 404 |\r\n| 忘记添加 `display: none` | Modal 挡住内容 | 网站无法使用 |\r\n| 改名文件不改链接 | 链接错乱 | 网页加载失败 |\r\n| 修改 fetch 路径不检查 | Markdown 加载失败 | 页面内容空白 |\r\n| 提交前不运行检查 | 阻止提交 | 浪费时间 |\r\n\r\n---\r\n\r\n## 🎯 核心规则（必记！）\r\n\r\n### 规则 1: 每次修改后都要检查\r\n```bash\r\nbash validate_docs.sh  # 必须通过！\r\n```\r\n\r\n**为什么重要？** 之前因为没有这个检查，出现了：\r\n- ✗ XunPhysics 完整架构无法打开\r\n- ✗ AI 入门教程的 UI 挡在屏幕中间\r\n- ✗ 文件名不匹配导致链接失效\r\n\r\n### 规则 2: 所有文件名必须用 XunPhysics\r\n```\r\n✅ XunPhysics_Architecture.html\r\n❌ QHPhysics_Architecture.html  (已过期)\r\n```\r\n\r\n### 规则 3: 所有 HTML modal 必须隐藏\r\n```css\r\n.note-editor {\r\n    position: fixed;\r\n    /* ... 其他样式 ... */\r\n    display: none;  /* ← 必须有这一行 */\r\n}\r\n```\r\n\r\n### 规则 4: 文件对应关系必须正确\r\n```\r\nXunPhysics_Architecture.html  → 加载 complete_doc.md\r\nAI_Tuning_Getting_Started.html → 加载 AI_Tuning_Getting_Started.md\r\nAI_Parameter_Optimization.html → 加载 AI_Parameter_Optimization.md\r\nPhysX_Analysis.html            → 加载 PhysX_Analysis.md\r\n```\r\n\r\n---\r\n\r\n## 🔍 检查清单（提交前必做）\r\n\r\n```\r\n提交前检查清单：\r\n\r\n[ ] 运行了 bash validate_docs.sh？\r\n[ ] 所有项目都通过（绿色 ✅）？\r\n[ ] 是否有错误（红色 ❌）？如果有，修复了吗？\r\n[ ] 新增的文件是否在 Documentation_Hub.html 中添加了链接？\r\n[ ] 改名的文件是否更新了所有指向它的链接？\r\n[ ] 新的 HTML 文件是否添加了 display: none 的 modal？\r\n[ ] fetch() 的 markdown 文件是否存在？\r\n\r\n以上都确认后，才能提交！\r\n```\r\n\r\n---\r\n\r\n## 📚 详细文档位置\r\n\r\n如果忘记了，查看这些文件：\r\n\r\n| 文档 | 位置 | 用途 |\r\n|------|------|------|\r\n| **快速参考** | `QUICK_REFERENCE.md` | 日常快速查阅 |\r\n| **完整说明** | `TESTING_GUIDE.md` | 详细学习 |\r\n| **系统概览** | `README_TESTING.md` | 理解设计思路 |\r\n| **本文件** | `START_HERE.md` | 第一次了解 |\r\n\r\n---\r\n\r\n## ⚡ 最常用的 3 个命令\r\n\r\n```bash\r\n# 命令 1: 检查（修改后必做）\r\nbash validate_docs.sh\r\n\r\n# 命令 2: 查看检查详细过程\r\nbash -x validate_docs.sh\r\n\r\n# 命令 3: 在 Hook 失败时强制提交（不推荐）\r\ngit commit --no-verify -m \"message\"\r\n```\r\n\r\n---\r\n\r\n## 🎓 学习路径\r\n\r\n### 第一次使用（5 分钟）\r\n1. 阅读本文件的\"5 分钟快速规则\"\r\n2. 理解\"核心规则\"部分\r\n3. 记住\"检查清单\"\r\n4. 开始修改文档\r\n\r\n### 遇到问题（10 分钟）\r\n1. 运行 `bash validate_docs.sh`\r\n2. 查看错误信息\r\n3. 对照 `QUICK_REFERENCE.md` 的\"常见修复\"\r\n4. 修复后再次运行检查\r\n\r\n### 深入理解（30 分钟）\r\n1. 阅读 `README_TESTING.md` 理解系统设计\r\n2. 阅读 `TESTING_GUIDE.md` 学习所有细节\r\n3. 查看脚本源码 `validate_docs.sh`\r\n\r\n---\r\n\r\n## 🚨 如果不按规则做会怎样？\r\n\r\n### 场景 1: 修改后直接提交（没检查）\r\n```bash\r\n$ git add .\r\n$ git commit -m \"docs: Update\"\r\n🔍 运行文档自测...\r\n❌ [AI_Tuning_Getting_Started.html] .note-editor 缺少 display: none\r\n\r\n❌ 自测失败！请修复上面的错误后重新提交。\r\n# ← 提交被阻止！必须修复后才能提交\r\n```\r\n\r\n### 场景 2: 创建新 HTML 但不更新链接\r\n```bash\r\n$ bash validate_docs.sh\r\n❌ [new_page.html] 链接指向不存在的文件: missing_data.md\r\n# ← 检查失败，提前发现问题！\r\n```\r\n\r\n### 场景 3: 改名文件但不更新引用\r\n```bash\r\n$ bash validate_docs.sh\r\n❌ [Documentation_Hub.html] 链接指向不存在的文件: old_name.html\r\n# ← 立即发现，避免网站崩溃！\r\n```\r\n\r\n---\r\n\r\n## 💾 规则永久保存位置\r\n\r\n这些规则被保存在：\r\n\r\n```\r\nF:/new/fishinggame/QHPlugins/QHForUnity/\r\n├── START_HERE.md           ← 本文件（第一次看）\r\n├── QUICK_REFERENCE.md      ← 日常参考\r\n├── TESTING_GUIDE.md        ← 详细说明\r\n├── README_TESTING.md       ← 系统概览\r\n├── validate_docs.sh        ← 自动检查脚本\r\n└── .git/hooks/pre-commit   ← Git 钩子（自动运行）\r\n```\r\n\r\n**即使你关闭命令行重新打开，这些文件也永远在这里！**\r\n\r\n---\r\n\r\n## 🔗 重要链接\r\n\r\n- **在线文档中心**: https://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n- **GitHub 仓库**: https://github.com/wangxun111/qhphysics-docs\r\n- **项目目录**: `F:/new/fishinggame/QHPlugins/QHForUnity`\r\n\r\n---\r\n\r\n## ❓ 常见问题\r\n\r\n**Q: 我忘记了规则，怎么办？**\r\nA: 打开 `QUICK_REFERENCE.md`，2 分钟快速复习。\r\n\r\n**Q: 为什么要这么多规则？**\r\nA: 防止重复出现链接错误、Modal 挡住内容、文件名不匹配等问题。这些规则就是从之前的错误中学到的！\r\n\r\n**Q: 如果检查失败，会损坏什么吗？**\r\nA: 不会。检查失败时只是阻止提交，不会损坏任何东西。修复后重新提交即可。\r\n\r\n**Q: 可以跳过检查吗？**\r\nA: 可以，用 `git commit --no-verify`，但非常不推荐！这样容易出现之前的问题。\r\n\r\n---\r\n\r\n## 🎯 记住最重要的一条规则\r\n\r\n```\r\n修改文件 → 运行 bash validate_docs.sh → 检查通过 → 才能提交\r\n```\r\n\r\n**就这么简单！**\r\n\r\n---\r\n\r\n## 📞 需要帮助？\r\n\r\n| 情况 | 查看文件 |\r\n|------|--------|\r\n| 忘记命令 | `QUICK_REFERENCE.md` |\r\n| 遇到错误 | `TESTING_GUIDE.md` |\r\n| 想理解设计 | `README_TESTING.md` |\r\n| 第一次使用 | **本文件 (START_HERE.md)** |\r\n\r\n---\r\n\r\n**最后更新：** 2026年2月26日\r\n**版本：** v1.0\r\n**状态：** ✅ 完全可用\r\n\r\n**下次修改文档时，记得先看这个文件！** 🚀\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

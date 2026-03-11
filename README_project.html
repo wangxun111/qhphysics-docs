@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>README_project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# 📖 XunPhysics 文档项目\r\n\r\n\u003e 一个自动化质量保证的物理引擎文档网站\r\n\r\n**🚀 在线访问：** https://wangxun111.github.io/qhphysics-docs/\r\n\r\n---\r\n\r\n## ⚠️ 首先请阅读\r\n\r\n**如果这是你第一次接触本项目，请立即打开：**\r\n\r\n📄 **[START_HERE.md](START_HERE.md)** ← 必读！5 分钟了解所有规则\r\n\r\n---\r\n\r\n## 🎯 核心工作流（30秒）\r\n\r\n```bash\r\n# 1. 修改文档\r\nvim some_file.html\r\n\r\n# 2. 检查（必须通过！）\r\nbash validate_docs.sh\r\n\r\n# 3. 如果有错，修复后再检查\r\nbash validate_docs.sh\r\n\r\n# 4. 提交并推送\r\ngit add .\r\ngit commit -m \"docs: Your message\"\r\ngit push origin main\r\n```\r\n\r\n---\r\n\r\n## 🔑 5 条必记规则\r\n\r\n| # | 规则 | 后果 |\r\n|----|------|------|\r\n| 1️⃣ | 修改后必须运行 `bash validate_docs.sh` | 链接错误、网页崩溃 |\r\n| 2️⃣ | 所有文件名用 `XunPhysics` 不用 `QHPhysics` | 链接失效 |\r\n| 3️⃣ | HTML 中必须有 `.note-editor { display: none; }` | Modal 挡住内容 |\r\n| 4️⃣ | fetch() 的 markdown 文件必须存在 | 页面空白 |\r\n| 5️⃣ | 新建文件要在 Documentation_Hub.html 添加链接 | 文档找不到 |\r\n\r\n---\r\n\r\n## 📚 快速链接\r\n\r\n### 📋 文档\r\n- **[START_HERE.md](START_HERE.md)** - 第一次了解（必读！）\r\n- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - 日常快速参考\r\n- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - 详细使用说明\r\n- **[README_TESTING.md](README_TESTING.md)** - 系统设计概览\r\n\r\n### 🛠️ 脚本\r\n- **[validate_docs.sh](validate_docs.sh)** - 自动检查脚本\r\n- **[.git/hooks/pre-commit](.git/hooks/pre-commit)** - Git 自动钩子\r\n\r\n### 🌐 在线\r\n- **[文档中心](https://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html)** - 完整网站\r\n- **[GitHub 仓库](https://github.com/wangxun111/qhphysics-docs)** - 源代码\r\n\r\n---\r\n\r\n## ✅ 检查项目\r\n\r\n本项目的自动化检查会验证：\r\n\r\n```\r\n✓ HTML 中所有链接是否指向存在的文件\r\n✓ Modal 是否正确隐藏（display: none）\r\n✓ 文件名是否使用正确的命名规范\r\n✓ fetch() 是否指向存在的 markdown 文件\r\n```\r\n\r\n全部自动化，\u003c 1 秒完成！\r\n\r\n---\r\n\r\n## 🚀 常用命令速查\r\n\r\n```bash\r\n# 检查文档（修改后必做）\r\nbash validate_docs.sh\r\n\r\n# 查看检查的详细过程\r\nbash -x validate_docs.sh\r\n\r\n# 提交代码\r\ngit add .\r\ngit commit -m \"docs: Your message\"\r\n\r\n# 推送到 GitHub（自动部署）\r\ngit push origin main\r\n\r\n# 紧急情况下跳过检查（不推荐）\r\ngit commit --no-verify -m \"Emergency fix\"\r\n```\r\n\r\n---\r\n\r\n## 🎓 学习资源\r\n\r\n### 初次使用（5 分钟）\r\n👉 打开 **[START_HERE.md](START_HERE.md)**\r\n\r\n### 日常查阅（2 分钟）\r\n👉 打开 **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)**\r\n\r\n### 深入学习（30 分钟）\r\n👉 打开 **[TESTING_GUIDE.md](TESTING_GUIDE.md)** 和 **[README_TESTING.md](README_TESTING.md)**\r\n\r\n---\r\n\r\n## 📁 项目结构\r\n\r\n```\r\nF:/new/fishinggame/QHPlugins/QHForUnity/\r\n│\r\n├── 📚 文档（在线访问）\r\n├── XunPhysics_Architecture.html         ← 物理引擎架构\r\n├── AI_Tuning_Getting_Started.html       ← AI 入门教程\r\n├── AI_Parameter_Optimization.html       ← AI 深度分析\r\n├── PhysX_Analysis.html                  ← PhysX 对标\r\n├── Documentation_Hub.html               ← 文档中心（主页）\r\n│\r\n├── 📖 数据文件\r\n├── complete_doc.md                      ← XunPhysics 完整文档\r\n├── AI_Tuning_Getting_Started.md\r\n├── AI_Parameter_Optimization.md\r\n├── PhysX_Analysis.md\r\n│\r\n├── 🔍 检查系统\r\n├── validate_docs.sh                     ← 主检查脚本\r\n├── validate_docs.py                     ← Python 版本（备用）\r\n├── .git/hooks/pre-commit                ← Git 自动钩子\r\n│\r\n└── 📖 规则和文档\r\n    ├── README.md                        ← 本文件\r\n    ├── START_HERE.md                    ← 新手必读\r\n    ├── QUICK_REFERENCE.md               ← 快速参考\r\n    ├── TESTING_GUIDE.md                 ← 详细说明\r\n    └── README_TESTING.md                ← 系统概览\r\n```\r\n\r\n---\r\n\r\n## 🛡️ 质量保证\r\n\r\n本项目使用自动化检查系统确保质量：\r\n\r\n- ✅ 每次 commit 前自动运行检查\r\n- ✅ 检查失败时阻止提交\r\n- ✅ 清晰的错误提示和修复建议\r\n- ✅ 无需手动检查，完全自动化\r\n\r\n**结果：** 零错误的网站，永远稳定！\r\n\r\n---\r\n\r\n## 💡 为什么需要这些规则？\r\n\r\n之前没有这个系统时出现过的问题：\r\n\r\n| 问题 | 原因 | 现在状态 |\r\n|------|------|--------|\r\n| XunPhysics 架构无法打开 | 文件名不匹配 | ✅ 自动检查 |\r\n| Modal UI 挡住内容 | 缺少 display: none | ✅ 自动检查 |\r\n| 链接 404 错误 | 文件不存在或命名错误 | ✅ 自动检查 |\r\n| Markdown 加载失败 | 路径不正确 | ✅ 自动检查 |\r\n\r\n**这些规则就是从错误中学到的！**\r\n\r\n---\r\n\r\n## 📝 修改前检查清单\r\n\r\n```\r\n准备修改代码？先检查这个清单：\r\n\r\n[ ] 已打开 START_HERE.md 了吗？\r\n[ ] 了解 5 条核心规则吗？\r\n[ ] 知道修改后要运行 bash validate_docs.sh 吗？\r\n[ ] 准备好了吗？开始修改！\r\n\r\n修改完成后：\r\n\r\n[ ] 运行 bash validate_docs.sh\r\n[ ] 所有检查都通过了吗？（绿色 ✅）\r\n[ ] 如果有错误，修复后再检查\r\n[ ] 确认无误后，才能提交\r\n```\r\n\r\n---\r\n\r\n## 🌐 在线访问\r\n\r\n- **主页**：https://wangxun111.github.io/qhphysics-docs/\r\n- **文档中心**：https://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n- **GitHub**：https://github.com/wangxun111/qhphysics-docs\r\n\r\n---\r\n\r\n## 📞 需要帮助？\r\n\r\n| 问题 | 解决方案 |\r\n|------|--------|\r\n| 不知道从哪开始 | 打开 [START_HERE.md](START_HERE.md) |\r\n| 忘记命令了 | 打开 [QUICK_REFERENCE.md](QUICK_REFERENCE.md) |\r\n| 遇到错误信息 | 打开 [TESTING_GUIDE.md](TESTING_GUIDE.md) 的\"常见问题\" |\r\n| 想理解系统 | 打开 [README_TESTING.md](README_TESTING.md) |\r\n\r\n---\r\n\r\n## 🎉 开始使用\r\n\r\n**新手？从这里开始：**\r\n\r\n```bash\r\n# 1. 首先，用 15 秒打开并快速浏览 START_HERE.md\r\ncat START_HERE.md | head -50\r\n\r\n# 2. 理解核心规则后，修改你的文件\r\n\r\n# 3. 每次修改后，运行检查\r\nbash validate_docs.sh\r\n\r\n# 4. 通过检查后，正常提交\r\ngit add .\r\ngit commit -m \"docs: Your change\"\r\ngit push origin main\r\n```\r\n\r\n---\r\n\r\n**版本：** v1.0\r\n**最后更新：** 2026年2月26日\r\n**状态：** ✅ 完全运作\r\n\r\n**记住：修改前阅读 [START_HERE.md](START_HERE.md)！** 🚀\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>

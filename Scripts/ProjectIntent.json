@@ -1,0 +1,16 @@
+﻿{
+    "description": "Configuration for the Task Orchestrator (Auto-Pilot)",
+    "current_mode": "Development",
+    "paths": {
+        "knowledge_base": "G:\\Copilot_OutPut\\FishingGame\\KnowledgeBase",
+        "logs": "F:\\new\\fishinggame",
+        "scripts": "G:\\Copilot_OutPut\\FishingGame\\Scripts"
+    },
+    "agents_config": {
+        "DocBuilder": { "enabled": true, "script": "Agent_DocBuilder.ps1" },
+        "Inspector": { "enabled": true, "script": "Inspector_Doc.ps1", "strict_mode": true },
+        "Navigator": { "enabled": true, "script": "Agent_Navigator.ps1" },
+        "Syncer": { "enabled": false, "script": "SyncDocs.ps1" },
+        "LogDetective": { "enabled": true, "script": "AnalyzeJitter.ps1", "pattern": "fishing_phy_log_*.txt" }
+    }
+}

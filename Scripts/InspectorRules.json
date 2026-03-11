@@ -1,0 +1,23 @@
+﻿[
+    {
+        "id": "PORTAL_INTEGRITY",
+        "category": "Portal",
+        "pattern": "^(?!.*site_nav\\.js).*$",
+        "description": "Ensure index.html is the Portal, not a converted document.",
+        "fix_suggestion": "The index.html file seems to be overwritten by a document conversion. Check if 'Index.md' exists in the root and rename it to 'Home.md'. Restore 'index.html' using the template."
+    },
+    {
+        "id": "JSON_SERIALIZATION_BUG",
+        "category": "HTML/Mermaid",
+        "pattern": "\"ReadCount\":\\s*\\d+|\"PSPath\":",
+        "description": "Detects if PowerShell object properties (metadata) were serialized into the HTML instead of content.",
+        "fix_suggestion": "The HTML contains PowerShell object metadata. In Agent_DocBuilder.ps1, ensure 'Get-Content' uses '-Raw' and casts to '[string]' before 'ConvertTo-Json'."
+    },
+    {
+        "id": "MOJIBAKE_DETECTION",
+        "category": "Encoding",
+        "pattern": "馃|锟",
+        "description": "Detects common encoding artifact characters (Replacement Character or GBK/UTF-8 mismatches).",
+        "fix_suggestion": "Encoding issue detected. Ensure all scripts use 'Set-Content -Encoding UTF8' and source files are saved as UTF-8."
+    }
+]

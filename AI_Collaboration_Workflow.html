@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AI_Collaboration_Workflow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github.min.css">
+    <style>
+        body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }
+        .mermaid { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div id="content" class="markdown-body"></div>
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: false });
+        const rawMd = "# AI 协同开发工作流标准化指南 (AI-Driven Development Workflow)\r\n\r\n本文档旨在记录并标准化基于大语言模型（AI Agent）的项目开发流程，结合了本项目（FishingGame）的实战经验与行业最佳实践。\r\n\r\n## 一、 实战总结：DAC 数值调优闭环 (The Data-Analyze-Code Loop)\r\n针对数值敏感、物理模拟或复杂逻辑调试场景，推荐使用此闭环。这是我们在调优“博鱼拉力抖动”问题时总结的高效模式。\r\n\r\n### 1. Data (数据标准化)\r\n*   **目标**: 将感性的“手感”转化为可量化的“数据”。\r\n*   **操作**:\r\n    *   在关键逻辑处（如博鱼拉力计算）埋点。\r\n    *   导出格式统一的 CSV/Log 文件。\r\n    *   **规范**: 文件名带时间戳，存放在统一目录（如 `G:\\Copilot_OutPut\\FishingGame\\Data`）。\r\n\r\n### 2. Analyze (自动化诊断)\r\n*   **目标**: 让 AI 替人读数据，发现肉眼不可见的规律。\r\n*   **操作**:\r\n    *   上传/指定数据文件路径。\r\n    *   要求 AI 编写 Python 脚本进行统计分析（计算均值、方差、翻转频率、极值分布）。\r\n    *   **指令示例**: “分析 `fight_force_xxx.csv`，统计 `friction=1.1772` 段的 `ratio` 翻转频率。”\r\n\r\n### 3. Code (决策与执行)\r\n*   **目标**: 基于数据证据修改代码，而非盲目试错。\r\n*   **操作**:\r\n    *   AI 提出 2-3 个基于数据的优化方案（如：方案A-积分判定 vs 方案B-纯时间锁定）。\r\n    *   人类开发者做选择题（Selection）。\r\n    *   AI 执行原子化代码修改（Atomic Edit）。\r\n    *   **安全网**: 每次修改后立即运行 `get_errors` 检查语法风险（如空值访问 `GetValueOrDefault`）。\r\n\r\n---\r\n\r\n## 二、 专业级 AI 开发通用流程 (General Professional Workflow)\r\n\r\n### 1. 上下文工程 (Context Engineering)\r\nAI 的表现取决于它知道多少当前项目的上下文。\r\n*   **项目地图**: 在对话开始时，明确当前工作目录结构。\r\n*   **显式引用**: 不要说“改那个函数”，要说“修改 `RodBehaviour.cs` 中的 `ChangeForceDynamic` 方法”。\r\n*   **记忆外挂**: 建立外部文档（如本文档），记录已达成的共识、关键参数和设计决策，在新会话中作为 Context 输入，避免 AI“失忆”。\r\n\r\n### 2. 结构化任务分拆 (Structured Task Decomposition)\r\n不要扔给 AI 一个巨大的、模糊的需求。我们将任务分为“新功能开发”和“复杂调优”两类策略。\r\n\r\n#### A. 新功能开发 (Feature Implementation)\r\n*   **策略**: 自底向上 (Bottom-Up)。\r\n*   **分拆步骤**:\r\n    1.  **数据结构**: “定义 `FishActionNode` 的核心字段。”\r\n    2.  **核心算法**: “实现基于阻尼的拉力计算公式。”\r\n    3.  **胶水逻辑**: “将算法接入 Unity Update 循环。”\r\n    4.  **表现层**: “实现 UI 状态变化的视觉反馈。”\r\n\r\n#### B. 复杂调优/Debug (Optimization \u0026 Debugging)\r\n*   **策略**: 观测-假设-验证 (ODDA Loop)。这是解决“拉力抖动”问题的关键路径。\r\n*   **分拆步骤**:\r\n    1.  **观测设施 (Instrumentation)**: “不要急着改代码。先写一个 CSV 导出器，记录每一帧的 `force`、`ratio` 和 `state`。”\r\n    2.  **数据复现 (Reproduction)**: “生成几组不同摩擦力（如 `friction=1.1772`）下的 Log 文件。”\r\n    3.  **假设提出 (Hypothesis)**: “让 AI 分析 Log。AI 发现是‘物理弹跳’导致的高频噪声。”\r\n    4.  **方案验证 (Pilot)**: “实现‘积分方案 (Score)’的原型，先不考虑完美参数，只看机制是否生效。”\r\n    5.  **参数收敛 (tuning)**: “基于新 Log，调整 `ScoreThreshold` 和 `CoolDown`，直到抖动频率 \u003c 1次/秒。”\r\n\r\n### 3. 防御性编程与自检 (Defensive Coding)\r\nAI 可能会忽略边界情况（如 `Nullable\u003cT\u003e`），人类需要作为 Reviewer。\r\n*   **指令策略**: “请检查代码中的空引用风险、类型转换错误和性能热点。”\r\n*   **工具链**: 结合 IDE 的 Compile Error 反馈，要求 AI 修复所有 Warning（如我们修复的 `actionData` 命名警告和 `.Value` 空指针风险）。\r\n\r\n### 4. 知识归档 (Knowledge Distillation)\r\n*   将 AI 分析长 Log 的结果归档为文本文件，而不是散落在聊天记录里。\r\n*   将 AI 生成的复杂算法逻辑（如贝塞尔曲线生成、物理从动公式）提取为独立的 Markdown 技术文档，作为项目资产。\r\n*   **结构化索引更新协议**:\r\n    *   每当生成新的 `DeepDive_*.md` 文档时，必须**立即**将其链接插入到上级结构文档（如 `Core_Gameplay_DeepDive.md`）的对应章节下。\r\n    *   确保 `Index.md` -\u003e `Overview.md` -\u003e `DeepDive.md` 的层级导航链完整，禁止制造“孤岛文档”。\r\n\r\n#### 自动化文档维护 (Auto-Documentation)\r\n为了保持文档与代码同步，我们在 `G:\\Copilot_OutPut\\FishingGame` 下部署了自动化工具：\r\n*   **Generate**: `generate_dashboard.py` - 手动生成单页 HTML 仪表盘。\r\n*   **Watch**: `watch_dashboard.py` - 启动后自动监听 `.md` 文件变化并实时更新 HTML。\r\n*   **AI 职责**: AI 在修改文档后，应主动运行生成脚本，或提醒用户运行 Watcher。\r\n\r\n---\r\n\r\n## 三、 本项目特定配置 (Project Configuration)\r\n\r\n### 目录规范\r\n*   **生成输出目录**: `G:\\Copilot_OutPut\\FishingGame` (存放 CSV 分析报告、生成的文档)\r\n*   **记忆库目录**: `G:\\FishingGame_Workspace\\AnalysisMemory` (存放历史关键数据)\r\n\r\n### 关键参数快照 (当前最佳实践)\r\n针对 `RodBehaviour.cs` 的防抖动设置：\r\n*   `CRITICAL_RATIO_MIN/MAX`: **0.60f / 1.40f** (更宽的临界区)\r\n*   `STATE_LOCK_TIME`: **9.0s** (强锁定)\r\n*   `RATIO_SCORE_ENTER`: **1.30f** (高积分阈值)\r\n*   `RATIO_SCORE_DECAY_TAU`: **4.0f** (平滑衰减)\r\n\r\n---\r\n*Created by GitHub Copilot \u0026 User on 2026-03-05*\r\n";
+        // 1. Render Markdown to HTML
+        document.getElementById('content').innerHTML = marked.parse(rawMd);
+        hljs.highlightAll();
+        // 2. Post-Process for Mermaid
+        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+        mermaidBlocks.forEach((block, index) => {
+            const pre = block.parentElement;
+            const code = block.textContent;
+            // Create separate div for Mermaid
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = code;
+            // Replace <pre> with <div>
+            pre.replaceWith(div);
+        });
+        // 3. Trigger Mermaid Render
+        // UMD version exposes global `mermaid` object
+        mermaid.run();
+    </script>
+</body>
+</html>
