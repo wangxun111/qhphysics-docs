@@ -20,14 +20,39 @@ if (-not (Test-Path "README.md")) {
 $stashOutput = git stash push -u -m "Docsify_AutoSync" 2>&1
 $hasStashed = $stashOutput -match "Saved working directory"
 
-# 4. 从远程拉取
+# 4. 从远程拉取 (带重试机制)
 Write-Host ">>> Pulling from remote..." -ForegroundColor Cyan
-git pull --rebase origin main 2>&1 | Write-Host -ForegroundColor Cyan
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "!!! Pull Failed !!!" -ForegroundColor Red
+$pullSuccess = $false
+$pullRetry = 0
+do {
+    git pull --rebase origin main 2>&1 | Write-Host -ForegroundColor Cyan
+    if ($LASTEXITCODE -eq 0) {
+        $pullSuccess = $true
+    } else {
+        $pullRetry++
+        if ($pullRetry -lt 3) {
+            Write-Host "!!! Pull Failed. Retrying ($pullRetry/3)..." -ForegroundColor Yellow
+            Start-Sleep -Seconds 2
+        }
+    }
+} until ($pullSuccess -or $pullRetry -ge 3)
+
+if (-not $pullSuccess) {
+    Write-Host "!!! Pull Failed after retries !!!" -ForegroundColor Red
     if ($hasStashed) { git stash pop | Out-Null }
-    $choice = Read-Host "Ignore pull errors and push anyway? (Y/N)"
-    if ($choice -ne 'Y') { exit 1 }
+    
+    # 询问用户是否强制推送 (覆盖远程)
+    $choice = Read-Host "Network/Conflict Error. Force Push (Overwrite Remote)? (Y/N)"
+    if ($choice -eq 'Y') {
+        Write-Host ">>> Force Pushing to remote..." -ForegroundColor Yellow
+        git push origin main --force
+        if ($LASTEXITCODE -eq 0) {
+             Write-Host ">>> SUCCESS! Site (Forced) is live at: https://wangxun111.github.io/qhphysics-docs/" -ForegroundColor Green
+             Read-Host "Press Enter to exit..."
+             exit 0
+        }
+    }
+    exit 1
 }
 
 # 5. 恢复现场
