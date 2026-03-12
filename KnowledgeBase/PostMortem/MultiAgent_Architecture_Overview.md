@@ -1,4 +1,4 @@
-﻿# 🤖 多 Agent 协同与工作流架构图
+﻿﻿# 🤖 多 Agent 协同与工作流架构图
 本文档描述了当前项目自动化系统（Auto-Pilot）的架构、角色分工及工作流程。
 ---
 ## 1. 系统概览 (Architecture Overview)
@@ -21,7 +21,11 @@ graph TD
         Orchestrator -->|分发任务| LogDetective[🕵️ 日志侦探]
         Coder -->|产出代码| RawCode[待检代码]
         DocBuilder -->|产出 HTML| RawArtifacts[待检产物]
-        RawArtifacts --> Inspector{🔍 产物质检员}
+
+        %% 核心修复：强制在第一次出现时定义 Inspector 的形状
+        RawCode --> Inspector{🔍 产物质检员}
+        RawArtifacts --> Inspector
+        
         Inspector -->|读取规则| Rules
         Orchestrator -->|发现新错误| Learner{🧠 规则学习者}
         Learner -->|自动添加规则| Rules

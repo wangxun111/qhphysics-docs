@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 文档中心 - 完整导航\r\n\r\n欢迎来到 XunPhysics 钓鱼游戏物理引擎的完整文档中心！\r\n\r\n这里汇集了所有关于物理引擎架构、AI参数调优、PhysX对标分析的资料。\r\n\r\n---\r\n\r\n## 📚 按需求快速查找\r\n\r\n### 🚀 我想实现 AI 参数调优（首选）\r\n\r\n**[AI参数调优入门教程](AI_Tuning_Getting_Started.html)** ⭐⭐⭐⭐⭐\r\n- 📄 800+ 行 | 7 个章节\r\n- ✨ 包含完整的钓鱼游戏案例\r\n- 💻 提供 Python 脚本 + C# 代码\r\n- ⏱️ 从零到一只需 3-5 天\r\n- **推荐指数**: 新手必读！\r\n\r\n**适合**：想快速上手 AI 调优的工程师\r\n**不适合**：只想了解理论的人\r\n\r\n---\r\n\r\n### 🧠 我想深入理解 AI 参数调优原理\r\n\r\n**[AI参数调优深度分析](AI_Parameter_Optimization.html)**\r\n- 📄 923 行 | 9 个章节\r\n- 🎯 4 种 AI 优化方案详解\r\n- 📊 3 个完整案例研究（贝叶斯、遗传、RL）\r\n- 💡 ROI 分析和实施路线图\r\n- **推荐指数**: 进阶必读\r\n\r\n**适合**：想掌握多种优化算法的研究者\r\n**不适合**：只有 2 小时的人\r\n\r\n---\r\n\r\n### 🎮 我想了解 XunPhysics 引擎架构\r\n\r\n**[XunPhysics 完整架构文档](XunPhysics_Architecture.html)** ⭐⭐⭐⭐\r\n- 📄 1007 行 | 13 个章节\r\n- 🔧 完整的系统架构解析\r\n- ⚙️ 深度的 Spring 系统分析（第13章）\r\n- 🚀 SIMD 优化详解\r\n- **推荐指数**: 架构师必读\r\n\r\n**适合**：要修改引擎源码或理解内部机制的人\r\n**不适合**：只是想用现成引擎的人\r\n\r\n---\r\n\r\n### ⚔️ 我想对标 PhysX 或选择物理引擎\r\n\r\n**[PhysX 深度分析与对比](PhysX_Analysis.html)** ⭐⭐⭐⭐\r\n- 📄 540 行 | 12 个章节\r\n- 🔍 详细的 PhysX vs XunPhysics 对比（第7章）\r\n- ⚖️ 优缺点全面分析（第10章）\r\n- 🎯 选型建议（第11章）\r\n- **推荐指数**: 选型必读\r\n\r\n**适合**：需要在 PhysX 和 XunPhysics 间选择的人\r\n**不适合**：已经决定好引擎的人\r\n\r\n---\r\n\r\n### 📋 我想快速浏览所有文档\r\n\r\n**[文档导航索引](\\_DOCUMENTATION_INDEX.md)**\r\n- 📄 完整的文档导航地图\r\n- 📊 统计数据和文件列表\r\n- 🗺️ 推荐阅读顺序\r\n- 🔗 所有快速链接\r\n\r\n---\r\n\r\n## 📚 按学习路径选择\r\n\r\n### 初学者路线（完全新手）\r\n\r\n**推荐时间**: 5-7 天\r\n\r\n```\r\n第1天: AI参数调优入门教程\r\n       └─ 第一章（核心概念，30分钟）\r\n       └─ 第二章（完整案例，3小时）\r\n\r\n第2-3天: 继续完成入门教程\r\n        └─ 环境搭建、运行优化脚本\r\n\r\n第4-5天: 在你的项目中应用\r\n        └─ 集成评估函数\r\n        └─ 调试和改进\r\n\r\n第6-7天: 阅读 XunPhysics 架构了解背景\r\n        └─ 理解为什么参数调优有效\r\n```\r\n\r\n### 进阶开发者路线（有一定基础）\r\n\r\n**推荐时间**: 3-4 天\r\n\r\n```\r\n第1天: 快速扫过 AI入门教程第二章\r\n      └─ 快速了解流程\r\n\r\n第1-2天: AI 深度分析\r\n        └─ 学习其他优化算法\r\n        └─ 灵敏度分析、参数联动\r\n\r\n第3天: XunPhysics 架构（第12-13章）\r\n      └─ 理解为什么某些参数重要\r\n\r\n第4天: PhysX 对比分析\r\n      └─ 了解其他引擎的做法\r\n```\r\n\r\n### 架构师路线（系统设计）\r\n\r\n**推荐时间**: 2 天\r\n\r\n```\r\n第1天: 快速浏览入门教程（了解流程）\r\n      └─ 30分钟\r\n\r\n      XunPhysics 架构全篇阅读\r\n      └─ 2小时，重点：整体架构 + 核心算法\r\n\r\n      PhysX 对比（第7、10、11章）\r\n      └─ 1小时，了解竞品\r\n\r\n第2天: AI深度分析全篇\r\n      └─ 了解多种优化策略\r\n```\r\n\r\n---\r\n\r\n## 🎯 文档全景图\r\n\r\n```\r\n                    📌 你在这里\r\n                         ↓\r\n        ┌─────────────────────────────────┐\r\n        │   文档中心（总导航）            │\r\n        │   Documentation Hub              │\r\n        └──────────┬──────────────────────┘\r\n                   │\r\n        ┌──────────┴────────────────────────┐\r\n        │                                   │\r\n        ↓                                   ↓\r\n\r\n    🚀 AI 参数调优系列               🏗️ 架构分析系列\r\n    ├─ 入门教程 ⭐ 新手必读          ├─ XunPhysics 架构\r\n    └─ 深度分析 (4种方案详解)       └─ PhysX 对标分析\r\n```\r\n\r\n---\r\n\r\n## 📊 文档统计\r\n\r\n| 类型 | 数量 | 总行数 | 总章节 |\r\n|------|------|--------|--------|\r\n| AI调优系列 | 2 | 1723+ | 16 |\r\n| 架构分析系列 | 2 | 1547 | 25 |\r\n| 导航索引 | 1 | - | - |\r\n| **总计** | **5** | **3270+** | **41** |\r\n\r\n### 具体文档清单\r\n\r\n| 文档名 | 行数 | 章节 | 难度 | 推荐度 |\r\n|--------|------|------|------|--------|\r\n| AI参数调优入门教程 | 800+ | 7 | ⭐ 简单 | ⭐⭐⭐⭐⭐ |\r\n| AI参数调优深度分析 | 923 | 9 | ⭐⭐⭐ 复杂 | ⭐⭐⭐⭐ |\r\n| XunPhysics 架构 | 1007 | 13 | ⭐⭐ 中等 | ⭐⭐⭐⭐ |\r\n| PhysX 分析对比 | 540 | 12 | ⭐⭐ 中等 | ⭐⭐⭐⭐ |\r\n\r\n---\r\n\r\n## 🔗 快速链接\r\n\r\n### 直接跳转\r\n\r\n- [🚀 AI入门教程](AI_Tuning_Getting_Started.html) - 立即开始\r\n- [🧠 AI深度分析](AI_Parameter_Optimization.html) - 进阶学习\r\n- [🏗️ XunPhysics架构](XunPhysics_Architecture.html) - 系统设计\r\n- [⚔️ PhysX对比](PhysX_Analysis.html) - 选型参考\r\n\r\n### 下载和查看源码\r\n\r\n- [AI入门教程源码](AI_Tuning_Getting_Started.md) - Markdown\r\n- [AI深度分析源码](AI_Parameter_Optimization.md) - Markdown\r\n- [XunPhysics源码](complete_doc.md) - Markdown\r\n- [PhysX源码](PhysX_Analysis.md) - Markdown\r\n\r\n---\r\n\r\n## 💡 常见问题\r\n\r\n### Q: 我该从哪个文档开始？\r\n\r\n**A**: 99% 的人应该从 **[AI参数调优入门教程](AI_Tuning_Getting_Started.html)** 开始。\r\n- ✅ 实践性强，包含完整代码\r\n- ✅ 只需 3-5 天学会\r\n- ✅ 立即可用于实际项目\r\n\r\n### Q: 为什么有两个 AI 调优文档？\r\n\r\n**A**: 不同用途：\r\n- **入门教程** = \"我想快速上手，给我代码！\"\r\n- **深度分析** = \"我想掌握多种算法和理论\"\r\n\r\n建议：先学入门，再学深度分析。\r\n\r\n### Q: 需要学 XunPhysics 架构吗？\r\n\r\n**A**: 取决于你的角色：\r\n- **参数调优工程师** = 不需要（入门教程足够）\r\n- **引擎开发者** = 必须学（架构很重要）\r\n- **项目经理** = 快速浏览即可\r\n\r\n### Q: 这些文档多久更新一次？\r\n\r\n**A**:\r\n- 入门教程：每个版本有重大改进时更新\r\n- 深度分析：随着新研究或算法更新\r\n- 架构文档：仅在引擎有重大变化时更新\r\n\r\n---\r\n\r\n## 🎓 学习建议\r\n\r\n### 最短学习路径（针对赶时间的人）\r\n\r\n⏱️ **2小时快速入门**\r\n\r\n```\r\nAI入门教程：\r\n  ├─ 第一章（核心概念）- 15分钟\r\n  └─ 第二章前3节（环境 + 案例）- 1小时45分钟\r\n\r\n结果：了解基本流程，知道如何快速上手\r\n```\r\n\r\n### 标准学习路径（推荐）\r\n\r\n⏱️ **3-5天完整学习**\r\n\r\n```\r\nDay 1: AI入门教程全篇（3小时）\r\nDay 2: 在自己的项目中实践（2小时）\r\nDay 3: 遇到问题查第三章 FAQ（随时）\r\nDay 4: 阅读 XunPhysics 架构（2小时，可选）\r\nDay 5: 优化效果，读深度分析（可选）\r\n```\r\n\r\n### 深度学习路径（完全掌握）\r\n\r\n⏱️ **1-2周 全面精通**\r\n\r\n```\r\nWeek 1:\r\n  ├─ AI入门教程（Day 1-2）\r\n  ├─ AI深度分析（Day 3-4）\r\n  └─ XunPhysics架构（Day 5）\r\n\r\nWeek 2:\r\n  ├─ PhysX分析（Day 1）\r\n  ├─ 在项目中应用各种优化技巧（Day 2-4）\r\n  └─ 编写自定义评估函数（Day 5）\r\n```\r\n\r\n---\r\n\r\n## 🔐 版本信息\r\n\r\n- **文档系统版本**: v3.0\r\n- **最后更新**: 2026年2月26日\r\n- **包含内容**:\r\n  - ✅ XunPhysics 完整架构\r\n  - ✅ PhysX 深度分析\r\n  - ✅ AI 参数调优（入门 + 深度）\r\n  - ✅ 完整案例和源码\r\n  - ✅ 常见问题解决\r\n  - ✅ 学习路线图\r\n\r\n---\r\n\r\n## 📢 后续新文档添加方式\r\n\r\n当有新文档时，只需在此文件中添加一个新的卡片即可：\r\n\r\n```markdown\r\n### 📖 [新文档标题](新文件名.html)\r\n\r\n- 📄 行数 | 章节数\r\n- ✨ 核心特点\r\n- 💻 包含内容\r\n- ⏱️ 学习时间\r\n- **推荐指数**: 星级\r\n\r\n**适合**: 谁应该看\r\n**不适合**: 谁不需要看\r\n```\r\n\r\n所有新文档都会自动在此处显示，形成一个统一的知识库。\r\n\r\n---\r\n\r\n**祝学习愉快！** 🎉\r\n有任何问题？返回此页面，查看对应章节的快速链接。\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>

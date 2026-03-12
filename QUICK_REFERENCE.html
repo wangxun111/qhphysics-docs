@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 🚀 快速参考 - 修改文档时的操作流程\r\n\r\n## ⚡ 最简单的流程（30秒）\r\n\r\n```bash\r\n# 1. 修改文件（使用编辑器或 vim）\r\n# 2. 检查（1秒）\r\nbash validate_docs.sh\r\n\r\n# 3. 如果有错，修复后再检查\r\n\r\n# 4. 提交并推送（自动进行自测）\r\ngit add .\r\ngit commit -m \"docs: Update something\"\r\ngit push origin main\r\n\r\n# 完成！网站在 1-2 分钟后自动更新\r\n```\r\n\r\n## 📋 修改清单\r\n\r\n**在提交前，检查以下事项：**\r\n\r\n- [ ] HTML 文件内的所有链接都有效？\r\n- [ ] `.note-editor` 和 `.note-overlay` 有 `display: none`？\r\n- [ ] 所有文件使用 `XunPhysics` 命名（不是 QHPhysics）？\r\n- [ ] HTML 中的 `fetch()` 指向的 markdown 文件存在？\r\n\r\n**可以用脚本一键检查：**\r\n```bash\r\nbash validate_docs.sh\r\n```\r\n\r\n## 🔧 常见修复\r\n\r\n### 链接错误\r\n```\r\n❌ [Documentation_Hub.html] 链接指向不存在的文件: missing.html\r\n\r\n✅ 修复：创建文件或修正链接\r\n```\r\n\r\n### Modal 被挡\r\n```\r\n❌ [AI_Tuning_Getting_Started.html] .note-editor 缺少 display: none\r\n\r\n✅ 修复：在 CSS 中添加 display: none\r\n```\r\n\r\n### 文件名不匹配\r\n```\r\n❌ 发现旧命名文件: QHPhysics_Architecture.html\r\n\r\n✅ 修复：mv QHPhysics_Architecture.html XunPhysics_Architecture.html\r\n```\r\n\r\n### Markdown 加载失败\r\n```\r\n❌ [XunPhysics_Architecture.html] fetch 指向不存在的文件: missing.md\r\n\r\n✅ 修复：确保 markdown 文件存在\r\n```\r\n\r\n## 🎯 核心概念\r\n\r\n| 文件 | 作用 | 何时运行 |\r\n|------|------|--------|\r\n| validate_docs.sh | 检查文档问题 | 手动运行或自动（提交前） |\r\n| .git/hooks/pre-commit | Git 钩子 | 每次 commit 前自动运行 |\r\n| TESTING_GUIDE.md | 详细说明 | 遇到问题时查阅 |\r\n\r\n## 📚 文档对应关系\r\n\r\n```\r\nXunPhysics_Architecture.html  ──加载──\u003e complete_doc.md\r\nAI_Tuning_Getting_Started.html ──加载──\u003e AI_Tuning_Getting_Started.md\r\nAI_Parameter_Optimization.html ──加载──\u003e AI_Parameter_Optimization.md\r\nPhysX_Analysis.html           ──加载──\u003e PhysX_Analysis.md\r\n```\r\n\r\n## ⚡ 速查表\r\n\r\n```bash\r\n# 运行测试\r\nbash validate_docs.sh\r\n\r\n# 显示测试详细过程\r\nbash -x validate_docs.sh\r\n\r\n# 强制提交（跳过检查，不推荐）\r\ngit commit --no-verify -m \"message\"\r\n\r\n# 查看特定文件中的 display:none\r\ngrep \"display: none\" AI_Tuning_Getting_Started.html\r\n\r\n# 重新启用 Git Hook（如果禁用过）\r\nchmod +x .git/hooks/pre-commit\r\n```\r\n\r\n## 🎉 成功提交示例\r\n\r\n```\r\n$ bash validate_docs.sh\r\n\r\n✅ AI_Parameter_Optimization.html: 链接正常 Documentation_Hub.html\r\n✅ XunPhysics_Architecture.html: note-editor 正确隐藏\r\n✅ 文件名命名规范（使用 XunPhysics）\r\n✅ XunPhysics_Architecture.html: 正确加载 complete_doc.md\r\n\r\n✅ 所有检查通过！文档质量良好 🎉\r\n\r\n$ git add .\r\n$ git commit -m \"docs: Fix typo in Spring chapter\"\r\n\r\n🔍 运行文档自测...\r\n✅ 所有检查通过，继续提交...\r\n[main abc1234] docs: Fix typo in Spring chapter\r\n 1 file changed, 2 insertions(+)\r\n\r\n$ git push origin main\r\nTo https://github.com/wangxun111/qhphysics-docs.git\r\n   6e841a5..abc1234  main -\u003e main\r\n\r\n✅ 完成！网站 1-2 分钟后自动更新\r\n```\r\n\r\n---\r\n\r\n**更多详情：** 查看 `TESTING_GUIDE.md`\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>

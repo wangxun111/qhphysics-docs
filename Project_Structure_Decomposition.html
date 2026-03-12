@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 钓鱼项目架构分层拆解 (Project Taxonomy)\r\n\r\n基于项目使用的中间件（HybridCLR, OxGFrame, Lunaris）与核心玩法代码（RodBehaviour），我们将项目分解为以下五大领域。这种分类方式有助于团队分工和 AI 辅助开发的上下文隔离。\r\n\r\n## 1. 核心玩法层 (Core Gameplay Domain)\r\n*这是项目的灵魂，也是目前我们调试的重点。*\r\n*   **物理模拟 (Physics Simulation)**\r\n    *   **模块**: `RodPhysics`, `LineController`, `ReelMechanics`\r\n    *   **功能**: 鱼竿弯曲计算、鱼线张力物理（Mathf.SmoothDamp）、水面阻力模拟。\r\n*   **鱼类 AI (Fish AI)**\r\n    *   **模块**: `FishBehaviorTree`, `StaminaSystem`\r\n    *   **功能**: 鱼的游动状态机（闲置、咬钩、挣扎、疲劳）、鱼的体力消耗与恢复逻辑。\r\n*   **玩家交互 (Player Control)**\r\n    *   **模块**: `InputHandler`, `TouchGestures`\r\n    *   **功能**: 抛竿手势识别、收线力度控制（刺鱼、溜鱼）、震动反馈 (`MoreMountains.NiceVibrations`)。\r\n\r\n## 2. 表现与渲染层 (Visuals \u0026 Rendering Domain)\r\n*利用 URP 和专业插件实现的视觉表现。*\r\n*   **环境渲染 (Environment)**\r\n    *   **依赖**: `Lunaris.Terrain`, `Lunaris.Rendering`, `MightyTerrain`\r\n    *   **功能**: 高性能水体渲染（反射/折射）、动态天气系统、体积雾 (`urpvolumetricfog`)。\r\n*   **视觉特效 (VFX)**\r\n    *   **依赖**: `Coffee.UIParticle`, `AVProVideo`\r\n    *   **功能**: 水花飞溅粒子、全屏视频特效（中鱼大招）、SSR (屏幕空间反射)。\r\n*   **UI 动效 (UI Motion)**\r\n    *   **依赖**: `DOTween`, `Coffee.SoftMask`\r\n    *   **功能**: 张力条的动态伸缩、获得物品的弹窗动画。\r\n\r\n## 3. 系统架构层 (Infrastructure Domain)\r\n*项目的底层骨架，决定了稳定性和扩展性。*\r\n*   **热更新与代码执行 (Hot Update)**\r\n    *   **依赖**: `HybridCLR` (华山版)\r\n    *   **功能**: C# 代码热修复、DLL 补充元数据管理（AOT/Interpreter）。\r\n*   **框架核心 (Framework Core)**\r\n    *   **依赖**: `OxGFrame`\r\n    *   **功能**: 消息中心 (EventCenter)、资源加载 (AssetLoader)、UI 栈管理。\r\n*   **网络通信 (Networking)**\r\n    *   **依赖**: `BestHTTP`\r\n    *   **功能**: HTTP/WebSocket 通信、断线重连、Protobuf 协议处理。\r\n\r\n## 4. 外围系统层 (Meta Game Domain)\r\n*玩家成长的数值循环。*\r\n*   **经济与库存 (Economy \u0026 Inventory)**\r\n    *   **模块**: `InventorySystem`, `EquipmentManager`\r\n    *   **功能**: 鱼竿/鱼饵/鱼线的属性数值管理、背包系统、商店逻辑。\r\n*   **数据持久化 (Persistence)**\r\n    *   **依赖**: `Gilzoide.SqliteNet`\r\n    *   **功能**: 本地数据库存储（玩家存档、图鉴记录）。\r\n\r\n## 5. 平台与安全层 (Platform \u0026 Ops Domain)\r\n*上线运营的保障。*\r\n*   **发布支持 (Distribution)**\r\n    *   **依赖**: `Google.Play`, `AppleAuth`\r\n    *   **功能**: 渠道登录、内购 (IAP)、Android App Bundle (AAB) 分包。\r\n*   **安全与监控 (Security \u0026 Monitor)**\r\n    *   **依赖**: `OPS.Obfuscator`, `BuglyPlugins`, `SRDebugger`\r\n    *   **功能**: 代码混淆（防止反编译）、崩溃日志上报、真机运行时控制台。\r\n\r\n---\r\n\r\n## AI 协作建议 (AI Collaboration Strategy)\r\n\r\n在后续开发中，请根据修改涉及的层级，调整给 AI 的 Prompt：\r\n\r\n1.  **修改物理手感时**:\r\n    *   **关键词**: \"Core Gameplay\", \"RodPhysics\", \"Hysteresis\"\r\n    *   **关注点**: 数值平滑、帧率独立性、手感反馈。\r\n\r\n2.  **修改界面相关时**:\r\n    *   **关键词**: \"UI\", \"DOTween\", \"OxGFrame\"\r\n    *   **关注点**: 异步加载、内存泄漏、动画流畅度。\r\n\r\n3.  **修改底层配置时**:\r\n    *   **关键词**: \"HybridCLR\", \"Obfuscator\", \"Build Pipeline\"\r\n    *   **关注点**: 编译错误、AOT 泛型问题、包体大小。\r\n\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>

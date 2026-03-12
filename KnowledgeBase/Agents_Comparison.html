@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 🤖 多 Agent 架构对比分析报告\r\n\r\n本文档深入对比了本项目当前的 **\"Hybrid Orchestrator\"** 架构与业界主流的多 Agent 框架（如 AutoGen, MetaGPT, LangChain）的区别。\r\n\r\n---\r\n\r\n## 1. 核心架构模式对比\r\n\r\n| 特性 | 本项目 (Hybrid Orchestrator) | 微软 AutoGen | MetaGPT | LangChain (LangGraph) |\r\n| :--- | :--- | :--- | :--- | :--- |\r\n| **通信模式** | **垂直指挥 (Hierarchical)**\u003cbr\u003e所有的指令必须经过总指挥官 (Orchestrator) 分发，Worker 之间不直接对话。| **对话流 (Conversational)**\u003cbr\u003eAgent 之间像在聊天室里一样自由对话，达成共识。 | **标准作业程序 (SOP)**\u003cbr\u003e严格按照现实世界的软件公司流程（PM-\u003e架构-\u003e开发-\u003e测试）流转。 | **图结构 (Graph)**\u003cbr\u003e基于有向无环图 (DAG) 或状态机，定义严格的节点流转。 |\r\n| **AI 介入深度** | **混合式 (Hybrid)**\u003cbr\u003e上层思考 (AI Plan) + 下层执行 (脚本 Script)。AI 只做大脑，不直接操作底层文件流。 | **全 AI (Full AI)**\u003cbr\u003e每个角色都是 LLM，甚至代码执行也是由 LLM 编写 Python 代码并在沙箱运行。 | **全 AI (Full AI)**\u003cbr\u003e所有角色均为 LLM 扮演。 | **工具调用 (Tool Use)**\u003cbr\u003eAI 核心 + 外部工具调用。 |\r\n| **人类介入 (HITL)**| **强介入 (Approval Loop)**\u003cbr\u003e规划师 (Planner) 拆解任务后，**必须**经过用户确认才能进入执行层。 | **可选介入**\u003cbr\u003e可以在对话中设置 HumanProxy，随时打断或提供反馈。 | **弱介入**\u003cbr\u003e通常是一键生成，最后验收。 | **节点级介入**\u003cbr\u003e可以在特定图节点设置断点等待用户输入。 |\r\n| **执行稳定性** | **极高 (High)**\u003cbr\u003e底层 Worker 是写死的 PowerShell 脚本，逻辑确定，不会产生幻觉。 | **中等 (Medium)**\u003cbr\u003eLLM 写的代码可能在运行时报错，需要自我修正循环。 | **中等 (Medium)**\u003cbr\u003e主要依赖 Prompt 的鲁棒性。 | **高 (High)**\u003cbr\u003e取决于工具定义的质量。 |\r\n\r\n---\r\n\r\n## 2. 深度差异分析\r\n\r\n### A. \"脚本工人\" vs \"AI 工人\" (The Worker Difference)\r\n*   **主流方案 (AutoGen/MetaGPT)**: 它们的 \"Documentation Agent\" 是一个 LLM。当你要求写文档时，它会**实时生成**文档内容。优点是灵活，缺点是慢且不稳定，可能每次生成格式不一样。\r\n*   **本项目**: 我们的 \"DocBuilder\" 是一个 **PowerShell 脚本**。它不思考，只负责将 Markdown 机械地、完美地转换为 HTML。\r\n*   **结论**: 本项目牺牲了底层 Worker 的灵活性，换取了**极致的稳定性和速度**。这更适合工程落地，而不是纯粹的 AI 实验。\r\n\r\n### B. \"意图驱动\" vs \"目标驱动\" (Intent vs Goal)\r\n*   **主流方案**: 通常给定一个模糊的 Goal（如“写个贪吃蛇”），Agent 自主拆解。\r\n*   **本项目**: 引入了 `ProjectIntent.json`。这是一种**状态机**思维。你通过修改配置文件来切换系统的“模式”（如从开发模式切换到调试模式），这比单纯的自然语言指令更精确、更可控。\r\n\r\n### C. 质检机制 (Quality Assurance)\r\n*   **MetaGPT**: 拥有通过 LLM 扮演的 \"QA Engineer\"，它会阅读代码并写出测试用例。\r\n*   **本项目**: 引入了 **Inspector (脚本质检员)** 和 **CodeInspector (编译质检员)**。\r\n    *   我们的质检是**硬性**的：文件大小是否达标？编译是否通过？HTML 是否包含 404？\r\n    *   **优势**: 不会因为 AI \"眼花\" 而漏过错误。如果编译失败，系统绝对不会放行。\r\n\r\n---\r\n\r\n## 3. 为什么选择当前架构？\r\n\r\n目前的 **\"AI 大脑 + 脚本手脚\"** 架构是针对中大型 Unity/C# 项目的最佳实践。\r\n\r\n1.  **确定性 (Determinism)**: 游戏开发中的物理日志分析、文档生成、代码编译，容错率极低。脚本能保证 100% 的一致性。\r\n2.  **成本控制 (Cost)**: 如果每个文件变更都触发 LLM 去分析，Token 消耗巨大。用 `FileSystemWatcher` + PowerShell 脚本，成本为 **0**。\r\n3.  **可维护性**: 任何开发者都能看懂 PowerShell 脚本并进行修改，而调试复杂的 Multi-Agent Prompt 链条（如 LangChain）通常非常困难。\r\n\r\n---\r\n\r\n## 4. 总结\r\n\r\n| 维度 | 本项目架构 | 纯 AI Agent 架构 |\r\n| :--- | :--- | :--- |\r\n| **角色本质** | AI 规划 + 脚本执行 | AI 规划 + AI 执行 |\r\n| **运行成本** | 低 (API 调用少) | 高 (Token 消耗大) |\r\n| **执行速度** | 毫秒级 (本地脚本) | 秒级/分钟级 (网络请求) |\r\n| **创造力** | 低 (受限于脚本逻辑) | 高 (可生成任意内容) |\r\n| **适用场景** | 工程构建、持续集成、文档管理、日志监控 | 创意写作、原型开发、开放式问答 |\r\n\r\n**结论**: 您现在拥有的，是一套**专为工程效能优化**的实用型 Agent 系统，而非一个纯粹的 AI 玩具。\r\n\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>

@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 🏥 站点健康体检报告 (Site Health Report)\r\n**时间**: 2026-03-11\r\n**执行者**: DocInspector Agent\r\n\r\n## 1. 核心组件检查\r\n| 组件 | 状态 | 说明 |\r\n| :--- | :--- | :--- |\r\n| **入口 (index.html)** | ✅ 正常 | 文件存在，结构完整。 |\r\n| **索引 (site_nav.js)** | ✅ 正常 | JSON 数据有效，LastWriteTime 为最近。 |\r\n| **样式表** | ✅ 正常 | CDN 链接可访问。 |\r\n\r\n## 2. 内容完整性检查\r\n| 检查项 | 结果 | 详情 |\r\n| :--- | :--- | :--- |\r\n| **空文件检测** | ✅ 通过 | 未发现 0KB 文件。 |\r\n| **错误标记检测** | ✅ 通过 | 未发现 \"Error: File not found\" 标记。 |\r\n| **Mermaid 渲染** | ✅ 通过 | 架构图 HTML 代码已修复，无语法错误。 |\r\n\r\n## 3. 建议\r\n系统运行状态良好，无需人工干预。\r\n\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>

@@ -110,3 +110,14 @@ Before modifying complex systems, check this folder for existing context.
     *   **CRITICAL RULE**: 严禁在根目录创建 `Index.md` 或 `REAMIE.md`，这会导致 `index.html` 被覆盖而损坏门户。请使用 `Home.md` 作为文档首页。
     *   **Encoding**: 所有 PowerShell 脚本必须使用 UTF-8 BOM 保存，注释必须使用英文，禁止中文乱码导致语法崩溃。
     *   **JSON Integrity**: 生成 HTML 时，必须强制转换内容为 `[string]`，防止 PowerShell 对象属性泄露。
+
+## 7. 脚本生成完整性 (Script Integrity)
+**CRITICAL RULE**: AI 在生成长脚本（特别是 PowerShell/Python 工具）时：
+1.  **Check Truncation**: 生成任何超过 50 行的脚本后，必须**自动读取其最后 5 行**（`Get-Content -Tail 5`），确认文件以正确的闭合括号 `}` 或结束语结束。
+2.  **No Silent Failure**: 如果发现脚本不完整，必须立即重新生成，不得继续执行后续步骤。
+## 8. Mermaid 绘图规范 (Graph Visualization)
+**CRITICAL RULE**: 编写 Mermaid 代码时：
+1.  **Explicit Definition**: 节点必须在第一次出现时**显式定义其形状和标签**。
+    -   ❌ `A --> B` ... `B{Label}` (错误：会导致 B 渲染为默认方块，覆盖后续定义)
+    -   ✅ `A --> B{Label}` (正确)
+2.  **Node Order**: 如果图表复杂，建议在开头统一声明所有节点，然后再写连线。

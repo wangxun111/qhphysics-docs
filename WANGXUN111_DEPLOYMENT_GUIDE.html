@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 🚀 针对 wangxun111 的个性化部署指南\r\n\r\n## 你的部署信息\r\n\r\n| 信息 | 内容 |\r\n|------|------|\r\n| GitHub 用户名 | `wangxun111` |\r\n| 仓库名称 | `qhphysics-docs` |\r\n| 部署方式 | GitHub Pages |\r\n| 预期网址 | https://wangxun111.github.io/qhphysics-docs/ |\r\n\r\n---\r\n\r\n## ⚡ 快速部署（3分钟搞定）\r\n\r\n### Step 1: 打开命令行\r\n\r\n```bash\r\n按 Win + R → 输入 cmd → 回车\r\n```\r\n\r\n### Step 2: 进入文档目录并运行部署脚本\r\n\r\n**复制并粘贴这条完整命令**：\r\n\r\n```bash\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity \u0026\u0026 deploy_to_github.bat wangxun111\r\n```\r\n\r\n然后按回车。\r\n\r\n### Step 3: 输入密码或 Token\r\n\r\n脚本运行时会要求输入密码：\r\n\r\n```\r\nUsername for \u0027https://github.com\u0027: wangxun111\r\nPassword for \u0027https://wangxun111@github.com\u0027: _\r\n```\r\n\r\n**选项 A：直接输入 GitHub 密码**\r\n- 输入你的 GitHub 账户密码\r\n- 密码不会显示（正常现象），输入完后回车\r\n\r\n**选项 B：使用 Personal Access Token（推荐）**\r\n1. 访问 https://github.com/settings/tokens\r\n2. 点击 \"Generate new token\"\r\n3. 勾选 \"repo\" 权限\r\n4. 点击 \"Generate token\"\r\n5. 复制生成的 token\r\n6. 粘贴到密码框（Ctrl+V）\r\n\r\n### Step 4: 启用 GitHub Pages\r\n\r\n脚本运行完成后会看到这样的提示：\r\n\r\n```\r\n【下一步】启用 GitHub Pages：\r\n\r\n1. 打开浏览器，访问：\r\n   https://github.com/wangxun111/qhphysics-docs/settings/pages\r\n\r\n2. 在 \u0027Source\u0027 中选择：\u0027Deploy from a branch\u0027\r\n\r\n3. 选择分支：\u0027main\u0027 和 \u0027/ (root)\u0027\r\n\r\n4. 点击 \u0027Save\u0027\r\n```\r\n\r\n**打开这个链接**（复制粘贴到浏览器）：\r\n```\r\nhttps://github.com/wangxun111/qhphysics-docs/settings/pages\r\n```\r\n\r\n在这个页面：\r\n1. 找到 \"Source\" 部分\r\n2. 选择 \"Deploy from a branch\"\r\n3. 选择分支：**main**\r\n4. 选择文件夹：**/ (root)**\r\n5. 点击 **Save**\r\n\r\n---\r\n\r\n## ✅ 完成！你的网站链接\r\n\r\n部署完成后（1-2分钟），你可以访问：\r\n\r\n### 📍 主页（文档中心）\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/\r\n```\r\n\r\n### 📍 所有文档\r\n\r\n**文档中心导航页**：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n**AI参数调优入门教程**：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/AI_Tuning_Getting_Started.html\r\n```\r\n\r\n**AI参数调优深度分析**：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/AI_Parameter_Optimization.html\r\n```\r\n\r\n**XunPhysics 完整架构**：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/XunPhysics_Architecture.html\r\n```\r\n\r\n**PhysX 深度分析**：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/PhysX_Analysis.html\r\n```\r\n\r\n---\r\n\r\n## 🔍 验证部署是否成功\r\n\r\n### 检查 1: 仓库是否创建\r\n\r\n打开：\r\n```\r\nhttps://github.com/wangxun111/qhphysics-docs\r\n```\r\n\r\n你应该看到：\r\n- ✅ 仓库名：qhphysics-docs\r\n- ✅ 分支：main\r\n- ✅ 文件列表（所有文档）\r\n\r\n### 检查 2: GitHub Pages 是否启用\r\n\r\n打开：\r\n```\r\nhttps://github.com/wangxun111/qhphysics-docs/settings/pages\r\n```\r\n\r\n你应该看到：\r\n- ✅ Source: Deploy from a branch\r\n- ✅ Branch: main / (root)\r\n- ✅ 状态：Your site is published at https://wangxun111.github.io/qhphysics-docs/\r\n\r\n### 检查 3: 网站是否可访问\r\n\r\n打开：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n你应该看到：\r\n- ✅ 文档中心页面正常显示\r\n- ✅ 所有链接可点击\r\n- ✅ 样式正常加载\r\n\r\n---\r\n\r\n## ⏱️ 时间表\r\n\r\n| 时间 | 事件 |\r\n|------|------|\r\n| 0分钟 | 运行部署脚本 |\r\n| 1-2分钟 | 脚本完成，文件上传到 GitHub |\r\n| 3-5分钟 | GitHub Pages 开始构建（可能有延迟） |\r\n| 5-10分钟 | 网站部署完成，可以访问 |\r\n\r\n**第一次访问可能需要等待 5-10 分钟，这是正常的。**\r\n\r\n---\r\n\r\n## 🔧 故障排除\r\n\r\n### 问题 1: \"git not found\" 错误\r\n\r\n**解决**：\r\n1. 下载 Git：https://git-scm.com/download/win\r\n2. 安装 Git\r\n3. 重新运行脚本\r\n\r\n### 问题 2: 密码验证失败\r\n\r\n**解决**：\r\n1. 访问 https://github.com/settings/tokens\r\n2. 创建新 Personal Access Token\r\n3. 勾选 \"repo\" 权限\r\n4. 复制 Token\r\n5. 重新运行脚本，使用 Token 作为密码\r\n\r\n### 问题 3: 网站仍然 404\r\n\r\n**解决**：\r\n- 确保已启用 GitHub Pages（Settings → Pages）\r\n- 等待 5-10 分钟\r\n- 在浏览器中硬刷新：Ctrl + Shift + R\r\n- 检查网址是否正确\r\n\r\n### 问题 4: 脚本说\"远程仓库已存在\"\r\n\r\n**解决**：\r\n正常情况。脚本会自动处理，继续运行即可。\r\n\r\n---\r\n\r\n## 📤 后续如何更新网站\r\n\r\n修改文档后，只需运行：\r\n\r\n```bash\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\n\r\ngit add .\r\ngit commit -m \"docs: Update - [你的更改描述]\"\r\ngit push\r\n```\r\n\r\n1-2 分钟后网站会自动更新！\r\n\r\n---\r\n\r\n## 🔗 分享你的网站\r\n\r\n现在可以分享这个链接给任何人：\r\n\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n他们可以在任何地方、任何设备上访问你的完整文档！\r\n\r\n---\r\n\r\n## 📋 最终检查清单\r\n\r\n部署前：\r\n- [ ] 你有 GitHub 账号（已确认）\r\n- [ ] 你的用户名是 wangxun111（已确认）\r\n- [ ] 你有命令行访问权限\r\n\r\n部署中：\r\n- [ ] 打开命令行\r\n- [ ] 进入 F:\\new\\fishinggame\\QHPlugins\\QHForUnity\r\n- [ ] 运行 `deploy_to_github.bat wangxun111`\r\n- [ ] 输入密码或 Token\r\n- [ ] 等待脚本完成\r\n\r\n部署后：\r\n- [ ] 打开 GitHub Pages 设置链接\r\n- [ ] 配置 Source → Deploy from a branch\r\n- [ ] 选择 main 分支和 / (root) 文件夹\r\n- [ ] 点击 Save\r\n- [ ] 等待 5-10 分钟\r\n\r\n验证：\r\n- [ ] 访问 https://wangxun111.github.io/qhphysics-docs/\r\n- [ ] 网站正常显示\r\n- [ ] 所有链接可点击\r\n\r\n---\r\n\r\n## 🎉 现在就开始！\r\n\r\n**命令（复制粘贴）**：\r\n```\r\ncd F:\\new\\fishinggame\\QHPlugins\\QHForUnity \u0026\u0026 deploy_to_github.bat wangxun111\r\n```\r\n\r\n**最终网址**：\r\n```\r\nhttps://wangxun111.github.io/qhphysics-docs/Documentation_Hub.html\r\n```\r\n\r\n祝部署顺利！如有任何问题，告诉我错误信息，我来帮你解决。\r\n\r\n---\r\n\r\n**需要帮助？** 查看这些文件：\r\n- DEPLOYMENT_README.txt - 快速指南\r\n- DEPLOYMENT_VISUAL_GUIDE.md - 可视化步骤\r\n- GITHUB_DEPLOYMENT_GUIDE.md - 完整参考\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>

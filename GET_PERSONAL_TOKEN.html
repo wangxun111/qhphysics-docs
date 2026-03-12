@@ -12,33 +12,25 @@
 </head>
 <body>
     <div id="content" class="markdown-body"></div>
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <!-- Mermaid UMD (Global Scope) for file:// compatibility -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // Initialize Mermaid
         mermaid.initialize({ startOnLoad: false });
+        // Embed content safely
         const rawMd = "# 🔑 获取 Personal Access Token（推荐方式）\r\n\r\n## 步骤 1：访问 GitHub 设置\r\n\r\n打开浏览器，访问：\r\n```\r\nhttps://github.com/settings/tokens\r\n```\r\n\r\n## 步骤 2：创建新 Token\r\n\r\n1. 点击 **\"Generate new token\"** 按钮\r\n2. 选择 **\"Generate new token (classic)\"**\r\n\r\n## 步骤 3：配置权限\r\n\r\n填写表单：\r\n- **Token name**: `qhphysics-deploy` 或任意名称\r\n- **Expiration**: `No expiration` 或选择合适的期限\r\n- **Select scopes**: 勾选 **\"repo\"**（这样就足够了）\r\n\r\n## 步骤 4：生成 Token\r\n\r\n点击下面的 **\"Generate token\"** 按钮\r\n\r\n## 步骤 5：复制 Token\r\n\r\n✅ 一个长字符串会出现（一次性显示）\r\n- 复制这个字符串（Ctrl+C）\r\n- 保存到某个地方（以后如果忘记会需要重新生成）\r\n\r\n## 步骤 6：在命令行中使用\r\n\r\n当脚本要求输入用户名和密码时：\r\n\r\n```\r\nUsername for \u0027https://github.com\u0027: wangxun111\r\nPassword for \u0027https://wangxun111@github.com\u0027: [粘贴 Token，Ctrl+V]\r\n```\r\n\r\n**注意**：粘贴时密码不会显示（正常现象），直接粘贴后按回车\r\n\r\n完成！Token 用于身份验证。\r\n";
-        // 1. Render Markdown to HTML
         document.getElementById('content').innerHTML = marked.parse(rawMd);
         hljs.highlightAll();
-        // 2. Post-Process for Mermaid
-        // marked.js renders ```mermaid as <pre><code class="language-mermaid">
+        // Transform Mermaid Blocks
         const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
         mermaidBlocks.forEach((block, index) => {
             const pre = block.parentElement;
             const code = block.textContent;
-            // Create separate div for Mermaid
             const div = document.createElement('div');
             div.className = 'mermaid';
             div.textContent = code;
-            // Replace <pre> with <div>
             pre.replaceWith(div);
         });
-        // 3. Trigger Mermaid Render
-        // UMD version exposes global `mermaid` object
         mermaid.run();
     </script>
 </body>
